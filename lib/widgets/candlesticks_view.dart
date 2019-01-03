@@ -9,10 +9,8 @@ import 'package:candlesticks/widgets/candles/candles_style.dart';
 import 'package:candlesticks/widgets/ma/ma_style.dart';
 
 class CandlesticksView extends CandlesticksState {
-
-    CandlesticksView(
-        {final List<CandleData> initData, Stream<CandleData> dataStream})
-        : super(initData: initData, dataStream: dataStream);
+    CandlesticksView({List<CandleData> initData,
+        Stream<CandleData> dataStream}) : super(initData:initData, dataStream:dataStream);
 
 
     @override
@@ -37,9 +35,9 @@ class CandlesticksView extends CandlesticksState {
                             children: <Widget>[
                                 Positioned.fill(
                                     child: CandlesWidget(
-                                        initData: initData,
-                                        dataStream: dataStream,
-                                        uiCamera: uiCameraAnimation.value,
+                                        initData: extInitData,
+                                        dataStream: exdataStream,
+                                        uiCamera: uiCameraAnimation?.value,
                                         onUpdate: onCandleUpdate,
                                         onAdd: onCandleAdd,
                                         style: widget.candlesticksStyle.candlesStyle,
@@ -47,9 +45,9 @@ class CandlesticksView extends CandlesticksState {
                                 ),
                                 Positioned.fill(
                                     child: MaWidget(
-                                        initData: initData,
-                                        dataStream: dataStream,
-                                        uiCamera: uiCameraAnimation.value,
+                                        initData: extInitData,
+                                        dataStream: exdataStream,
+                                        uiCamera: uiCameraAnimation?.value,
                                         onUpdate: onMaUpdate,
                                         onAdd: onMaAdd,
                                         style: widget.candlesticksStyle.maStyle,

@@ -16,21 +16,21 @@ abstract class UIAnimatedState<T extends UIObjects<TT,
     AnimationController uiObjectAnimationController;
     Animation<T> uiAnimatedObject;
 
-    T initCandleLIst(List<CandleData> candleDataList);
+    T initCandleLIst(List<ExtCandleData> candleDataList);
 
-    TT updateLastCandle(CandleData candleData);
+    TT updateLastCandle(ExtCandleData candleData);
 
-    TT addCandle(CandleData candleData);
+    TT addCandle(ExtCandleData candleData);
 
-    T addCandleBegin(CandleData candleData);
+    T addCandleBegin(ExtCandleData candleData);
 
-    T addCandleEnd(CandleData candleData);
+    T addCandleEnd(ExtCandleData candleData);
 
-    bool needUpdate(CandleData candleData, TT uiObject);
+    bool needUpdate(ExtCandleData candleData, TT uiObject);
 
     UIAnimatedState() : super();
 
-    void onData(CandleData candleData) {
+    void onData(ExtCandleData candleData) {
         var removedPoint;
         uiObjectAnimationController.value = 1;
         var currentUIPathData = this.uiAnimatedObject?.value;
@@ -195,11 +195,11 @@ class UIAnimatedWidget<T extends UIObjects<TT, T>, TT extends UIAnimatedObject<
         this.state,
     }) :super(key: key);
 
-    final List<CandleData> initData;
-    final Stream<CandleData> dataStream;
+    final List<ExtCandleData> initData;
+    final Stream<ExtCandleData> dataStream;
     final UICamera uiCamera;
-    final Function(CandleData candleData, TT point) onAddCandle;
-    final Function(CandleData candleData, TT point) onUpdateLastCandle;
+    final Function(ExtCandleData candleData, TT point) onAddCandle;
+    final Function(ExtCandleData candleData, TT point) onUpdateLastCandle;
     final Function() state;
     final Duration duration;
 

@@ -19,7 +19,7 @@ abstract class CandlesState extends State<CandlesWidget>
     CandlesState()
         : super();
 
-    void onData(CandleData candleData) {
+    void onData(ExtCandleData candleData) {
         var removedObject;
         var candleUIObject = UIOCandle.fromData(candleData, widget.style.paddingX,
             candleData.open <= candleData.close
@@ -115,7 +115,7 @@ abstract class CandlesState extends State<CandlesWidget>
 
 
         List<UIOCandle> candleUIObjectList = [];
-        widget.initData?.forEach((CandleData candleData) {
+        widget.initData?.forEach((ExtCandleData candleData) {
             var candleUIObject = UIOCandle.fromData(candleData, widget.style.paddingX,
                 candleData.open <= candleData.close
                     ? positivePainter

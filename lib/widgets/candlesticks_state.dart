@@ -17,9 +17,7 @@ const countMin = 16;
 
 abstract class CandlesticksState extends State<CandlesticksWidget>
     with TickerProviderStateMixin {
-//    UICamera uiCamera;
-    List<CandleData> initData;
-    Stream<CandleData> dataStream;
+    Stream<ExtCandleData> exdataStream;
 
     AnimationController uiCameraAnimationController;
     Animation<UICamera> uiCameraAnimation;
@@ -29,27 +27,39 @@ abstract class CandlesticksState extends State<CandlesticksWidget>
 
     List<double> candlesX = List<double>();
 
+    List<ExtCandleData> extInitData;
 
-    CandlesticksState({List<CandleData> initData, Stream<CandleData> dataStream})
+    CandlesticksState(
+        {List<CandleData> initData, Stream<CandleData> dataStream})
         : super() {
-        this.initData = initData;
-        this.dataStream = dataStream;
+        extInitData = List<ExtCandleData>();
 
-        initData.forEach((CandleData p) {
-            var uio = UIOCandle.fromData(p, 0, null);
-            var aabb = uio.aabb();
-            this.candlesMaxY.add(max(aabb.max.y, aabb.min.y));
-            this.candlesMinY.add(min(aabb.max.y, aabb.min.y));
-            this.candlesX.add(aabb.min.x);
+        initData.forEach((CandleData candleData) {
+            extInitData.add(onCandleData(candleData));
         });
 
+        exdataStream = dataStream.map(onCandleData).asBroadcastStream();
+
+
+        // 这个时候Y轴还没开始算。
+        /*
         var viewPort = calViewPort(
             candlesMinY.length - countMax, candlesMaxY.length - 1);
         var uiCamera = UICamera(viewPort);
-        uiCameraAnimationController = AnimationController(
-            duration: const Duration(milliseconds: 500), vsync: this);
         uiCameraAnimation = Tween(begin: uiCamera, end: uiCamera).animate(
             uiCameraAnimationController);
+            */
+    }
+
+    ExtCandleData onCandleData(CandleData candleData) {
+        if((candlesX.length <= 0) || (candleData.timeMs > candlesX.last)) {
+            candlesX.add(candleData.timeMs.toDouble());
+        }
+        if((this.widget == null) || (this.extInitData.length < this.widget.initData.length)) {
+            this.candlesMaxY.add(candleData.high);
+            this.candlesMinY.add(candleData.low);
+        }
+        return ExtCandleData(candleData, index: candlesX.length - 1);
     }
 
     UIORect calViewPort(int from, int to) {
@@ -81,24 +91,24 @@ abstract class CandlesticksState extends State<CandlesticksWidget>
     }
 
     int _onAddX(double x) {
-        if(this.candlesX == null) {
+        if (this.candlesX == null) {
             this.candlesX = List<double>();
         }
-        if(this.candlesX.length <= 0) {
+        if (this.candlesX.length <= 0) {
             this.candlesX.add(x);
             return this.candlesX.length - 1;
-        }else {
+        } else {
             this.candlesX.add(x);
             var i = this.candlesX.length - 1;
-            for(; i - 1 >= 0; i--) {
-                if(x < this.candlesX[i - 1]) {
+            for (; i - 1 >= 0; i--) {
+                if (x < this.candlesX[i - 1]) {
                     this.candlesX[i] = this.candlesX[i - 1];
-                }else {
+                } else {
                     break;
                 }
             }
             this.candlesX[i] = x;
-            if((i > 0) && (this.candlesX[i - 1] == x)) {
+            if ((i > 0) && (this.candlesX[i - 1] == x)) {
                 this.candlesX.removeAt(i - 1);
             }
 
@@ -106,7 +116,7 @@ abstract class CandlesticksState extends State<CandlesticksWidget>
         }
     }
 
-    void onCandleAdd(CandleData candleData, UIOCandle candle) {
+    void onCandleAdd(ExtCandleData candleData, UIOCandle candle) {
         var aabb = candle.aabb();
         _onAddX(candleData.timeMs.toDouble());
 
@@ -115,7 +125,8 @@ abstract class CandlesticksState extends State<CandlesticksWidget>
 
         var uiCamera = uiCameraAnimation.value;
         if (uiCamera.viewPort.cross(candle.aabb())) {
-            var viewPort = calViewPort(this.candlesX.length - countMax, this.candlesX.length - 1);
+            var viewPort = calViewPort(
+                this.candlesX.length - countMax, this.candlesX.length - 1);
             var uiCamera = UICamera(viewPort);
             uiCameraAnimation =
                 Tween(begin: uiCameraAnimation.value.clone(), end: uiCamera)
@@ -125,7 +136,7 @@ abstract class CandlesticksState extends State<CandlesticksWidget>
         }
     }
 
-    void onCandleUpdate(CandleData candleData, UIOCandle candle) {
+    void onCandleUpdate(ExtCandleData candleData, UIOCandle candle) {
         var aabb = candle.aabb();
         var index = this.candlesX.length - 1;
         this.candlesMaxY.update(index, max(aabb.max.y, aabb.min.y));
@@ -143,7 +154,7 @@ abstract class CandlesticksState extends State<CandlesticksWidget>
         }
     }
 
-    void onMaAdd(CandleData candleData, UIOPoint point) {
+    void onMaAdd(ExtCandleData candleData, UIOPoint point) {
         _onAddX(candleData.timeMs.toDouble());
 
         var aabb = point.aabb();
@@ -151,11 +162,10 @@ abstract class CandlesticksState extends State<CandlesticksWidget>
         this.candlesMinY.add(min(aabb.max.y, aabb.min.y));
     }
 
-    void onMaUpdate(CandleData candleData, UIOPoint point) {
+    void onMaUpdate(ExtCandleData candleData, UIOPoint point) {
         var index = 0;
         for (index = this.candlesX.length - 1; (index >= 0) &&
-            (point.x < this.candlesX[index]); index--) {
-        }
+            (point.x < this.candlesX[index]); index--) {}
         this.candlesMaxY.update(index, point.y);
         this.candlesMinY.update(index, point.y);
     }
@@ -223,6 +233,34 @@ abstract class CandlesticksState extends State<CandlesticksWidget>
     void initState() {
         // TODO: implement initState
         super.initState(); //插入监听器
+        uiCameraAnimationController = AnimationController(
+            duration: widget.candlesticksStyle.cameraDuration, vsync: this);
+
+
+        /*
+        var viewPort = UIORect(UIOPoint(0, 0), UIOPoint(0, 0));
+        var uiCamera = UICamera(viewPort);
+        uiCameraAnimation = Tween(begin: uiCamera, end: uiCamera).animate(
+            uiCameraAnimationController);
+            */
+
+        var viewPort = calViewPort(
+            candlesX.length - countMax, candlesX.length - 1);
+        var uiCamera = UICamera(viewPort);
+        uiCameraAnimation = Tween(begin: uiCamera, end: uiCamera).animate(
+            uiCameraAnimationController);
+        /*
+        var minX = double.infinity;
+        var maxX = double.negativeInfinity;
+        var minY = double.infinity;
+        var maxY = double.negativeInfinity;
+
+
+        extInitData.forEach((ExtCandleData extCandleData) {
+            if(extCandleData.)
+        }
+        );
+        */
     }
 
     @override

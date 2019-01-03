@@ -18,7 +18,7 @@ class UIOCandle implements UIAnimatedObject<UIOCandle> {
 
     UIOCandle(this.origin, this.r, this.top, this.bottom, this.marginX, {this.painter});
 
-    UIOCandle.fromData(CandleData data, this.marginX, this.painter)
+    UIOCandle.fromData(ExtCandleData data, this.marginX, this.painter)
         :
             origin = new UIOPoint(data.timeMs.toDouble(), data.open, painter: painter),
             r = UIOPoint(data.durationMs.toDouble(), data.close - data.open, painter: painter),

@@ -49,6 +49,7 @@ class _MyAppState extends State<MyApp> {
                             initData: candleData,
                             dataStream: DataSource.instance.subject.stream,
                             candlesticksStyle: CandlesticksStyle(
+                                cameraDuration: Duration(milliseconds: 500),
                                 candlesStyle: CandlesStyle(
                                     positiveColor: Colors.redAccent,
                                     negativeColor: Colors.greenAccent,
