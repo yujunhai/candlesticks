@@ -127,8 +127,6 @@ class KLayoutDelegate extends MultiChildLayoutDelegate {
 
   @override
   void performLayout(Size size) {
-    print('performLayout');
-    print(size);
     final BoxConstraints constraints = new BoxConstraints(maxWidth: size.width, minWidth: size.width);
 
     layoutChild(kChart, constraints);

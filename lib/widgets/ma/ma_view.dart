@@ -45,8 +45,9 @@ class MaView extends UIAnimatedView<UIOPath, UIOPoint> {
         }
     }
 
+
     @override
-    UIOPoint updateLastObject(CandleData candleData) {
+    UIOPoint updateLastCandle(CandleData candleData) {
         double last = 0;
         if (this._sum.length - 2 > 0) {
             last = this._sum[this._sum.length - 2];
@@ -92,7 +93,7 @@ class MaView extends UIAnimatedView<UIOPath, UIOPoint> {
     }
 
     @override
-    UIOPath updateLastCandleBegin(CandleData candleData) {
+    UIOPath addCandleBegin(CandleData candleData) {
         return UIOPath(
             [
                 fixedUIObject.uiObjects.last.clone(),
@@ -102,8 +103,8 @@ class MaView extends UIAnimatedView<UIOPath, UIOPoint> {
     }
 
     @override
-    UIOPath updateLastCandleEnd(CandleData candleData) {
-        var point = updateLastObject(candleData);
+    UIOPath addCandleEnd(CandleData candleData) {
+        var point = updateLastCandle(candleData);
         return UIOPath(
             [fixedUIObject.uiObjects.last.clone(), point], painter: painter);
     }
@@ -197,8 +198,8 @@ class MaWidget extends StatefulWidget {
     final List<CandleData> initData;
     final Stream<CandleData> dataStream;
     final UICamera uiCamera;
-    final Function(UIOPoint point) onUpdate;
-    final Function(UIOPoint point) onAdd;
+    final Function(CandleData candleData, UIOPoint point) onUpdate;
+    final Function(CandleData candleData, UIOPoint point) onAdd;
     final MaStyle style;
 
     @override

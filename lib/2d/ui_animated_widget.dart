@@ -18,11 +18,13 @@ abstract class UIAnimatedState<T extends UIObjects<TT,
 
     T initCandleLIst(List<CandleData> candleDataList);
 
+    TT updateLastCandle(CandleData candleData);
+
     TT addCandle(CandleData candleData);
 
-    T updateLastCandleBegin(CandleData candleData);
+    T addCandleBegin(CandleData candleData);
 
-    T updateLastCandleEnd(CandleData candleData);
+    T addCandleEnd(CandleData candleData);
 
     bool needUpdate(CandleData candleData, TT uiObject);
 
@@ -44,18 +46,17 @@ abstract class UIAnimatedState<T extends UIObjects<TT,
 
         T beginPath;
         T endPath;
-        TT point;
         if (removedPoint != null) {
             beginPath = currentUIPathData.clone();
             endPath = currentUIPathData.clone();
-            point = addCandle(candleData);
+            TT point = updateLastCandle(candleData);
             if (point == null) {
                 return;
             }
             beginPath.uiObjects.add(removedPoint);
             endPath.uiObjects.add(point);
             if (widget.onUpdateLastCandle != null) {
-                widget.onUpdateLastCandle(point);
+                widget.onUpdateLastCandle(candleData, point);
             }
         } else {
             if (uiAnimatedObject != null) {
@@ -63,10 +64,14 @@ abstract class UIAnimatedState<T extends UIObjects<TT,
                 fixedUIObject.uiObjects.add(
                     uiAnimatedObject.value.uiObjects.last);
             }
-            beginPath = updateLastCandleBegin(candleData);
-            endPath = updateLastCandleEnd(candleData);
-            if (widget.onUpdateLastCandle != null) {
-                widget.onUpdateLastCandle(endPath.uiObjects.last);
+            TT point = addCandle(candleData);
+            if (point == null) {
+                return;
+            }
+            beginPath = addCandleBegin(candleData);
+            endPath = addCandleEnd(candleData);
+            if (widget.onAddCandle != null) {
+                widget.onAddCandle(candleData, endPath.uiObjects.last);
             }
         }
 
@@ -114,19 +119,20 @@ abstract class UIAnimatedState<T extends UIObjects<TT,
         widget.dataStream.listen(onData);
 
         this.fixedUIObject = initCandleLIst(widget.initData);
-        this.fixedUIObject.uiObjects.forEach((uiObject) {
-            this.widget.onAddCandle(uiObject);
-        });
         uiObjectAnimationController = AnimationController(
             duration: this.widget.duration, vsync: this);
 
 
         if (widget.initData.length >= 2) {
             this.fixedUIObject.uiObjects.removeLast();
-            var endPath = updateLastCandleEnd(widget.initData.last);
+            var endPath = addCandleEnd(widget.initData.last);
 
             uiAnimatedObject = Tween(begin: endPath, end: endPath).animate(
                 uiObjectAnimationController);
+        }
+
+        for(var i = 0; i < this.fixedUIObject.uiObjects.length; i++) {
+            this.widget.onAddCandle(widget.initData[i], this.fixedUIObject.uiObjects[i]);
         }
     }
 
@@ -192,8 +198,8 @@ class UIAnimatedWidget<T extends UIObjects<TT, T>, TT extends UIAnimatedObject<
     final List<CandleData> initData;
     final Stream<CandleData> dataStream;
     final UICamera uiCamera;
-    final Function(TT point) onAddCandle;
-    final Function(TT point) onUpdateLastCandle;
+    final Function(CandleData candleData, TT point) onAddCandle;
+    final Function(CandleData candleData, TT point) onUpdateLastCandle;
     final Function() state;
     final Duration duration;
 

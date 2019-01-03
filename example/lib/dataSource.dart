@@ -31,9 +31,9 @@ class DataSource {
 
         channel.stream.listen((request) {
             var msg = json.decode(utf8.decode(request));
-            print(msg);
+            //print(msg);
             if (msg['ch'] == market) {
-                print(msg['data']);
+//                print(msg['data']);
                 List dataK = [];
                 msg['data'].forEach((item) {
                     var d = {};
@@ -92,7 +92,7 @@ class DataSource {
             channel.sink.add(
                 '{"method":"pull_heart","data":{"time":"${now}"}}');
             if (msg['method'] == 'push_gamble_kline_graph') {
-                print(msg['data']);
+                //print(msg['data']);
                 List dataK = [];
                 msg['data'].forEach((item) {
                     var d = {};
@@ -105,7 +105,7 @@ class DataSource {
                         d['volume'] = double.parse(item[5]);
                         d['virgin'] = item;
                     } catch (e) {
-                        print(e);
+                        //print(e);
                     }
 
                     dataK.add(d);
@@ -142,7 +142,7 @@ class DataSource {
         channel.stream.listen((request) {
             var msg = json.decode(utf8.decode(request));
             if (msg['method'] == 'push_kline_graph') {
-                print(msg['data']);
+                //print(msg['data']);
                 List dataK = [];
                 msg['data'].forEach((item) {
                     var d = {};
@@ -155,7 +155,7 @@ class DataSource {
                         d['volume'] = double.parse(item[5]);
                         d['virgin'] = item;
                     } catch (e) {
-                        print(e);
+                        //print(e);
                     }
 
                     dataK.add(d);

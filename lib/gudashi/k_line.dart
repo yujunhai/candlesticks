@@ -62,21 +62,18 @@ class KChartsState extends State<KCharts> {
         // TODO: implement initState
         super.initState();
         init();
-        print("initState");
     }
 
     @override
     void didChangeDependencies() {
         // TODO: implement didChangeDependencies
         super.didChangeDependencies();
-        print('didChangeDependencies');
     }
 
     @override
     void didUpdateWidget(KCharts oldWidget) {
         // TODO: implement didUpdateWidget
         super.didUpdateWidget(oldWidget);
-        print('didUpdateWidget');
     }
 
     @override
@@ -294,7 +291,7 @@ class KChartsState extends State<KCharts> {
                 kPlot.setPlot(kPointData);
                 kPoint.kPointData = kPointData;
                 kPlot.getMainPlot.showPlot(kPoint.kPointData);
-                print(kPoint.kPointData.last);
+//                print(kPoint.kPointData.last);
             }
             setAtDataIndex(size:size);
 //        });

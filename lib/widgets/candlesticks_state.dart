@@ -88,17 +88,27 @@ abstract class CandlesticksState extends State<CandlesticksWidget>
             this.candlesX.add(x);
             return this.candlesX.length - 1;
         }else {
-            for(;this.candlesX.isNotEmpty && x <= this.candlesX.last;){
-                this.candlesX.removeLast();
-            }
             this.candlesX.add(x);
-            return this.candlesX.length - 1;
+            var i = this.candlesX.length - 1;
+            for(; i - 1 >= 0; i--) {
+                if(x < this.candlesX[i - 1]) {
+                    this.candlesX[i] = this.candlesX[i - 1];
+                }else {
+                    break;
+                }
+            }
+            this.candlesX[i] = x;
+            if((i > 0) && (this.candlesX[i - 1] == x)) {
+                this.candlesX.removeAt(i - 1);
+            }
+
+            return i;
         }
     }
 
-    void onCandleAdd(UIOCandle candle) {
+    void onCandleAdd(CandleData candleData, UIOCandle candle) {
         var aabb = candle.aabb();
-        _onAddX(aabb.min.x);
+        _onAddX(candleData.timeMs.toDouble());
 
         this.candlesMaxY.add(max(aabb.max.y, aabb.min.y));
         this.candlesMinY.add(min(aabb.max.y, aabb.min.y));
@@ -115,7 +125,7 @@ abstract class CandlesticksState extends State<CandlesticksWidget>
         }
     }
 
-    void onCandleUpdate(UIOCandle candle) {
+    void onCandleUpdate(CandleData candleData, UIOCandle candle) {
         var aabb = candle.aabb();
         var index = this.candlesX.length - 1;
         this.candlesMaxY.update(index, max(aabb.max.y, aabb.min.y));
@@ -133,16 +143,15 @@ abstract class CandlesticksState extends State<CandlesticksWidget>
         }
     }
 
-    void onMaAdd(UIOPoint point) {
-        _onAddX(point.x - 30000);
+    void onMaAdd(CandleData candleData, UIOPoint point) {
+        _onAddX(candleData.timeMs.toDouble());
 
         var aabb = point.aabb();
         this.candlesMaxY.add(max(aabb.max.y, aabb.min.y));
         this.candlesMinY.add(min(aabb.max.y, aabb.min.y));
-        this.candlesX.add(aabb.min.x);
     }
 
-    void onMaUpdate(UIOPoint point) {
+    void onMaUpdate(CandleData candleData, UIOPoint point) {
         var index = 0;
         for (index = this.candlesX.length - 1; (index >= 0) &&
             (point.x < this.candlesX[index]); index--) {

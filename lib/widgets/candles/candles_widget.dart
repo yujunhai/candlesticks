@@ -30,8 +30,8 @@ class CandlesWidget extends StatefulWidget {
     final Stream<CandleData> dataStream;
     final UICamera uiCamera;
     final CandlesStyle style;
-    final Function(UIOCandle candle) onUpdate;
-    final Function(UIOCandle candle) onAdd;
+    final Function(CandleData candleData, UIOCandle candle) onUpdate;
+    final Function(CandleData candleData, UIOCandle candle) onAdd;
 
     @override
     CandlesView createState() => CandlesView();

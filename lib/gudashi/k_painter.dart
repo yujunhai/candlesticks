@@ -20,7 +20,6 @@ class KPainter extends CustomPainter {
 
   @override
   void paint (Canvas canvas, Size size){
-    print(size);
     bg(canvas, size);
     axisLine(canvas, size);
     kLine(canvas, size);
@@ -47,8 +46,7 @@ class KPainter extends CustomPainter {
       }
       for(int iv = 0; iv < kPlot.getViceNameList.length; iv++){
         String nameY = kPlot.getViceNameList[iv] + 'Y';
-        print(nameY);
-        print(kPoint.kPointData[kPoint.atDataIndex[0]]);
+//        print(kPoint.kPointData[kPoint.atDataIndex[0]]);
         Paint maPaint = new Paint();
         maPaint..color = kPlot.getViceColorList[iv];
         if(kPlot.getViceNameList[iv] == 'macd'){
