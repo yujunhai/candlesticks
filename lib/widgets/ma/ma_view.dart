@@ -5,6 +5,7 @@ import 'package:candlesticks/2d/uiobjects/uio_point.dart';
 import 'package:candlesticks/2d/ui_animated_widget.dart';
 import 'package:candlesticks/2d/uicamera.dart';
 import 'package:candlesticks/2d/candle_data.dart';
+import 'package:candlesticks/widgets/ma/ma_style.dart';
 
 class MaView extends UIAnimatedView<UIOPath, UIOPoint> {
     List<double> _sum;
@@ -165,26 +166,7 @@ class MaWidgetState extends State<MaWidget> {
 }
 
 
-class MaStyle {
-    Color maLong;
-    int longCount;
-
-    Color maMiddle;
-    int middleCount;
-
-    Color maShort;
-    int shortCount;
-
-    Duration duration;
-
-    MaStyle(this.shortCount, this.maShort,
-        this.middleCount, this.maMiddle,
-        this.longCount, this.maLong,
-        this.duration);
-}
-
 class MaWidget extends StatefulWidget {
-
     MaWidget({
         Key key,
         this.initData,

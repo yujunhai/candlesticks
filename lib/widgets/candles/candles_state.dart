@@ -21,7 +21,7 @@ abstract class CandlesState extends State<CandlesWidget>
 
     void onData(CandleData candleData) {
         var removedObject;
-        var candleUIObject = UIOCandle.fromData(candleData, widget.style.marginX,
+        var candleUIObject = UIOCandle.fromData(candleData, widget.style.paddingX,
             candleData.open <= candleData.close
                 ? positivePainter
                 : negativePainter);
@@ -53,7 +53,7 @@ abstract class CandlesState extends State<CandlesWidget>
             }
             begin = UIOCandles(<UIOCandle>[UIOCandle(
                 UIOPoint(candleUIObject.origin.x, candleUIObject.origin.y),
-                UIOPoint(candleUIObject.r.x, 0), 0, 0,widget.style.marginX,
+                UIOPoint(candleUIObject.r.x, 0), 0, 0,widget.style.paddingX,
                 painter: candleUIObject.painter)
             ]);
             end = UIOCandles(<UIOCandle>[candleUIObject]);
@@ -116,7 +116,7 @@ abstract class CandlesState extends State<CandlesWidget>
 
         List<UIOCandle> candleUIObjectList = [];
         widget.initData?.forEach((CandleData candleData) {
-            var candleUIObject = UIOCandle.fromData(candleData, widget.style.marginX,
+            var candleUIObject = UIOCandle.fromData(candleData, widget.style.paddingX,
                 candleData.open <= candleData.close
                     ? positivePainter
                     : negativePainter);

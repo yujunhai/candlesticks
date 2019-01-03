@@ -5,6 +5,9 @@ import 'package:candlesticks/widgets/candles/candles_widget.dart';
 import 'package:candlesticks/widgets/ma/ma_view.dart';
 import 'package:candlesticks/2d/candle_data.dart';
 
+import 'package:candlesticks/widgets/candles/candles_style.dart';
+import 'package:candlesticks/widgets/ma/ma_style.dart';
+
 class CandlesticksView extends CandlesticksState {
 
     CandlesticksView(
@@ -39,9 +42,7 @@ class CandlesticksView extends CandlesticksState {
                                         uiCamera: uiCameraAnimation.value,
                                         onUpdate: onCandleUpdate,
                                         onAdd: onCandleAdd,
-                                        style: CandlesStyle(Colors.redAccent,
-                                            Colors.greenAccent, 1,
-                                            Duration(milliseconds: 200)),
+                                        style: widget.candlesticksStyle.candlesStyle,
                                     )
                                 ),
                                 Positioned.fill(
@@ -51,14 +52,7 @@ class CandlesticksView extends CandlesticksState {
                                         uiCamera: uiCameraAnimation.value,
                                         onUpdate: onMaUpdate,
                                         onAdd: onMaAdd,
-                                        style: MaStyle(
-                                            5,
-                                            Colors.yellowAccent,
-                                            15,
-                                            Colors.greenAccent,
-                                            30,
-                                            Colors.deepPurpleAccent,
-                                            Duration(milliseconds: 200)),
+                                        style: widget.candlesticksStyle.maStyle,
                                     ),
                                 ),
                             ],

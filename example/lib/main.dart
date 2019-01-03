@@ -48,6 +48,21 @@ class _MyAppState extends State<MyApp> {
                         child: CandlesticksWidget(
                             initData: candleData,
                             dataStream: DataSource.instance.subject.stream,
+                            candlesticksStyle: CandlesticksStyle(
+                                candlesStyle: CandlesStyle(
+                                    positiveColor: Colors.redAccent,
+                                    negativeColor: Colors.greenAccent,
+                                    paddingX: 1,
+                                    duration: Duration(milliseconds: 200)),
+                                maStyle: MaStyle(
+                                    shortCount: 5,
+                                    maShort: Colors.yellowAccent,
+                                    middleCount: 15,
+                                    maMiddle: Colors.greenAccent,
+                                    longCount: 30,
+                                    maLong: Colors.deepPurpleAccent,
+                                    duration: Duration(milliseconds: 200)),
+                            ),
                         ),
                     ),
                     Expanded(
