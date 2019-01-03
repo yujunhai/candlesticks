@@ -13,7 +13,7 @@ void main() async {
     //data = await DataSource.instance.initTZB(minute);
     data = await DataSource.instance.initTZB(minute);
 
-    var count = 500;
+    var count = 100;
     for (var i = data.length - count; i < data.length; i++) {
         var cd = CandleData.fromArray(data[i]['virgin'], 1000 * 60 * minute);
         candleData.add(cd);

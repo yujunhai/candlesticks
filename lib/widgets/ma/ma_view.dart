@@ -21,8 +21,8 @@ class MaView extends UIAnimatedView<UIOPath, UIOPoint> {
     }
 
     double movingAverage(int index, int ma) {
-        if ((this._sum == null) || (index + 1 < ma) ||
-            (index > this._sum.length)) {
+        if ((this._sum == null) || (index - ma < 0) ||
+            (index >= this._sum.length)) {
             return null;
         }
 
@@ -35,33 +35,26 @@ class MaView extends UIAnimatedView<UIOPath, UIOPoint> {
         var y = (last - before) / ma;
         return y;
     }
+
     @override
     bool needUpdate(CandleData candleData, UIOPoint uiObject) {
-        if(candleData.timeMs + candleData.durationMs / 2 <= uiObject.x) {
+        if (candleData.timeMs + candleData.durationMs / 2 <= uiObject.x) {
             return true;
-        }else {
+        } else {
             return false;
         }
     }
 
     @override
-    UIOPoint calUIObject(CandleData candleData, update) {
-        if (!update) {
-            double last = 0;
-            if(this._sum.length > 0) {
-                last = this._sum.last;
-            }
-            this._sum.add(last + candleData.close);
+    UIOPoint updateLastObject(CandleData candleData) {
+        double last = 0;
+        if (this._sum.length - 2 > 0) {
+            last = this._sum[this._sum.length - 2];
+        }
+        if (this._sum.length - 1 > 0) {
+            this._sum[this._sum.length - 1] = last + candleData.close;
         } else {
-            double last = 0;
-            if(this._sum.length - 2 > 0) {
-                last = this._sum[this._sum.length - 2];
-            }
-            if(this._sum.length - 1 > 0) {
-                this._sum[this._sum.length - 1] = last + candleData.close;
-            } else {
-                print("warning!");
-            }
+            print("warning!");
         }
         var y = movingAverage(this._sum.length - 1, count);
         if (y != null) {
@@ -73,21 +66,48 @@ class MaView extends UIAnimatedView<UIOPath, UIOPoint> {
     }
 
     @override
-    UIOPath calUIObjects(List<UIOPoint> uiObjects) {
-        return UIOPath(uiObjects, painter: painter);
+    UIOPoint calUIObject(CandleData candleData) {
+        double last = 0;
+        if (this._sum.length > 0) {
+            last = this._sum.last;
+        }
+        this._sum.add(last + candleData.close);
+        var y = movingAverage(this._sum.length - 1, count);
+        if (y != null) {
+            var point = UIOPoint(candleData.timeMs.toDouble() +
+                candleData.durationMs.toDouble() / 2.0, y);
+            return point;
+        }
+        return null;
     }
 
     @override
-    UIOPath calAnimationBegin(UIOPoint uiObject) {
+    UIOPath calUIObjects(List<CandleData> candleDataList) {
+        List<UIOPoint> uiPointList = [];
+        candleDataList?.forEach((CandleData candleData) {
+            var point = calUIObject(candleData);
+            if (point != null) {
+                uiPointList.add(point);
+            }
+        });
+        return UIOPath(uiPointList, painter: painter);
+    }
+
+    @override
+    UIOPath calAnimationBegin(CandleData candleData) {
         return UIOPath(
-            [fixedUIObject.uiObjects.last.clone(), fixedUIObject.uiObjects.last.clone()],
+            [
+                fixedUIObject.uiObjects.last.clone(),
+                fixedUIObject.uiObjects.last.clone()
+            ],
             painter: painter);
     }
 
     @override
-    UIOPath calAnimationEnd(UIOPoint uiObject) {
+    UIOPath calAnimationEnd(CandleData candleData) {
+        var point = updateLastObject(candleData);
         return UIOPath(
-            [fixedUIObject.uiObjects.last.clone(), uiObject], painter: painter);
+            [fixedUIObject.uiObjects.last.clone(), point], painter: painter);
     }
 
     @override
@@ -109,7 +129,9 @@ class MaWidgetState extends State<MaWidget> {
                         uiCamera: widget.uiCamera,
                         onUpdate: widget.onUpdate,
                         duration: widget.style.duration,
-                        state: () => MaView(widget.style.shortCount, widget.style.maShort),
+                        state: () =>
+                            MaView(
+                                widget.style.shortCount, widget.style.maShort),
                     )
                 ),
                 Positioned.fill(
@@ -119,7 +141,9 @@ class MaWidgetState extends State<MaWidget> {
                         uiCamera: widget.uiCamera,
                         onUpdate: widget.onUpdate,
                         duration: widget.style.duration,
-                        state: () => MaView(widget.style.middleCount, widget.style.maMiddle),
+                        state: () =>
+                            MaView(widget.style.middleCount,
+                                widget.style.maMiddle),
                     )
                 ),
                 Positioned.fill(
@@ -129,7 +153,8 @@ class MaWidgetState extends State<MaWidget> {
                         uiCamera: widget.uiCamera,
                         onUpdate: widget.onUpdate,
                         duration: widget.style.duration,
-                        state: () => MaView(widget.style.longCount, widget.style.maLong),
+                        state: () =>
+                            MaView(widget.style.longCount, widget.style.maLong),
                     )
                 ),
             ],
@@ -150,12 +175,10 @@ class MaStyle {
 
     Duration duration;
 
-    MaStyle(
-        this.shortCount, this.maShort,
+    MaStyle(this.shortCount, this.maShort,
         this.middleCount, this.maMiddle,
         this.longCount, this.maLong,
-        this.duration
-        );
+        this.duration);
 }
 
 class MaWidget extends StatefulWidget {
@@ -167,7 +190,7 @@ class MaWidget extends StatefulWidget {
         this.uiCamera,
         this.onUpdate,
         this.style,
-    }) : super(key:key);
+    }) : super(key: key);
 
     final List<CandleData> initData;
     final Stream<CandleData> dataStream;
