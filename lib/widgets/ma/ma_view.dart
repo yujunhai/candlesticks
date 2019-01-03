@@ -53,8 +53,6 @@ class MaView extends UIAnimatedView<UIOPath, UIOPoint> {
         }
         if (this._sum.length - 1 > 0) {
             this._sum[this._sum.length - 1] = last + candleData.close;
-        } else {
-            print("warning!");
         }
         var y = movingAverage(this._sum.length - 1, count);
         if (y != null) {
@@ -66,7 +64,7 @@ class MaView extends UIAnimatedView<UIOPath, UIOPoint> {
     }
 
     @override
-    UIOPoint calUIObject(CandleData candleData) {
+    UIOPoint addCandle(CandleData candleData) {
         double last = 0;
         if (this._sum.length > 0) {
             last = this._sum.last;
@@ -82,10 +80,10 @@ class MaView extends UIAnimatedView<UIOPath, UIOPoint> {
     }
 
     @override
-    UIOPath calUIObjects(List<CandleData> candleDataList) {
+    UIOPath initCandleLIst(List<CandleData> candleDataList) {
         List<UIOPoint> uiPointList = [];
         candleDataList?.forEach((CandleData candleData) {
-            var point = calUIObject(candleData);
+            var point = addCandle(candleData);
             if (point != null) {
                 uiPointList.add(point);
             }
@@ -94,7 +92,7 @@ class MaView extends UIAnimatedView<UIOPath, UIOPoint> {
     }
 
     @override
-    UIOPath calAnimationBegin(CandleData candleData) {
+    UIOPath updateLastCandleBegin(CandleData candleData) {
         return UIOPath(
             [
                 fixedUIObject.uiObjects.last.clone(),
@@ -104,7 +102,7 @@ class MaView extends UIAnimatedView<UIOPath, UIOPoint> {
     }
 
     @override
-    UIOPath calAnimationEnd(CandleData candleData) {
+    UIOPath updateLastCandleEnd(CandleData candleData) {
         var point = updateLastObject(candleData);
         return UIOPath(
             [fixedUIObject.uiObjects.last.clone(), point], painter: painter);
@@ -127,7 +125,8 @@ class MaWidgetState extends State<MaWidget> {
                         initData: widget.initData,
                         dataStream: widget.dataStream,
                         uiCamera: widget.uiCamera,
-                        onUpdate: widget.onUpdate,
+                        onUpdateLastCandle: widget.onUpdate,
+                        onAddCandle: widget.onAdd,
                         duration: widget.style.duration,
                         state: () =>
                             MaView(
@@ -139,7 +138,8 @@ class MaWidgetState extends State<MaWidget> {
                         initData: widget.initData,
                         dataStream: widget.dataStream,
                         uiCamera: widget.uiCamera,
-                        onUpdate: widget.onUpdate,
+                        onUpdateLastCandle: widget.onUpdate,
+                        onAddCandle: widget.onAdd,
                         duration: widget.style.duration,
                         state: () =>
                             MaView(widget.style.middleCount,
@@ -151,7 +151,8 @@ class MaWidgetState extends State<MaWidget> {
                         initData: widget.initData,
                         dataStream: widget.dataStream,
                         uiCamera: widget.uiCamera,
-                        onUpdate: widget.onUpdate,
+                        onUpdateLastCandle: widget.onUpdate,
+                        onAddCandle: widget.onAdd,
                         duration: widget.style.duration,
                         state: () =>
                             MaView(widget.style.longCount, widget.style.maLong),
@@ -189,13 +190,15 @@ class MaWidget extends StatefulWidget {
         this.dataStream,
         this.uiCamera,
         this.onUpdate,
+        this.onAdd,
         this.style,
     }) : super(key: key);
 
     final List<CandleData> initData;
     final Stream<CandleData> dataStream;
     final UICamera uiCamera;
-    final Function(int index, UIOPoint point) onUpdate;
+    final Function(UIOPoint point) onUpdate;
+    final Function(UIOPoint point) onAdd;
     final MaStyle style;
 
     @override

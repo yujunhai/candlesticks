@@ -80,13 +80,44 @@ abstract class CandlesticksState extends State<CandlesticksWidget>
         return UIORect(UIOPoint(minX, minY), UIOPoint(maxX, maxY));
     }
 
-    void onCandleUpdate(int index, UIOCandle candle) {
-        var aabb = candle.aabb();
-        if (index >= this.candlesX.length) {
-            this.candlesMaxY.add(max(aabb.max.y, aabb.min.y));
-            this.candlesMinY.add(min(aabb.max.y, aabb.min.y));
-            this.candlesX.add(aabb.min.x);
+    int _onAddX(double x) {
+        if(this.candlesX == null) {
+            this.candlesX = List<double>();
         }
+        if(this.candlesX.length <= 0) {
+            this.candlesX.add(x);
+            return this.candlesX.length - 1;
+        }else {
+            for(;this.candlesX.isNotEmpty && x <= this.candlesX.last;){
+                this.candlesX.removeLast();
+            }
+            this.candlesX.add(x);
+            return this.candlesX.length - 1;
+        }
+    }
+
+    void onCandleAdd(UIOCandle candle) {
+        var aabb = candle.aabb();
+        _onAddX(aabb.min.x);
+
+        this.candlesMaxY.add(max(aabb.max.y, aabb.min.y));
+        this.candlesMinY.add(min(aabb.max.y, aabb.min.y));
+
+        var uiCamera = uiCameraAnimation.value;
+        if (uiCamera.viewPort.cross(candle.aabb())) {
+            var viewPort = calViewPort(this.candlesX.length - countMax, this.candlesX.length - 1);
+            var uiCamera = UICamera(viewPort);
+            uiCameraAnimation =
+                Tween(begin: uiCameraAnimation.value.clone(), end: uiCamera)
+                    .animate(uiCameraAnimationController);
+            uiCameraAnimationController.reset();
+            uiCameraAnimationController.forward();
+        }
+    }
+
+    void onCandleUpdate(UIOCandle candle) {
+        var aabb = candle.aabb();
+        var index = this.candlesX.length - 1;
         this.candlesMaxY.update(index, max(aabb.max.y, aabb.min.y));
         this.candlesMinY.update(index, min(aabb.max.y, aabb.min.y));
 
@@ -102,24 +133,19 @@ abstract class CandlesticksState extends State<CandlesticksWidget>
         }
     }
 
-    void onMaUpdate(int index, UIOPoint point) {
-        if(this.candlesX == null) {
-            return;
-        }
-        for (index = this.candlesX.length - 1; (index >= 0) &&
-            (point.x < this.candlesX[index]); index--) {
-
-        }
-        if(index < 0) {
-            return;
-        }
+    void onMaAdd(UIOPoint point) {
+        _onAddX(point.x - 30000);
 
         var aabb = point.aabb();
-        if (index >= this.candlesX.length) {
-            this.candlesMaxY.add(max(aabb.max.y, aabb.min.y));
-            this.candlesMinY.add(min(aabb.max.y, aabb.min.y));
-            this.candlesX.add(aabb.min.x);
-            return;
+        this.candlesMaxY.add(max(aabb.max.y, aabb.min.y));
+        this.candlesMinY.add(min(aabb.max.y, aabb.min.y));
+        this.candlesX.add(aabb.min.x);
+    }
+
+    void onMaUpdate(UIOPoint point) {
+        var index = 0;
+        for (index = this.candlesX.length - 1; (index >= 0) &&
+            (point.x < this.candlesX[index]); index--) {
         }
         this.candlesMaxY.update(index, point.y);
         this.candlesMinY.update(index, point.y);

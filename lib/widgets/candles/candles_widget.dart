@@ -22,6 +22,7 @@ class CandlesWidget extends StatefulWidget {
         this.dataStream,
         this.uiCamera,
         this.onUpdate,
+        this.onAdd,
         this.style,
     }) :super(key: key);
 
@@ -29,7 +30,8 @@ class CandlesWidget extends StatefulWidget {
     final Stream<CandleData> dataStream;
     final UICamera uiCamera;
     final CandlesStyle style;
-    final Function(int index, UIOCandle candle) onUpdate;
+    final Function(UIOCandle candle) onUpdate;
+    final Function(UIOCandle candle) onAdd;
 
     @override
     CandlesView createState() => CandlesView();

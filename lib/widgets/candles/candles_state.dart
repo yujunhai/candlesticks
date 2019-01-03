@@ -59,7 +59,7 @@ abstract class CandlesState extends State<CandlesWidget>
             end = UIOCandles(<UIOCandle>[candleUIObject]);
         }
         if (widget.onUpdate != null) {
-            widget.onUpdate(uiPainterData.uiObjects.length, candleUIObject);
+            widget.onUpdate(candleUIObject);
         }
 
         uiPainterDataAnimation = Tween(begin: begin, end: end).animate(

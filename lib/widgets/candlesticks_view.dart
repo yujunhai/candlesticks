@@ -38,6 +38,7 @@ class CandlesticksView extends CandlesticksState {
                                         dataStream: dataStream,
                                         uiCamera: uiCameraAnimation.value,
                                         onUpdate: onCandleUpdate,
+                                        onAdd: onCandleAdd,
                                         style: CandlesStyle(Colors.redAccent,
                                             Colors.greenAccent, 1,
                                             Duration(milliseconds: 200)),
@@ -49,6 +50,7 @@ class CandlesticksView extends CandlesticksState {
                                         dataStream: dataStream,
                                         uiCamera: uiCameraAnimation.value,
                                         onUpdate: onMaUpdate,
+                                        onAdd: onMaAdd,
                                         style: MaStyle(
                                             5,
                                             Colors.yellowAccent,
