@@ -6,10 +6,10 @@ import 'dataSource.dart';
 
 List<dynamic> data = [];
 List<CandleData> candleData = [];
+const minute = 1;
 
 void main() async {
 //    candleData = await getCandleData();
-    var minute = 1;
     //data = await DataSource.instance.initTZB(minute);
     data = await DataSource.instance.initTZB(minute);
 
@@ -51,6 +51,7 @@ class _MyAppState extends State<MyApp> {
                             candlesticksStyle: CandlesticksStyle(
                                 cameraDuration: Duration(milliseconds: 500),
                                 viewPortX: 50,
+                                durationMs: 1000 * 60.0 * minute,
                                 candlesStyle: CandlesStyle(
                                     positiveColor: Colors.redAccent,
                                     negativeColor: Colors.greenAccent,

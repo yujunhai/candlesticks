@@ -85,7 +85,7 @@ abstract class CandlesticksState extends State<CandlesticksWidget>
         if (maxY == null) {
             maxY = 0;
         }
-        var durationMs = 60 * 1000;
+        var durationMs = widget.candlesticksStyle.durationMs;
         if (from < 0) {
             return null;
         }
@@ -218,8 +218,8 @@ abstract class CandlesticksState extends State<CandlesticksWidget>
         maxX -= dx;
 
         var baseX = this.candlesX.first;
-        var startIndex = (minX - baseX) ~/ (60 * 1000);
-        var endIndex = (maxX - baseX) ~/ (60 * 1000);
+        var startIndex = (minX - baseX) ~/ widget.candlesticksStyle.durationMs;
+        var endIndex = (maxX - baseX) ~/ widget.candlesticksStyle.durationMs;
         var minY = this.candlesMinY.min(startIndex, endIndex);
         if (minY == null) {
             minY = 0;

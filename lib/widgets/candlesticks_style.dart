@@ -5,9 +5,10 @@ import 'package:candlesticks/widgets/candles/candles_style.dart';
 class CandlesticksStyle {
     Duration cameraDuration;
     int viewPortX;
+    double durationMs;
 
     CandlesStyle candlesStyle;
     MaStyle maStyle;
 
-    CandlesticksStyle({this.candlesStyle, this.maStyle, this.cameraDuration, this.viewPortX});
+    CandlesticksStyle({this.candlesStyle, this.maStyle, this.cameraDuration, this.viewPortX, this.durationMs});
 }
