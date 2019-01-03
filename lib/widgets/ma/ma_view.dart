@@ -22,7 +22,7 @@ class MaView extends UIAnimatedView<UIOPath, UIOPoint> {
     }
 
     double movingAverage(int index, int ma) {
-        if ((this._sum == null) || (index - ma < 0) ||
+        if ((this._sum == null) || (index + 1 < ma) ||
             (index >= this._sum.length)) {
             return null;
         }
@@ -59,7 +59,7 @@ class MaView extends UIAnimatedView<UIOPath, UIOPoint> {
         var y = movingAverage(this._sum.length - 1, count);
         if (y != null) {
             var point = UIOPoint(candleData.timeMs.toDouble() +
-                candleData.durationMs.toDouble() / 2.0, y);
+                candleData.durationMs.toDouble() / 2.0, y, index: candleData.index);
             return point;
         }
         return null;
@@ -75,7 +75,7 @@ class MaView extends UIAnimatedView<UIOPath, UIOPoint> {
         var y = movingAverage(this._sum.length - 1, count);
         if (y != null) {
             var point = UIOPoint(candleData.timeMs.toDouble() +
-                candleData.durationMs.toDouble() / 2.0, y);
+                candleData.durationMs.toDouble() / 2.0, y, index: candleData.index);
             return point;
         }
         return null;
@@ -130,6 +130,7 @@ class MaWidgetState extends State<MaWidget> {
                         onUpdateLastCandle: widget.onUpdate,
                         onAddCandle: widget.onAdd,
                         duration: widget.style.duration,
+                        onInitCandles:widget.onInit,
                         state: () =>
                             MaView(
                                 widget.style.shortCount, widget.style.maShort),
@@ -174,6 +175,7 @@ class MaWidget extends StatefulWidget {
         this.uiCamera,
         this.onUpdate,
         this.onAdd,
+        this.onInit,
         this.style,
     }) : super(key: key);
 
@@ -182,6 +184,7 @@ class MaWidget extends StatefulWidget {
     final UICamera uiCamera;
     final Function(ExtCandleData candleData, UIOPoint point) onUpdate;
     final Function(ExtCandleData candleData, UIOPoint point) onAdd;
+    final Function(List<ExtCandleData> initData, UIOPath path) onInit;
     final MaStyle style;
 
     @override

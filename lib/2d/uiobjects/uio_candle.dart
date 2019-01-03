@@ -8,6 +8,7 @@ import 'package:candlesticks/2d/uiobjects/uio_path.dart';
 import 'package:candlesticks/2d/candle_data.dart';
 
 class UIOCandle implements UIAnimatedObject<UIOCandle> {
+    final int index;
     final UIOPoint origin;
     final UIOPoint r;
     final Paint painter;
@@ -16,9 +17,9 @@ class UIOCandle implements UIAnimatedObject<UIOCandle> {
     final double bottom;
     final double marginX;
 
-    UIOCandle(this.origin, this.r, this.top, this.bottom, this.marginX, {this.painter});
+    UIOCandle(this.origin, this.r, this.top, this.bottom, this.marginX, {this.painter, this.index});
 
-    UIOCandle.fromData(ExtCandleData data, this.marginX, this.painter)
+    UIOCandle.fromData(ExtCandleData data, this.marginX, this.painter, {this.index})
         :
             origin = new UIOPoint(data.timeMs.toDouble(), data.open, painter: painter),
             r = UIOPoint(data.durationMs.toDouble(), data.close - data.open, painter: painter),
@@ -31,7 +32,7 @@ class UIOCandle implements UIAnimatedObject<UIOCandle> {
         var r = this.r.clone();
         var top = this.top;
         var bottom = this.bottom;
-        return UIOCandle(origin, r, top, bottom, marginX, painter: this.painter);
+        return UIOCandle(origin, r, top, bottom, marginX, painter: this.painter, index:index);
     }
 
     //culling

@@ -8,14 +8,15 @@ import 'package:candlesticks/2d/uicamera.dart';
 const _ZERO = 0.0000000001;
 
 class UIOPoint extends UIAnimatedObject<UIOPoint> {
+    final int index;
     final double x;
     final double y;
     final Paint painter;
 
-    UIOPoint(this.x, this.y, {this.painter});
+    UIOPoint(this.x, this.y, {this.painter, this.index});
 
     UIOPoint clone() {
-        return UIOPoint(x, y, painter : this.painter);
+        return UIOPoint(x, y, painter : this.painter, index:this.index);
     }
 
     UIORect aabb() {

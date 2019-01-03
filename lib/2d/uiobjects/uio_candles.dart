@@ -6,10 +6,11 @@ import 'package:candlesticks/2d/uiobjects/uio_candle.dart';
 import 'package:candlesticks/2d/uiobject.dart';
 
 class UIOCandles extends UIObjects<UIOCandle, UIOCandles> implements UIObjectsAccesser<UIOCandle>, UIObject<UIOCandles> {
+    final int index;
     final List<UIOCandle> uiObjects;
     final Paint painter;
 
-    UIOCandles(this.uiObjects, {this.painter}) : super();
+    UIOCandles(this.uiObjects, {this.painter, this.index}) : super();
 
     UIOCandles clone() {
         var uiObjects =

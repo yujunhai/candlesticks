@@ -11,6 +11,7 @@ class UIOCullingRange {
 }
 
 abstract class UIObject<T> {
+    int get index;
     Paint get painter;
     T clone();
     void paint(Canvas canvas, Size size, UICamera uiCamera, {UIOCullingRange range});

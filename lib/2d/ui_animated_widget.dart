@@ -119,6 +119,10 @@ abstract class UIAnimatedState<T extends UIObjects<TT,
         widget.dataStream.listen(onData);
 
         this.fixedUIObject = initCandleLIst(widget.initData);
+        if(this.widget.onInitCandles != null) {
+            this.widget.onInitCandles(widget.initData, this.fixedUIObject);
+        }
+
         uiObjectAnimationController = AnimationController(
             duration: this.widget.duration, vsync: this);
 
@@ -193,11 +197,13 @@ class UIAnimatedWidget<T extends UIObjects<TT, T>, TT extends UIAnimatedObject<
         this.onUpdateLastCandle,
         this.duration,
         this.state,
+        this.onInitCandles,
     }) :super(key: key);
 
     final List<ExtCandleData> initData;
     final Stream<ExtCandleData> dataStream;
     final UICamera uiCamera;
+    final Function(List<ExtCandleData> initData, T uiobject) onInitCandles;
     final Function(ExtCandleData candleData, TT point) onAddCandle;
     final Function(ExtCandleData candleData, TT point) onUpdateLastCandle;
     final Function() state;

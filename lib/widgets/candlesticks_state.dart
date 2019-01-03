@@ -9,11 +9,9 @@ import 'package:candlesticks/2d/uiobjects/uio_rect.dart';
 import 'package:candlesticks/2d/uiobjects/uio_point.dart';
 import 'package:candlesticks/2d/treedlist.dart';
 import 'package:candlesticks/2d/candle_data.dart';
+import 'package:candlesticks/2d/uiobjects/uio_path.dart';
 
 const ZERO = 0.00000001;
-//const countMax = 128;
-const countMax = 16;
-const countMin = 16;
 
 abstract class CandlesticksState extends State<CandlesticksWidget>
     with TickerProviderStateMixin {
@@ -54,11 +52,17 @@ abstract class CandlesticksState extends State<CandlesticksWidget>
     ExtCandleData onCandleData(CandleData candleData) {
         if((candlesX.length <= 0) || (candleData.timeMs > candlesX.last)) {
             candlesX.add(candleData.timeMs.toDouble());
-        }
-        if((this.widget == null) || (this.extInitData.length < this.widget.initData.length)) {
             this.candlesMaxY.add(candleData.high);
             this.candlesMinY.add(candleData.low);
         }
+        /*
+        if((this.widget == null) || (this.extInitData.length < this.widget.initData.length)) {
+            if((candlesX.length <= 0) || (candleData.timeMs > candlesX.last)) {
+                this.candlesMaxY.add(candleData.high);
+                this.candlesMinY.add(candleData.low);
+            }
+        }
+        */
         return ExtCandleData(candleData, index: candlesX.length - 1);
     }
 
@@ -120,13 +124,13 @@ abstract class CandlesticksState extends State<CandlesticksWidget>
         var aabb = candle.aabb();
         _onAddX(candleData.timeMs.toDouble());
 
-        this.candlesMaxY.add(max(aabb.max.y, aabb.min.y));
-        this.candlesMinY.add(min(aabb.max.y, aabb.min.y));
+        this.candlesMaxY.update(candle.index, max(aabb.max.y, aabb.min.y));
+        this.candlesMinY.update(candle.index, min(aabb.max.y, aabb.min.y));
 
         var uiCamera = uiCameraAnimation.value;
         if (uiCamera.viewPort.cross(candle.aabb())) {
             var viewPort = calViewPort(
-                this.candlesX.length - countMax, this.candlesX.length - 1);
+                this.candlesX.length - widget.candlesticksStyle.viewPortX, this.candlesX.length - 1);
             var uiCamera = UICamera(viewPort);
             uiCameraAnimation =
                 Tween(begin: uiCameraAnimation.value.clone(), end: uiCamera)
@@ -138,13 +142,13 @@ abstract class CandlesticksState extends State<CandlesticksWidget>
 
     void onCandleUpdate(ExtCandleData candleData, UIOCandle candle) {
         var aabb = candle.aabb();
-        var index = this.candlesX.length - 1;
+        var index = candle.index;
         this.candlesMaxY.update(index, max(aabb.max.y, aabb.min.y));
         this.candlesMinY.update(index, min(aabb.max.y, aabb.min.y));
 
         var uiCamera = uiCameraAnimation.value;
         if (uiCamera.viewPort.cross(candle.aabb())) {
-            var viewPort = calViewPort(index - countMax, index);
+            var viewPort = calViewPort(index - widget.candlesticksStyle.viewPortX, index);
             var uiCamera = UICamera(viewPort);
             uiCameraAnimation =
                 Tween(begin: uiCameraAnimation.value.clone(), end: uiCamera)
@@ -154,12 +158,21 @@ abstract class CandlesticksState extends State<CandlesticksWidget>
         }
     }
 
+    void onMaInit(List<ExtCandleData> initData, UIOPath path) {
+        path.uiObjects.forEach((point) {
+            var aabb = point.aabb();
+            this.candlesMaxY.update(point.index, max(aabb.max.y, aabb.min.y));
+            this.candlesMinY.update(point.index, min(aabb.max.y, aabb.min.y));
+        });
+        return;
+    }
+
     void onMaAdd(ExtCandleData candleData, UIOPoint point) {
         _onAddX(candleData.timeMs.toDouble());
 
         var aabb = point.aabb();
-        this.candlesMaxY.add(max(aabb.max.y, aabb.min.y));
-        this.candlesMinY.add(min(aabb.max.y, aabb.min.y));
+        this.candlesMaxY.update(point.index, max(aabb.max.y, aabb.min.y));
+        this.candlesMinY.update(point.index, min(aabb.max.y, aabb.min.y));
     }
 
     void onMaUpdate(ExtCandleData candleData, UIOPoint point) {
@@ -245,7 +258,7 @@ abstract class CandlesticksState extends State<CandlesticksWidget>
             */
 
         var viewPort = calViewPort(
-            candlesX.length - countMax, candlesX.length - 1);
+            candlesX.length - widget.candlesticksStyle.viewPortX, candlesX.length - 1);
         var uiCamera = UICamera(viewPort);
         uiCameraAnimation = Tween(begin: uiCamera, end: uiCamera).animate(
             uiCameraAnimationController);

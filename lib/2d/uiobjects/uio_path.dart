@@ -7,10 +7,11 @@ import 'package:candlesticks/2d/uiobjects/uio_point.dart';
 import 'package:candlesticks/2d/uicamera.dart';
 
 class UIOPath extends UIObjects<UIOPoint, UIOPath> implements UIObjectsAccesser<UIOPoint>, UIObject<UIOPath> {
+    final int index;
     final List<UIOPoint> uiObjects;
     final Paint painter;
 
-    UIOPath(this.uiObjects, {this.painter}) : super();
+    UIOPath(this.uiObjects, {this.painter, this.index}) : super();
 
     UIOPath clone() {
         var uiObjects =

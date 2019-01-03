@@ -13,7 +13,7 @@ void main() async {
     //data = await DataSource.instance.initTZB(minute);
     data = await DataSource.instance.initTZB(minute);
 
-    var count = 100;
+    var count = 500;
     for (var i = data.length - count; i < data.length; i++) {
         var cd = CandleData.fromArray(data[i]['virgin'], 1000 * 60 * minute);
         candleData.add(cd);
@@ -50,6 +50,7 @@ class _MyAppState extends State<MyApp> {
                             dataStream: DataSource.instance.subject.stream,
                             candlesticksStyle: CandlesticksStyle(
                                 cameraDuration: Duration(milliseconds: 500),
+                                viewPortX: 50,
                                 candlesStyle: CandlesStyle(
                                     positiveColor: Colors.redAccent,
                                     negativeColor: Colors.greenAccent,

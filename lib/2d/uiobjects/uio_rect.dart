@@ -5,11 +5,12 @@ import 'package:candlesticks/2d/uiobject.dart';
 import 'package:candlesticks/2d/uicamera.dart';
 
 class UIORect implements UIAnimatedObject<UIORect> {
+    final int index;
     final UIOPoint min;
     final UIOPoint max;
     final Paint painter;
 
-    UIORect(this.min, this.max, {this.painter});
+    UIORect(this.min, this.max, {this.painter, this.index});
 
     double get height => this.max.y - this.min.y;
 

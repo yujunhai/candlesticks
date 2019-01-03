@@ -50,6 +50,7 @@ class CandlesticksView extends CandlesticksState {
                                         uiCamera: uiCameraAnimation?.value,
                                         onUpdate: onMaUpdate,
                                         onAdd: onMaAdd,
+                                        onInit: onMaInit,
                                         style: widget.candlesticksStyle.maStyle,
                                     ),
                                 ),

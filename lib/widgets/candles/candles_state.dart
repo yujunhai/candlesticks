@@ -24,7 +24,7 @@ abstract class CandlesState extends State<CandlesWidget>
         var candleUIObject = UIOCandle.fromData(candleData, widget.style.paddingX,
             candleData.open <= candleData.close
                 ? positivePainter
-                : negativePainter);
+                : negativePainter, index: candleData.index);
 
         uiPainterDataAnimationController.value = 1;
         var currentUIPainterData = this.uiPainterDataAnimation?.value;

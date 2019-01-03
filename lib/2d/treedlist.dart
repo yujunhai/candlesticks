@@ -31,7 +31,7 @@ class TreedListMin<T extends Comparable> {
     }
 
     void update(int index, T value) {
-        if ((index < 0) || (index >= this._data.length)) {
+        if ((index == null) || (index < 0) || (index >= this._data.length)) {
             return;
         }
         if (value.compareTo(this._data[index]) * reverse < 0) {
