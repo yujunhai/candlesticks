@@ -1,8 +1,8 @@
 name: candlesticks
 description: A new flutter plugin project.
 version: 0.0.1
-author:
-homepage:
+author: John Leeker <johnleeker@hotmail.com>
+homepage: https://github.com/LeekerLabs/candlesticks
 
 environment:
   sdk: ">=2.0.0-dev.68.0 <3.0.0"
