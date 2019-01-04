@@ -64,16 +64,11 @@ class UIOCandle implements UIAnimatedObject<UIOCandle> {
         rect = UIORect(UIOPoint(rect.min.x + dx, rect.min.y), UIOPoint(rect.max.x - dx, rect.max.y), painter: painter);
         rect.paint(canvas, size, uiCamera);
 
-        var basePath = UIOPath(<UIOPoint>[this.origin, this.origin + this.r], painter: painter);
+        var basePath = UIOPath(<UIOPoint>[this.origin + UIOPoint(dx, 0), this.origin + this.r - UIOPoint(dx, 0)], painter: painter);
         basePath.paint(canvas, size, uiCamera, range: UIOCullingRange(0, 2));
 
-        if(this.r.y > 0){
-            var path = UIOPath(<UIOPoint>[this.origin + UIOPoint(this.r.x / 2, -this.bottom), this.origin + UIOPoint(this.r.x / 2, this.top)], painter: painter);
-            path.paint(canvas, size, uiCamera, range: UIOCullingRange(0, 2));
-        }else {
-            var path = UIOPath(<UIOPoint>[this.origin + UIOPoint(this.r.x / 2, this.top), this.origin + UIOPoint(this.r.x / 2, -this.bottom)], painter: painter);
-            path.paint(canvas, size, uiCamera, range: UIOCullingRange(0, 2));
-        }
+        var path = UIOPath(<UIOPoint>[this.origin + UIOPoint(this.r.x / 2, -this.bottom), this.origin + UIOPoint(this.r.x / 2, this.top)], painter: painter);
+        path.paint(canvas, size, uiCamera, range: UIOCullingRange(0, 2));
     }
 
     //lerp
