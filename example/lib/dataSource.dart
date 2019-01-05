@@ -71,8 +71,7 @@ class DataSource {
 
         return completer.future;
     }
-    Future<List> initTZB(int minute) async {
-        var completer = new Completer<List>();
+    initTZB(int minute) async {
         var symbol = "eth_usdt";
 
         channel = await IOWebSocketChannel.connect(
@@ -108,22 +107,14 @@ class DataSource {
                         //print(e);
                     }
 
-                    dataK.add(d);
-                    if(completer.isCompleted) {
-                        subject.sink.add(CandleData.fromArray(item, 1000*60*minute));
-                    }
+                    subject.sink.add(CandleData.fromArray(item, 1000*60*minute));
                 });
-                if(!completer.isCompleted) {
-                    completer.complete(dataK);
-                }
 //        kChartsKey.currentState.data = data;
 //                print('pull_kline_graph');
 //        kChartsKey.currentState.init();
 //                channel.sink.close(5678, "raisin");
             }
         });
-
-        return completer.future;
     }
 
     Future<List> initRBTC(int minute) async {

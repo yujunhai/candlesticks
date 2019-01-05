@@ -10,12 +10,10 @@ class CandlesWidget extends StatefulWidget {
 
     CandlesWidget({
         Key key,
-        this.initData,
         this.dataStream,
         this.style,
     }) :super(key: key);
 
-    final List<ExtCandleData> initData;
     final Stream<ExtCandleData> dataStream;
     final CandlesStyle style;
 

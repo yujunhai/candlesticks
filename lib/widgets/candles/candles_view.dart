@@ -16,6 +16,11 @@ class CandlesView extends CandlesState {
     var uiCamera = CandlesticksContext
         .of(context)
         .uiCamera;
+    if(uiCamera == null){
+      return Container(
+
+      );
+    }
 
     return UIGestureDetector(
         onTap: () {

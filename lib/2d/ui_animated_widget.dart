@@ -115,13 +115,14 @@ abstract class UIAnimatedState<T extends UIObjects<TT,
     super.initState(); //插入监听器
     widget.dataStream.listen(onData);
 
-    this.fixedUIObject = initCandleLIst(widget.initData);
+    this.fixedUIObject = initCandleLIst([]);
 
 
     uiObjectAnimationController = AnimationController(
         duration: this.widget.duration, vsync: this);
 
 
+    /*
     if (widget.initData.length >= 2) {
       this.fixedUIObject.uiObjects.removeLast();
       var endPath = addCandleEnd(widget.initData.last);
@@ -129,7 +130,7 @@ abstract class UIAnimatedState<T extends UIObjects<TT,
       uiAnimatedObject = Tween(begin: endPath, end: endPath).animate(
           uiObjectAnimationController);
     }
-
+    */
   }
   @override
   void didChangeDependencies() {
@@ -192,14 +193,12 @@ class UIAnimatedWidget<T extends UIObjects<TT, T>, TT extends UIAnimatedObject<
 
   UIAnimatedWidget({
     Key key,
-    this.initData,
     this.dataStream,
     this.uiCamera,
     this.duration,
     this.state,
   }) :super(key: key);
 
-  final List<ExtCandleData> initData;
   final Stream<ExtCandleData> dataStream;
   final UICamera uiCamera;
   final Function() state;

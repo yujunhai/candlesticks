@@ -37,7 +37,7 @@ class UIOPoint extends UIAnimatedObject<UIOPoint> {
             b = UIOPoint(0, 0, painter: painter);
         }
 
-        return UIOPoint(a.x + b.x, a.y + b.y, painter: painter);
+        return UIOPoint(a.x + b.x, a.y + b.y, painter: painter, index:index);
     }
 
     UIOPoint operator -(UIOPoint other) {
@@ -47,11 +47,11 @@ class UIOPoint extends UIAnimatedObject<UIOPoint> {
             b = UIOPoint(0, 0, painter: painter);
         }
 
-        return UIOPoint(a.x - b.x, a.y - b.y, painter: painter);
+        return UIOPoint(a.x - b.x, a.y - b.y, painter: painter, index:index);
     }
 
     UIOPoint operator *(double process) {
-        return UIOPoint(this.x * process, this.y * process, painter: painter);
+        return UIOPoint(this.x * process, this.y * process, painter: painter, index:index);
     }
 
     bool equal(other) {

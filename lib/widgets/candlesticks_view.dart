@@ -7,9 +7,8 @@ import 'package:candlesticks/2d/candle_data.dart';
 import 'package:candlesticks/widgets/candlesticks_context_widget.dart';
 
 class CandlesticksView extends CandlesticksState {
-  CandlesticksView({List<CandleData> initData,
-    Stream<CandleData> dataStream})
-      : super(initData: initData, dataStream: dataStream);
+  CandlesticksView({Stream<CandleData> dataStream})
+      : super(dataStream: dataStream);
 
 
   @override
@@ -37,19 +36,19 @@ class CandlesticksView extends CandlesticksState {
                       children: <Widget>[
                         Positioned.fill(
                             child: CandlesWidget(
-                              initData: extInitData,
                               dataStream: exdataStream,
                               style: widget.candlesticksStyle.candlesStyle,
                             )
                         ),
+                        /*
                         Positioned.fill(
                           child: MaWidget(
-                            initData: extInitData,
                             dataStream: exdataStream,
                             uiCamera: uiCameraAnimation?.value,
                             style: widget.candlesticksStyle.maStyle,
                           ),
                         ),
+                        */
                       ],
                     )
                 ));

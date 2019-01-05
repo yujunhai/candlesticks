@@ -26,72 +26,71 @@ abstract class CandlesState extends State<CandlesWidget>
         .of(context)
         .uiCamera;
 
-    var removedObject;
     var candleUIObject = UIOCandle.fromData(candleData, widget.style.paddingX,
         candleData.open <= candleData.close
             ? positivePainter
             : negativePainter, index: candleData.index);
 
-    uiPainterDataAnimationController.value = 1;
-    var currentUIPainterData = this.uiPainterDataAnimation?.value;
-    for (; currentUIPainterData != null &&
-        currentUIPainterData.uiObjects.isNotEmpty;) {
-      UIOCandle last = currentUIPainterData.uiObjects.last;
-      if (candleUIObject.origin.x <= last.origin.x) {
-        removedObject = currentUIPainterData.uiObjects.removeLast();
-      } else {
-        break;
-      }
+    CandlesticksContext.of(context).onAABBChange(
+        candleData, candleUIObject.aabb());
+    if(uiPainterData == null) {
+      uiPainterData = UIOCandles([]);
+      UIOCandles begin = UIOCandles([candleUIObject]);
+      uiPainterDataAnimation = Tween(begin: begin, end: begin).animate(
+          uiPainterDataAnimationController);
+      return;
     }
-
-    UIOCandles begin;
-    UIOCandles end;
-    if (removedObject != null) {
-      begin = currentUIPainterData.clone();
-      end = currentUIPainterData.clone();
-      begin.uiObjects.add(removedObject);
-      end.uiObjects.add(candleUIObject);
-    } else {
-      if (uiPainterDataAnimation != null) {
-        uiPainterDataAnimationController.value = 1;
-        uiPainterData.uiObjects.addAll(
-            uiPainterDataAnimation.value.uiObjects);
-      }
-      begin = UIOCandles(<UIOCandle>[UIOCandle(
-          UIOPoint(candleUIObject.origin.x, candleUIObject.origin.y),
-          UIOPoint(candleUIObject.r.x, 0), 0, 0, widget.style.paddingX,
-          painter: candleUIObject.painter)
-      ]);
-      end = UIOCandles(<UIOCandle>[candleUIObject]);
-    }
-
-    CandlesticksContext.of(context).onAABBChange(candleData, candleUIObject.aabb());
-
-    uiPainterDataAnimation = Tween(begin: begin, end: end).animate(
-        uiPainterDataAnimationController);
-    uiPainterDataAnimationController.reset();
-    uiPainterDataAnimationController.forward();
 
     bool inView = false;
-    for (var i = 0; i < end.uiObjects.length; i++) {
-      if (uiCamera.viewPort.cross(end.uiObjects[i].aabb())) {
-        inView = true;
-        break;
-      }
+    if ((uiCamera != null) && (uiCamera.viewPort.cross(candleUIObject.aabb()))) {
+      inView = true;
     }
 
-    if (inView) {
-      uiPainterDataAnimation = Tween(begin: begin, end: end).animate(
-          uiPainterDataAnimationController);
-      uiPainterDataAnimationController.reset();
-      uiPainterDataAnimationController.forward();
-      setState(() {
+    var currentUIPainterData = this.uiPainterDataAnimation.value;
+    UIOCandle last = currentUIPainterData.uiObjects.last;
+    if (candleUIObject.index <= last.index) {
+      if(inView) {
+        var begin = currentUIPainterData.clone();
+        var end = currentUIPainterData.clone();
+        end.uiObjects[end.uiObjects.length - 1] = candleUIObject;
+        uiPainterDataAnimation = Tween(begin: begin, end: end).animate(
+            uiPainterDataAnimationController);
+        uiPainterDataAnimationController.reset();
+        uiPainterDataAnimationController.forward();
+        setState(() {
 
-      });
-    } else {
-      uiPainterDataAnimation = Tween(begin: end, end: end).animate(
-          uiPainterDataAnimationController);
-      uiPainterDataAnimationController.reset();
+        });
+      }else {
+        uiPainterDataAnimationController.value = 1;
+        var end = this.uiPainterDataAnimation.value.clone();
+        uiPainterDataAnimation = Tween(begin: end, end: end).animate(
+            uiPainterDataAnimationController);
+        uiPainterDataAnimationController.reset();
+      }
+    }else {
+      uiPainterDataAnimationController.value = 1;
+      uiPainterData.uiObjects.addAll(uiPainterDataAnimation.value.uiObjects);
+
+      if(inView) {
+        var begin = UIOCandles(<UIOCandle>[UIOCandle(
+            UIOPoint(candleUIObject.origin.x, candleUIObject.origin.y),
+            UIOPoint(candleUIObject.r.x, 0), 0, 0, widget.style.paddingX,
+            painter: candleUIObject.painter)
+        ]);
+        var end = UIOCandles(<UIOCandle>[candleUIObject]);
+        uiPainterDataAnimation = Tween(begin: begin, end: end).animate(
+            uiPainterDataAnimationController);
+        uiPainterDataAnimationController.reset();
+        uiPainterDataAnimationController.forward();
+        setState(() {
+
+        });
+      }else {
+        var end = UIOCandles(<UIOCandle>[candleUIObject]);
+        uiPainterDataAnimation = Tween(begin: end, end: end).animate(
+            uiPainterDataAnimationController);
+        uiPainterDataAnimationController.reset();
+      }
     }
   }
 
@@ -110,7 +109,6 @@ abstract class CandlesState extends State<CandlesWidget>
   void initState() {
     // TODO: implement initState
     super.initState(); //插入监听器
-    widget.dataStream.listen(onData);
     positivePainter = new Paint()
       ..color = widget.style.positiveColor
       ..style = PaintingStyle.fill;
@@ -118,8 +116,12 @@ abstract class CandlesState extends State<CandlesWidget>
       ..color = widget.style.negativeColor
       ..style = PaintingStyle.fill;
 
+    uiPainterDataAnimationController = AnimationController(
+        duration: widget.style.duration, vsync: this);
+    widget.dataStream.listen(onData);
 
-    List<UIOCandle> candleUIObjectList = [];
+//    List<UIOCandle> candleUIObjectList = [];
+    /*
     widget.initData?.forEach((ExtCandleData candleData) {
       var candleUIObject = UIOCandle.fromData(candleData, widget.style.paddingX,
           candleData.open <= candleData.close
@@ -139,14 +141,13 @@ abstract class CandlesState extends State<CandlesWidget>
       lastObject = candleUIObjectList.removeLast();
     }
     this.uiPainterData = UIOCandles(candleUIObjectList);
-    uiPainterDataAnimationController = AnimationController(
-        duration: widget.style.duration, vsync: this);
     if (lastObject != null) {
       uiPainterDataAnimation = Tween(
           begin: UIOCandles([lastObject]),
           end: UIOCandles([lastObject]))
           .animate(uiPainterDataAnimationController);
     }
+    */
   }
 
   @override

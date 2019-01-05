@@ -80,7 +80,7 @@ class UIOCandle implements UIAnimatedObject<UIOCandle> {
         }
 
         return UIOCandle(
-            a.origin + b.origin, a.r + b.r, a.top + b.top, a.bottom + b.bottom, marginX, painter: painter);
+            a.origin + b.origin, a.r + b.r, a.top + b.top, a.bottom + b.bottom, marginX, painter: painter, index:index);
     }
 
     UIOCandle operator -(UIOCandle other) {
@@ -91,7 +91,7 @@ class UIOCandle implements UIAnimatedObject<UIOCandle> {
         }
 
         return UIOCandle(
-            a.origin - b.origin, a.r - b.r, a.top - b.top, a.bottom - b.bottom, marginX, painter: painter);
+            a.origin - b.origin, a.r - b.r, a.top - b.top, a.bottom - b.bottom, marginX, painter: painter, index: index);
     }
 
     UIOCandle operator *(double process) {
@@ -102,6 +102,6 @@ class UIOCandle implements UIAnimatedObject<UIOCandle> {
         var r = this.r * process;
         var top = this.top * process;
         var bottom = this.bottom * process;
-        return UIOCandle(origin, r, top, bottom, marginX, painter: painter);
+        return UIOCandle(origin, r, top, bottom, marginX, painter: painter, index: index);
     }
 }

@@ -124,7 +124,6 @@ class MaWidgetState extends State<MaWidget> {
             children: <Widget>[
                 Positioned.fill(
                     child: UIAnimatedWidget<UIOPath, UIOPoint>(
-                        initData: widget.initData,
                         dataStream: widget.dataStream,
                         uiCamera: widget.uiCamera,
                         duration: widget.style.duration,
@@ -135,7 +134,6 @@ class MaWidgetState extends State<MaWidget> {
                 ),
                 Positioned.fill(
                     child: UIAnimatedWidget<UIOPath, UIOPoint>(
-                        initData: widget.initData,
                         dataStream: widget.dataStream,
                         uiCamera: widget.uiCamera,
                         duration: widget.style.duration,
@@ -146,7 +144,6 @@ class MaWidgetState extends State<MaWidget> {
                 ),
                 Positioned.fill(
                     child: UIAnimatedWidget<UIOPath, UIOPoint>(
-                        initData: widget.initData,
                         dataStream: widget.dataStream,
                         uiCamera: widget.uiCamera,
                         duration: widget.style.duration,
@@ -163,13 +160,11 @@ class MaWidgetState extends State<MaWidget> {
 class MaWidget extends StatefulWidget {
     MaWidget({
         Key key,
-        this.initData,
         this.dataStream,
         this.uiCamera,
         this.style,
     }) : super(key: key);
 
-    final List<ExtCandleData> initData;
     final Stream<ExtCandleData> dataStream;
     final UICamera uiCamera;
     final MaStyle style;

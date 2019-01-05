@@ -4,20 +4,12 @@ import 'package:candlesticks/gudashi/k_line.dart';
 import 'package:candlesticks/candlesticks.dart';
 import 'dataSource.dart';
 
-List<dynamic> data = [];
-List<CandleData> candleData = [];
 const minute = 1;
 
 void main() async {
 //    candleData = await getCandleData();
     //data = await DataSource.instance.initTZB(minute);
-    data = await DataSource.instance.initTZB(minute);
-
-    var count = 500;
-    for (var i = data.length - count; i < data.length; i++) {
-        var cd = CandleData.fromArray(data[i]['virgin'], 1000 * 60 * minute);
-        candleData.add(cd);
-    }
+    await DataSource.instance.initTZB(minute);
 
     runApp(new MyApp());
 }
@@ -46,7 +38,6 @@ class _MyAppState extends State<MyApp> {
                     Expanded(
                         flex: 1,
                         child: CandlesticksWidget(
-                            initData: candleData,
                             dataStream: DataSource.instance.subject.stream,
                             candlesticksStyle: CandlesticksStyle(
                                 cameraDuration: Duration(milliseconds: 500),
@@ -68,6 +59,7 @@ class _MyAppState extends State<MyApp> {
                             ),
                         ),
                     ),
+                    /*
                     Expanded(
                         flex: 1,
                         child: KCharts(
@@ -75,6 +67,7 @@ class _MyAppState extends State<MyApp> {
                             data: data,
                         ),
                     ),
+                    */
                 ]
                 ),
             ),
