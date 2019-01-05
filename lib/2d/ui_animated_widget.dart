@@ -17,82 +17,90 @@ abstract class UIAnimatedState<T extends UIObjects<TT,
   AnimationController uiObjectAnimationController;
   Animation<T> uiAnimatedObject;
 
-  T initCandleLIst(List<ExtCandleData> candleDataList);
+  T getCandles();
 
-  TT updateLastCandle(ExtCandleData candleData);
+  TT getCandle(ExtCandleData candleData);
 
-  TT addCandle(ExtCandleData candleData);
+  T getBeginAnimation(T lastAnimationUIObject, TT point);
 
-  T addCandleBegin(ExtCandleData candleData);
-
-  T addCandleEnd(ExtCandleData candleData);
-
-  bool needUpdate(ExtCandleData candleData, TT uiObject);
+  T getEndAnimation(T lastAnimationUIObject, TT point);
 
   UIAnimatedState() : super();
 
   void onData(ExtCandleData candleData) {
-    var removedPoint;
-    uiObjectAnimationController.value = 1;
-    var currentUIPathData = this.uiAnimatedObject?.value;
-
-    for (; currentUIPathData != null &&
-        currentUIPathData.uiObjects.isNotEmpty;) {
-      if (this.needUpdate(candleData, currentUIPathData.uiObjects.last)) {
-        removedPoint = currentUIPathData.uiObjects.removeLast();
-      } else {
-        break;
-      }
+    if (fixedUIObject == null) {
+      this.fixedUIObject = getCandles();
     }
 
-    T beginPath;
-    T endPath;
-    if (removedPoint != null) {
-      beginPath = currentUIPathData.clone();
-      endPath = currentUIPathData.clone();
-      TT point = updateLastCandle(candleData);
-      if (point == null) {
-        return;
-      }
-      beginPath.uiObjects.add(removedPoint);
+    TT point = getCandle(candleData);
+    if (point == null) {
+      return;
+    }
+    CandlesticksContext.of(context).onAABBChange(
+        candleData, point.aabb());
+
+    if (uiAnimatedObject == null) {
+      T endPath = getCandles();
       endPath.uiObjects.add(point);
-      CandlesticksContext.of(context).onAABBChange(candleData, point.aabb());
-    } else {
-      if (uiAnimatedObject != null) {
-        uiObjectAnimationController.value = 1;
-        fixedUIObject.uiObjects.add(
-            uiAnimatedObject.value.uiObjects.last);
-      }
-      TT point = addCandle(candleData);
-      if (point == null) {
-        return;
-      }
-      beginPath = addCandleBegin(candleData);
-      endPath = addCandleEnd(candleData);
-      CandlesticksContext.of(context).onAABBChange(candleData, point.aabb());
-    }
-
-    bool inView = false;
-    for (var i = 0; i < endPath.uiObjects.length; i++) {
-      if (this.widget.uiCamera.viewPort.cross(
-          endPath.uiObjects[i].aabb())) {
-        inView = true;
-        break;
-      }
-    }
-
-    if (inView) {
-      uiAnimatedObject = Tween(begin: beginPath, end: endPath).animate(
-          uiObjectAnimationController);
-      uiObjectAnimationController.reset();
-      uiObjectAnimationController.forward();
-      setState(() {
-
-      });
-    } else {
       uiAnimatedObject = Tween(begin: endPath, end: endPath).animate(
           uiObjectAnimationController);
       uiObjectAnimationController.reset();
+      return;
+    }
+
+    var currentUIPathData = this.uiAnimatedObject?.value;
+    if (currentUIPathData.uiObjects.length < 2) {
+      T endPath = currentUIPathData.clone();
+      endPath.uiObjects.add(point);
+      uiAnimatedObject = Tween(begin: endPath, end: endPath).animate(
+          uiObjectAnimationController);
+      uiObjectAnimationController.reset();
+      return;
+    }
+    bool inView = false;
+    if ((this.widget.uiCamera != null) && (this.widget.uiCamera.viewPort.cross(point.aabb()))) {
+      inView = true;
+    }
+    TT last = currentUIPathData.uiObjects.last;
+    if (point.index <= last.index) {
+      if (inView) {
+        var beginPath = currentUIPathData.clone();
+        var endPath = currentUIPathData.clone();
+        endPath.uiObjects[endPath.uiObjects.length - 1] = point;
+        uiAnimatedObject = Tween(begin: beginPath, end: endPath).animate(
+            uiObjectAnimationController);
+        uiObjectAnimationController.reset();
+        uiObjectAnimationController.forward();
+      } else {
+        var endPath = currentUIPathData.clone();
+        endPath.uiObjects[endPath.uiObjects.length - 1] = point;
+        uiAnimatedObject = Tween(begin: endPath, end: endPath).animate(
+            uiObjectAnimationController);
+        uiObjectAnimationController.reset();
+      }
+    }else {
+      uiObjectAnimationController.value = 1;
+      if(fixedUIObject.uiObjects.isNotEmpty) {
+        fixedUIObject.uiObjects.removeLast();
+      }
+      var lastAnimationUIObject = uiAnimatedObject.value.clone();
+      var first = lastAnimationUIObject.uiObjects.removeAt(0);
+      fixedUIObject.uiObjects.add(first);
+      fixedUIObject.uiObjects.add(lastAnimationUIObject.uiObjects.first);
+
+      if(inView) {
+        var beginPath = getBeginAnimation(lastAnimationUIObject, point);
+        var endPath = getEndAnimation(lastAnimationUIObject, point);
+        uiAnimatedObject = Tween(begin: beginPath, end: endPath).animate(
+            uiObjectAnimationController);
+        uiObjectAnimationController.reset();
+        uiObjectAnimationController.forward();
+      }else {
+        var endPath = getEndAnimation(lastAnimationUIObject, point);
+        uiAnimatedObject = Tween(begin: endPath, end: endPath).animate(
+            uiObjectAnimationController);
+        uiObjectAnimationController.reset();
+      }
     }
   }
 
@@ -115,32 +123,13 @@ abstract class UIAnimatedState<T extends UIObjects<TT,
     super.initState(); //插入监听器
     widget.dataStream.listen(onData);
 
-    this.fixedUIObject = initCandleLIst([]);
-
-
     uiObjectAnimationController = AnimationController(
         duration: this.widget.duration, vsync: this);
-
-
-    /*
-    if (widget.initData.length >= 2) {
-      this.fixedUIObject.uiObjects.removeLast();
-      var endPath = addCandleEnd(widget.initData.last);
-
-      uiAnimatedObject = Tween(begin: endPath, end: endPath).animate(
-          uiObjectAnimationController);
-    }
-    */
   }
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    /*
-    for (var i = 0; i < this.widget.initData.length; i++) {
-      CandlesticksContext.of(context).onAABBChange(
-          this.widget.initData[i], this.fixedUIObject.uiObjects[i].aabb());
-    }
-    */
   }
 
   @override
@@ -162,6 +151,9 @@ abstract class UIAnimatedView<T extends UIObjects<TT,
 
   @override
   Widget build(BuildContext context) {
+    if((this.widget.uiCamera == null) || (uiAnimatedObject == null)) {
+      return Container();
+    }
     return Stack(
       children: <Widget>[
         Positioned.fill(

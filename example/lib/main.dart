@@ -41,7 +41,7 @@ class _MyAppState extends State<MyApp> {
                             dataStream: DataSource.instance.subject.stream,
                             candlesticksStyle: CandlesticksStyle(
                                 cameraDuration: Duration(milliseconds: 500),
-                                viewPortX: 50,
+                                viewPortX: 10,
                                 durationMs: 1000 * 60 * minute,
                                 candlesStyle: CandlesStyle(
                                     positiveColor: Colors.redAccent,

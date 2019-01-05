@@ -83,7 +83,7 @@ class DataSource {
         channel.sink.add(
             '{"method":"pull_gamble_user_market","data":{"market":"${symbol}","gamble":true}}');
         channel.sink.add(
-            '{"method":"pull_gamble_kline_graph","data":{"market":"${symbol}","k_line_type":"${minute}","k_line_count":"500"}}');
+            '{"method":"pull_gamble_kline_graph","data":{"market":"${symbol}","k_line_type":"${minute}","k_line_count":"10"}}');
 
         channel.stream.listen((request) {
             var msg = json.decode(utf8.decode(request));
