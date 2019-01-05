@@ -26,11 +26,7 @@ class CandlesticksView extends CandlesticksState {
                 uiCamera: uiCameraAnimation?.value,
                 child: Container(
                     decoration: new BoxDecoration(
-                      /*
-                                    border: new Border.all(
-                                        width: 1.0, color: Colors.white),
-                                        */
-                      color: const Color(0xff21232e),
+                      color: widget.candlesticksStyle.backgroundColor,
                     ),
                     child: Stack(
                       children: <Widget>[

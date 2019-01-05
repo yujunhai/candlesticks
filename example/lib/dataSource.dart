@@ -6,164 +6,162 @@ import 'package:candlesticks/candlesticks.dart';
 
 class DataSource {
 
-    static final DataSource instance = new DataSource
-        ._internal();
+  static final DataSource instance = new DataSource
+      ._internal();
 
-    factory DataSource() {
-        return instance;
-    }
+  factory DataSource() {
+    return instance;
+  }
 
-    final ReplaySubject<CandleData> subject = ReplaySubject<CandleData>();
+  final ReplaySubject<CandleData> subject = ReplaySubject<CandleData>();
 
-    var channel;
-    DataSource._internal();
+  var channel;
 
-    Future<List> initHuobi(int minute) async {
-        var completer = new Completer<List>();
-        var symbol = "ethusdt";
-        var period = "${minute}min";
-        var market = "market.$symbol.kline.$period";
+  DataSource._internal();
 
-        channel = await IOWebSocketChannel.connect(
-            "wss://api.huobi.pro/ws");
-        channel.sink.add(
-            '{"sub":"${market}","id":"id11"}}');
+  Future<List> initHuobi(int minute) async {
+    var completer = new Completer<List>();
+    var symbol = "ethusdt";
+    var period = "${minute}min";
+    var market = "market.$symbol.kline.$period";
 
-        channel.stream.listen((request) {
-            var msg = json.decode(utf8.decode(request));
-            //print(msg);
-            if (msg['ch'] == market) {
+    channel = await IOWebSocketChannel.connect(
+        "wss://api.huobi.pro/ws");
+    channel.sink.add(
+        '{"sub":"${market}","id":"id11"}}');
+
+    channel.stream.listen((request) {
+      var msg = json.decode(utf8.decode(request));
+      //print(msg);
+      if (msg['ch'] == market) {
 //                print(msg['data']);
-                List dataK = [];
-                msg['data'].forEach((item) {
-                    var d = {};
-                    try {
-                        d['time'] = int.parse(item[0]);
-                        d['open'] = double.parse(item[1]);
-                        d['high'] = double.parse(item[2]);
-                        d['low'] = double.parse(item[3]);
-                        d['close'] = double.parse(item[4]);
-                        d['volume'] = double.parse(item[5]);
-                        d['virgin'] = item;
-                    } catch (e) {
-                        print(e);
-                    }
+        List dataK = [];
+        msg['data'].forEach((item) {
+          var d = {};
+          try {
+            d['time'] = int.parse(item[0]);
+            d['open'] = double.parse(item[1]);
+            d['high'] = double.parse(item[2]);
+            d['low'] = double.parse(item[3]);
+            d['close'] = double.parse(item[4]);
+            d['volume'] = double.parse(item[5]);
+            d['virgin'] = item;
+          } catch (e) {
+            print(e);
+          }
 
-                    dataK.add(d);
-                    if(completer.isCompleted) {
-                        subject.sink.add(CandleData.fromArray(item));
-                    }
-                });
-                if(!completer.isCompleted) {
-                    completer.complete(dataK);
-                }
+          dataK.add(d);
+          if (completer.isCompleted) {
+            subject.sink.add(CandleData.fromArray(item));
+          }
+        });
+        if (!completer.isCompleted) {
+          completer.complete(dataK);
+        }
 //        kChartsKey.currentState.data = data;
 //                print('pull_kline_graph');
 //        kChartsKey.currentState.init();
 //                channel.sink.close(5678, "raisin");
-            }else if(msg['ping'] != null) {
-                int now = DateTime.now().millisecond;
-                channel.sink.add(
-                    '{"pong":"${now}"}}');
+      } else if (msg['ping'] != null) {
+        int now = DateTime
+            .now()
+            .millisecond;
+        channel.sink.add(
+            '{"pong":"${now}"}}');
+      }
+    });
 
-            }
-        });
+    return completer.future;
+  }
 
-        return completer.future;
-    }
-    initTZB(int minute) async {
-        var symbol = "eth_usdt";
+  initTZB(int minute) async {
+    var symbol = "eth_usdt";
 
-        channel = await IOWebSocketChannel.connect(
-            "wss://ws.tokenbinary.io/sub");
-        /*
+    channel = await IOWebSocketChannel.connect(
+        "wss://ws.tokenbinary.io/sub");
+    /*
         channel.sink.add(
             '{"method":"pull_heart","data":{"time":"1541066934853"}}');
             */
-        channel.sink.add(
-            '{"method":"pull_gamble_user_market","data":{"market":"${symbol}","gamble":true}}');
-        channel.sink.add(
-            '{"method":"pull_gamble_kline_graph","data":{"market":"${symbol}","k_line_type":"${minute}","k_line_count":"10"}}');
+    channel.sink.add(
+        '{"method":"pull_gamble_user_market","data":{"market":"${symbol}","gamble":true}}');
+    channel.sink.add(
+        '{"method":"pull_gamble_kline_graph","data":{"market":"${symbol}","k_line_type":"${minute}","k_line_count":"10"}}');
 
-        channel.stream.listen((request) {
-            var msg = json.decode(utf8.decode(request));
-            int now = DateTime.now().millisecond;
-            channel.sink.add(
-                '{"method":"pull_heart","data":{"time":"${now}"}}');
-            if (msg['method'] == 'push_gamble_kline_graph') {
-                //print(msg['data']);
-                List dataK = [];
-                msg['data'].forEach((item) {
-                    var d = {};
-                    try {
-                        d['time'] = int.parse(item[0]);
-                        d['open'] = double.parse(item[1]);
-                        d['high'] = double.parse(item[2]);
-                        d['low'] = double.parse(item[3]);
-                        d['close'] = double.parse(item[4]);
-                        d['volume'] = double.parse(item[5]);
-                        d['virgin'] = item;
-                    } catch (e) {
-                        //print(e);
-                    }
+    channel.stream.listen((request) {
+      var msg = json.decode(utf8.decode(request));
+      int now = DateTime
+          .now()
+          .millisecond;
+      channel.sink.add(
+          '{"method":"pull_heart","data":{"time":"${now}"}}');
+      if (msg['method'] == 'push_gamble_kline_graph') {
+        //print(msg['data']);
+        List dataK = [];
+        msg['data'].forEach((item) {
+          var d = {};
+          try {
+            d['time'] = int.parse(item[0]);
+            d['open'] = double.parse(item[1]);
+            d['high'] = double.parse(item[2]);
+            d['low'] = double.parse(item[3]);
+            d['close'] = double.parse(item[4]);
+            d['volume'] = double.parse(item[5]);
+            d['virgin'] = item;
+          } catch (e) {
+            //print(e);
+          }
 
-                    subject.sink.add(CandleData.fromArray(item));
-                });
+          subject.sink.add(CandleData.fromArray(item));
+        });
 //        kChartsKey.currentState.data = data;
 //                print('pull_kline_graph');
 //        kChartsKey.currentState.init();
 //                channel.sink.close(5678, "raisin");
-            }
+      }
+    });
+  }
+
+  initRBTC(int minute) async {
+    var symbol = "eth_usdt";
+
+    channel = await IOWebSocketChannel.connect(
+        "wss://market-api.rbtc.io/sub");
+    channel.sink.add(
+        '{"method":"pull_heart","data":{"time":"1541066934853"}}');
+    channel.sink.add(
+        '{"method":"pull_user_market","data":{"market":"${symbol}"}}');
+    channel.sink.add(
+        '{"method":"pull_kline_graph","data":{"market":"${symbol}","k_line_type":"${minute}","k_line_count":"31"}}');
+
+    channel.stream.listen((request) {
+      var msg = json.decode(utf8.decode(request));
+      if (msg['method'] == 'push_kline_graph') {
+        //print(msg['data']);
+        List dataK = [];
+        msg['data'].forEach((item) {
+          var d = {};
+          try {
+            d['time'] = int.parse(item[0]);
+            d['open'] = double.parse(item[1]);
+            d['high'] = double.parse(item[2]);
+            d['low'] = double.parse(item[3]);
+            d['close'] = double.parse(item[4]);
+            d['volume'] = double.parse(item[5]);
+            d['virgin'] = item;
+          } catch (e) {
+            //print(e);
+          }
+
+          dataK.add(d);
+          subject.sink.add(CandleData.fromArray(item));
         });
-    }
-
-    Future<List> initRBTC(int minute) async {
-        var completer = new Completer<List>();
-        var symbol = "del_pyc";
-
-        channel = await IOWebSocketChannel.connect(
-            "wss://market-api.rbtc.io/sub");
-        channel.sink.add(
-            '{"method":"pull_heart","data":{"time":"1541066934853"}}');
-        channel.sink.add(
-            '{"method":"pull_user_market","data":{"market":"${symbol}"}}');
-        channel.sink.add(
-            '{"method":"pull_kline_graph","data":{"market":"${symbol}","k_line_type":"${minute}","k_line_count":"500"}}');
-
-        channel.stream.listen((request) {
-            var msg = json.decode(utf8.decode(request));
-            if (msg['method'] == 'push_kline_graph') {
-                //print(msg['data']);
-                List dataK = [];
-                msg['data'].forEach((item) {
-                    var d = {};
-                    try {
-                        d['time'] = int.parse(item[0]);
-                        d['open'] = double.parse(item[1]);
-                        d['high'] = double.parse(item[2]);
-                        d['low'] = double.parse(item[3]);
-                        d['close'] = double.parse(item[4]);
-                        d['volume'] = double.parse(item[5]);
-                        d['virgin'] = item;
-                    } catch (e) {
-                        //print(e);
-                    }
-
-                    dataK.add(d);
-                    if(completer.isCompleted) {
-                        subject.sink.add(CandleData.fromArray(item));
-                    }
-                });
-                if(!completer.isCompleted) {
-                    completer.complete(dataK);
-                }
 //        kChartsKey.currentState.data = data;
 //                print('pull_kline_graph');
 //        kChartsKey.currentState.init();
 //                channel.sink.close(5678, "raisin");
-            }
-        });
-
-        return completer.future;
-    }
+      }
+    });
+    return;
+  }
 }

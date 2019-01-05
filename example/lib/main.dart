@@ -9,7 +9,7 @@ const minute = 1;
 void main() async {
 //    candleData = await getCandleData();
     //data = await DataSource.instance.initTZB(minute);
-    await DataSource.instance.initTZB(minute);
+    await DataSource.instance.initRBTC(minute);
 
     runApp(new MyApp());
 }
@@ -40,6 +40,7 @@ class _MyAppState extends State<MyApp> {
                         child: CandlesticksWidget(
                             dataStream: DataSource.instance.subject.stream,
                             candlesticksStyle: CandlesticksStyle(
+                                backgroundColor: Color(0xff21232e),
                                 cameraDuration: Duration(milliseconds: 500),
                                 viewPortX: 10,
                                 durationMs: 1000 * 60 * minute,

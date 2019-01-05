@@ -44,7 +44,7 @@ abstract class CandlesticksState extends State<CandlesticksWidget>
     if(uiCameraAnimationController == null) {
       return;
     }
-    if(candleData.index >= widget.candlesticksStyle.viewPortX) {
+    if(candleData.index + 1 >= widget.candlesticksStyle.viewPortX) {
       if(uiCameraAnimation != null) {
         var currentUICamera = uiCameraAnimation.value;
         if(!currentUICamera.viewPort.cross(aabb)) {
@@ -119,6 +119,10 @@ abstract class CandlesticksState extends State<CandlesticksWidget>
   }
 
   void onHorizontalDragUpdate(DragUpdateDetails details) {
+    if(uiCameraAnimation == null) {//还没有初始化完成。
+      return;
+    }
+
     var dr = details.primaryDelta / context.size.width;
     var dx = uiCameraAnimation.value.viewPort.width * dr;
     var uiCamera = uiCameraAnimation.value;
@@ -159,35 +163,6 @@ abstract class CandlesticksState extends State<CandlesticksWidget>
     exdataStream = widget.dataStream.map(onCandleData).asBroadcastStream();
     uiCameraAnimationController = AnimationController(
         duration: widget.candlesticksStyle.cameraDuration, vsync: this);
-
-
-    /*
-        var viewPort = UIORect(UIOPoint(0, 0), UIOPoint(0, 0));
-        var uiCamera = UICamera(viewPort);
-        uiCameraAnimation = Tween(begin: uiCamera, end: uiCamera).animate(
-            uiCameraAnimationController);
-            */
-
-    /*
-    var viewPort = calViewPort(
-        candlesX.length - widget.candlesticksStyle.viewPortX,
-        candlesX.length - 1);
-    var uiCamera = UICamera(viewPort);
-    uiCameraAnimation = Tween(begin: uiCamera, end: uiCamera).animate(
-        uiCameraAnimationController);
-        */
-    /*
-        var minX = double.infinity;
-        var maxX = double.negativeInfinity;
-        var minY = double.infinity;
-        var maxY = double.negativeInfinity;
-
-
-        extInitData.forEach((ExtCandleData extCandleData) {
-            if(extCandleData.)
-        }
-        );
-        */
   }
 
   @override
