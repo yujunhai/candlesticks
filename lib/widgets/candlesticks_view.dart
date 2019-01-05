@@ -39,7 +39,6 @@ class CandlesticksView extends CandlesticksState {
                         Positioned.fill(
                           child: MaWidget(
                             dataStream: exdataStream,
-                            uiCamera: uiCameraAnimation?.value,
                             style: widget.candlesticksStyle.maStyle,
                           ),
                         ),

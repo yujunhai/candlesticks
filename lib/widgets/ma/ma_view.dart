@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:candlesticks/2d/uiobjects/uio_path.dart';
 import 'package:candlesticks/2d/uiobjects/uio_point.dart';
 import 'package:candlesticks/2d/ui_animated_widget.dart';
-import 'package:candlesticks/2d/uicamera.dart';
 import 'package:candlesticks/2d/candle_data.dart';
 import 'package:candlesticks/widgets/ma/ma_style.dart';
+import 'package:candlesticks/widgets/candlesticks_context_widget.dart';
 
 class MaView extends UIAnimatedView<UIOPath, UIOPoint> {
   List<double> _sum;
@@ -88,12 +88,13 @@ class MaView extends UIAnimatedView<UIOPath, UIOPoint> {
 class MaWidgetState extends State<MaWidget> {
   @override
   Widget build(BuildContext context) {
+    var uiCamera = CandlesticksContext.of(context).uiCamera;
     return Stack(
       children: <Widget>[
         Positioned.fill(
             child: UIAnimatedWidget<UIOPath, UIOPoint>(
               dataStream: widget.dataStream,
-              uiCamera: widget.uiCamera,
+              uiCamera: uiCamera,
               duration: widget.style.duration,
               state: () =>
                   MaView(
@@ -103,7 +104,7 @@ class MaWidgetState extends State<MaWidget> {
         Positioned.fill(
             child: UIAnimatedWidget<UIOPath, UIOPoint>(
               dataStream: widget.dataStream,
-              uiCamera: widget.uiCamera,
+              uiCamera: uiCamera,
               duration: widget.style.duration,
               state: () =>
                   MaView(widget.style.middleCount,
@@ -113,7 +114,7 @@ class MaWidgetState extends State<MaWidget> {
         Positioned.fill(
             child: UIAnimatedWidget<UIOPath, UIOPoint>(
               dataStream: widget.dataStream,
-              uiCamera: widget.uiCamera,
+              uiCamera: uiCamera,
               duration: widget.style.duration,
               state: () =>
                   MaView(widget.style.longCount, widget.style.maLong),
@@ -129,12 +130,10 @@ class MaWidget extends StatefulWidget {
   MaWidget({
     Key key,
     this.dataStream,
-    this.uiCamera,
     this.style,
   }) : super(key: key);
 
   final Stream<ExtCandleData> dataStream;
-  final UICamera uiCamera;
   final MaStyle style;
 
   @override
