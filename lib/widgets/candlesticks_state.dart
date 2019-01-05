@@ -58,6 +58,7 @@ abstract class CandlesticksState extends State<CandlesticksWidget>
       var uiCamera = UICamera(viewPort);
       uiCameraAnimation = Tween(begin: uiCamera, end: uiCamera).animate(
           uiCameraAnimationController);
+      uiCameraAnimationController.reset();
       setState(() {
 
       });
@@ -146,10 +147,10 @@ abstract class CandlesticksState extends State<CandlesticksWidget>
     var newCamera = UICamera(
         UIORect(UIOPoint(minX, minY), UIOPoint(maxX, maxY)));
 
-    uiCameraAnimationController.reset();
     uiCameraAnimation =
         Tween(begin: newCamera, end: newCamera).animate(
             uiCameraAnimationController);
+    uiCameraAnimationController.reset();
     setState(() {
 
     });
