@@ -4,61 +4,57 @@ import 'package:candlesticks/widgets/candlesticks_state.dart';
 import 'package:candlesticks/widgets/candles/candles_widget.dart';
 import 'package:candlesticks/widgets/ma/ma_view.dart';
 import 'package:candlesticks/2d/candle_data.dart';
-
-import 'package:candlesticks/widgets/candles/candles_style.dart';
-import 'package:candlesticks/widgets/ma/ma_style.dart';
+import 'package:candlesticks/widgets/candlesticks_context_widget.dart';
 
 class CandlesticksView extends CandlesticksState {
-    CandlesticksView({List<CandleData> initData,
-        Stream<CandleData> dataStream}) : super(initData:initData, dataStream:dataStream);
+  CandlesticksView({List<CandleData> initData,
+    Stream<CandleData> dataStream})
+      : super(initData: initData, dataStream: dataStream);
 
 
-    @override
-    Widget build(BuildContext context) {
-        return GestureDetector(
-            onHorizontalDragEnd: onHorizontalDragEnd,
-            onHorizontalDragUpdate: onHorizontalDragUpdate,
-            child: AnimatedBuilder(
-                animation: Listenable.merge([
-                    uiCameraAnimation,
-                ]),
-                builder: (BuildContext context, Widget child) {
-                    return Container(
-                        decoration: new BoxDecoration(
-                            /*
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onHorizontalDragEnd: onHorizontalDragEnd,
+      onHorizontalDragUpdate: onHorizontalDragUpdate,
+      child: AnimatedBuilder(
+          animation: Listenable.merge([
+            uiCameraAnimation,
+          ]),
+          builder: (BuildContext context, Widget child) {
+            return CandlesticksContext(
+                onAABBChange: onAABBChange,
+                uiCamera: uiCameraAnimation?.value,
+                child: Container(
+                    decoration: new BoxDecoration(
+                      /*
                                     border: new Border.all(
                                         width: 1.0, color: Colors.white),
                                         */
-                            color: const Color(0xff21232e),
+                      color: const Color(0xff21232e),
+                    ),
+                    child: Stack(
+                      children: <Widget>[
+                        Positioned.fill(
+                            child: CandlesWidget(
+                              initData: extInitData,
+                              dataStream: exdataStream,
+                              style: widget.candlesticksStyle.candlesStyle,
+                            )
                         ),
-                        child: Stack(
-                            children: <Widget>[
-                                Positioned.fill(
-                                    child: CandlesWidget(
-                                        initData: extInitData,
-                                        dataStream: exdataStream,
-                                        uiCamera: uiCameraAnimation?.value,
-                                        onUpdate: onCandleUpdate,
-                                        onAdd: onCandleAdd,
-                                        style: widget.candlesticksStyle.candlesStyle,
-                                    )
-                                ),
-                                Positioned.fill(
-                                    child: MaWidget(
-                                        initData: extInitData,
-                                        dataStream: exdataStream,
-                                        uiCamera: uiCameraAnimation?.value,
-                                        onUpdate: onMaUpdate,
-                                        onAdd: onMaAdd,
-                                        onInit: onMaInit,
-                                        style: widget.candlesticksStyle.maStyle,
-                                    ),
-                                ),
-                            ],
-                        )
-                    );
-                }
-            ),
-        );
-    }
+                        Positioned.fill(
+                          child: MaWidget(
+                            initData: extInitData,
+                            dataStream: exdataStream,
+                            uiCamera: uiCameraAnimation?.value,
+                            style: widget.candlesticksStyle.maStyle,
+                          ),
+                        ),
+                      ],
+                    )
+                ));
+          }
+      ),
+    );
+  }
 }

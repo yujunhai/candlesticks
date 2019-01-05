@@ -127,10 +127,7 @@ class MaWidgetState extends State<MaWidget> {
                         initData: widget.initData,
                         dataStream: widget.dataStream,
                         uiCamera: widget.uiCamera,
-                        onUpdateLastCandle: widget.onUpdate,
-                        onAddCandle: widget.onAdd,
                         duration: widget.style.duration,
-                        onInitCandles:widget.onInit,
                         state: () =>
                             MaView(
                                 widget.style.shortCount, widget.style.maShort),
@@ -141,8 +138,6 @@ class MaWidgetState extends State<MaWidget> {
                         initData: widget.initData,
                         dataStream: widget.dataStream,
                         uiCamera: widget.uiCamera,
-                        onUpdateLastCandle: widget.onUpdate,
-                        onAddCandle: widget.onAdd,
                         duration: widget.style.duration,
                         state: () =>
                             MaView(widget.style.middleCount,
@@ -154,8 +149,6 @@ class MaWidgetState extends State<MaWidget> {
                         initData: widget.initData,
                         dataStream: widget.dataStream,
                         uiCamera: widget.uiCamera,
-                        onUpdateLastCandle: widget.onUpdate,
-                        onAddCandle: widget.onAdd,
                         duration: widget.style.duration,
                         state: () =>
                             MaView(widget.style.longCount, widget.style.maLong),
@@ -173,18 +166,12 @@ class MaWidget extends StatefulWidget {
         this.initData,
         this.dataStream,
         this.uiCamera,
-        this.onUpdate,
-        this.onAdd,
-        this.onInit,
         this.style,
     }) : super(key: key);
 
     final List<ExtCandleData> initData;
     final Stream<ExtCandleData> dataStream;
     final UICamera uiCamera;
-    final Function(ExtCandleData candleData, UIOPoint point) onUpdate;
-    final Function(ExtCandleData candleData, UIOPoint point) onAdd;
-    final Function(List<ExtCandleData> initData, UIOPath path) onInit;
     final MaStyle style;
 
     @override

@@ -12,18 +12,12 @@ class CandlesWidget extends StatefulWidget {
         Key key,
         this.initData,
         this.dataStream,
-        this.uiCamera,
-        this.onUpdate,
-        this.onAdd,
         this.style,
     }) :super(key: key);
 
     final List<ExtCandleData> initData;
     final Stream<ExtCandleData> dataStream;
-    final UICamera uiCamera;
     final CandlesStyle style;
-    final Function(ExtCandleData candleData, UIOCandle candle) onUpdate;
-    final Function(ExtCandleData candleData, UIOCandle candle) onAdd;
 
     @override
     CandlesView createState() => CandlesView();
