@@ -13,6 +13,13 @@ class CandlesticksView extends CandlesticksState {
 
   @override
   Widget build(BuildContext context) {
+    if (isWaitingForInitData()) {
+        return Container(
+          child: Center(
+            child: CircularProgressIndicator(),
+          ),
+        );
+    }
     return GestureDetector(
       onHorizontalDragEnd: onHorizontalDragEnd,
       onHorizontalDragUpdate: onHorizontalDragUpdate,

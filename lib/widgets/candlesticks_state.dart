@@ -15,6 +15,7 @@ const ZERO = 0.00000001;
 
 abstract class CandlesticksState extends State<CandlesticksWidget>
     with TickerProviderStateMixin {
+  StreamController<ExtCandleData> exdataStreamController;
   Stream<ExtCandleData> exdataStream;
 
   AnimationController uiCameraAnimationController;
@@ -27,13 +28,25 @@ abstract class CandlesticksState extends State<CandlesticksWidget>
   CandlesticksState({Stream<CandleData> dataStream})
       : super();
 
+  bool isWaitingForInitData() {
+    return this.candlesX.length < widget.candlesticksStyle.viewPortX;
+  }
+
   ExtCandleData onCandleData(CandleData candleData) {
     if ((candlesX.length <= 0) || (candleData.timeMs > candlesX.last)) {
       candlesX.add(candleData.timeMs.toDouble());
       this.candlesMaxY.add(candleData.high);
       this.candlesMinY.add(candleData.low);
     }
-    return ExtCandleData(candleData, index: candlesX.length - 1, durationMs: this.widget.candlesticksStyle.durationMs);
+    this.exdataStreamController.sink.add(ExtCandleData(
+        candleData, index: candlesX.length - 1,
+        durationMs: this.widget.candlesticksStyle.durationMs));
+
+    if(isWaitingForInitData()) {
+      setState(() {
+
+      });
+    }
   }
 
   onAABBChange(ExtCandleData candleData, UIORect aabb) {
@@ -41,13 +54,13 @@ abstract class CandlesticksState extends State<CandlesticksWidget>
     this.candlesMinY.update(candleData.index, aabb.min.y);
 
     //开始计算camera
-    if(uiCameraAnimationController == null) {
+    if (uiCameraAnimationController == null) {
       return;
     }
-    if(candleData.index + 1 >= widget.candlesticksStyle.viewPortX) {
-      if(uiCameraAnimation != null) {
+    if (!isWaitingForInitData()) {
+      if (uiCameraAnimation != null) {
         var currentUICamera = uiCameraAnimation.value;
-        if(!currentUICamera.viewPort.cross(aabb)) {
+        if (!currentUICamera.viewPort.cross(aabb)) {
           return;
         }
       }
@@ -120,7 +133,7 @@ abstract class CandlesticksState extends State<CandlesticksWidget>
   }
 
   void onHorizontalDragUpdate(DragUpdateDetails details) {
-    if(uiCameraAnimation == null) {//还没有初始化完成。
+    if (uiCameraAnimation == null) { //还没有初始化完成。
       return;
     }
 
@@ -161,7 +174,9 @@ abstract class CandlesticksState extends State<CandlesticksWidget>
   void initState() {
     // TODO: implement initState
     super.initState(); //插入监听器
-    exdataStream = widget.dataStream.map(onCandleData).asBroadcastStream();
+    exdataStreamController = new StreamController<ExtCandleData>();
+    exdataStream = exdataStreamController.stream.asBroadcastStream();
+    widget.dataStream.listen(onCandleData);
     uiCameraAnimationController = AnimationController(
         duration: widget.candlesticksStyle.cameraDuration, vsync: this);
   }
