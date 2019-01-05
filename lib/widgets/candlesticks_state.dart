@@ -33,7 +33,7 @@ abstract class CandlesticksState extends State<CandlesticksWidget>
       this.candlesMaxY.add(candleData.high);
       this.candlesMinY.add(candleData.low);
     }
-    return ExtCandleData(candleData, index: candlesX.length - 1);
+    return ExtCandleData(candleData, index: candlesX.length - 1, durationMs: this.widget.candlesticksStyle.durationMs);
   }
 
   onAABBChange(ExtCandleData candleData, UIORect aabb) {

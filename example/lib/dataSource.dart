@@ -51,7 +51,7 @@ class DataSource {
 
                     dataK.add(d);
                     if(completer.isCompleted) {
-                        subject.sink.add(CandleData.fromArray(item, 1000*60*minute));
+                        subject.sink.add(CandleData.fromArray(item));
                     }
                 });
                 if(!completer.isCompleted) {
@@ -107,7 +107,7 @@ class DataSource {
                         //print(e);
                     }
 
-                    subject.sink.add(CandleData.fromArray(item, 1000*60*minute));
+                    subject.sink.add(CandleData.fromArray(item));
                 });
 //        kChartsKey.currentState.data = data;
 //                print('pull_kline_graph');
@@ -151,7 +151,7 @@ class DataSource {
 
                     dataK.add(d);
                     if(completer.isCompleted) {
-                        subject.sink.add(CandleData.fromArray(item, 1000*60*minute));
+                        subject.sink.add(CandleData.fromArray(item));
                     }
                 });
                 if(!completer.isCompleted) {

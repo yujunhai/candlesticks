@@ -1,7 +1,6 @@
 
 class CandleData {
     final int timeMs;
-    final int durationMs;
     final double open;
     final double close;
     final double high;
@@ -10,7 +9,6 @@ class CandleData {
 
     CandleData({
         this.timeMs,
-        this.durationMs,
         this.open,
         this.close,
         this.high,
@@ -18,7 +16,7 @@ class CandleData {
         this.volume,
     });
 
-    CandleData.fromArray(final List<dynamic> item, this.durationMs) :
+    CandleData.fromArray(final List<dynamic> item) :
             timeMs = int.parse(item[0]),
             open = double.parse(item[1]),
             high = double.parse(item[2]),
@@ -29,10 +27,10 @@ class CandleData {
 
 class ExtCandleData extends CandleData {
     final int index;
+    final int durationMs;
 
-    ExtCandleData(CandleData candleData, {this.index}) : super(
+    ExtCandleData(CandleData candleData, {this.index, this.durationMs}) : super(
         timeMs:candleData.timeMs,
-        durationMs:candleData.durationMs,
         open:candleData.open,
         close:candleData.close,
         high:candleData.high,

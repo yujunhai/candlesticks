@@ -40,7 +40,6 @@ class CandlesticksView extends CandlesticksState {
                               style: widget.candlesticksStyle.candlesStyle,
                             )
                         ),
-                        /*
                         Positioned.fill(
                           child: MaWidget(
                             dataStream: exdataStream,
@@ -48,7 +47,6 @@ class CandlesticksView extends CandlesticksState {
                             style: widget.candlesticksStyle.maStyle,
                           ),
                         ),
-                        */
                       ],
                     )
                 ));
