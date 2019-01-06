@@ -29,7 +29,7 @@ abstract class CandlesticksState extends State<CandlesticksWidget>
       : super();
 
   bool isWaitingForInitData() {
-    return this.candlesX.length < widget.candlesticksStyle.viewPortX;
+    return this.candlesX.length < widget.candlesticksStyle.initAfterNData;
   }
 
   _onCandleData(CandleData candleData) {
@@ -50,9 +50,9 @@ abstract class CandlesticksState extends State<CandlesticksWidget>
 
       });
     } else {
-//      if (uiCameraAnimation == null) {
+      if (uiCameraAnimation == null) {
         var maxX = candlesX.last + durationMs;
-        var minX = maxX - durationMs * widget.candlesticksStyle.viewPortX;
+        var minX = maxX - durationMs * widget.candlesticksStyle.defaultViewPortX;
         var rangeX = AABBRangeX(minX, maxX);
         uiCameraAnimation =
             Tween(begin: rangeX, end: rangeX).animate(
@@ -61,7 +61,24 @@ abstract class CandlesticksState extends State<CandlesticksWidget>
         setState(() {
 
         });
-//      }
+      }else {
+        var currentRangeX = this.uiCameraAnimation.value;
+        if((currentRangeX.minX <= candlesX.last) && (candlesX.last <= currentRangeX.maxX)) {
+          var maxX = candlesX.last + durationMs;
+          var minX = maxX - durationMs * widget.candlesticksStyle.defaultViewPortX;
+          var rangeX = AABBRangeX(minX, maxX);
+
+          uiCameraAnimation =
+              Tween(begin: uiCameraAnimation.value, end: rangeX).animate(
+                  uiCameraAnimationController);
+          uiCameraAnimationController.reset();
+          uiCameraAnimationController.forward();
+          print("asdf");
+          setState(() {
+
+          });
+        }
+      }
     }
   }
 
@@ -80,57 +97,44 @@ abstract class CandlesticksState extends State<CandlesticksWidget>
   }
 
   void onHorizontalDragEnd(DragEndDetails details) {
-    /*
     //区间的最大值， 最小值。
     if (uiCameraAnimation == null) {
       return;
     }
 
-    var uiCamera = uiCameraAnimation.value;
-    var viewPortDx = uiCamera.worldToViewPortDX(durationMs);
-    var screenDx = uiCamera.viewPortToScreenDx(context.size, viewPortDx);
+    var currentRangeX = this.uiCameraAnimation.value;
+    var width = currentRangeX.width;
+    double a =  width * 3;
+    var viewPortDx = details.primaryVelocity.abs() / context.size.width;
+    var worldDx = width * viewPortDx;
 
-    double a = screenDx * 200;
-    double speed = details.primaryVelocity.abs();
+    double speed = worldDx;//per second
     double durationSecond = speed / a;
     double targetDx = speed * durationSecond +
         a * durationSecond * durationSecond / 2;
-    if (details.primaryVelocity < 0) {
-      targetDx = -targetDx;
+    if(details.primaryVelocity < 0) {
+      targetDx = - targetDx;
     }
 
-    double worldDx = uiCamera.viewPortToWorldDX(
-        uiCamera.screenToViewPortDx(context.size, targetDx));
-    double minX = uiCamera.viewPort.min.x - worldDx;
-    double maxX = uiCamera.viewPort.max.x - worldDx;
+    double minX = currentRangeX.minX - targetDx;
 
     if (minX < this.candlesX.first) {
       minX = this.candlesX.first;
     }
-    if (minX > this.candlesX.last -
-        durationMs * (this.widget.candlesticksStyle.viewPortX - 1)) {
-      minX = this.candlesX.last -
-          durationMs * (this.widget.candlesticksStyle.viewPortX - 1);
+    if (minX > this.candlesX.last + durationMs - width) {
+      minX = this.candlesX.last + durationMs - width;
     }
-    if (maxX > this.candlesX.last + durationMs) {
-      maxX = this.candlesX.last + durationMs;
-    }
-    if (maxX < this.candlesX.first +
-        durationMs * this.widget.candlesticksStyle.viewPortX) {
-      maxX = this.candlesX.first +
-          durationMs * this.widget.candlesticksStyle.viewPortX;
-    }
+    double maxX = minX + width;
 
-    var newUICamera = calUICamera(minX, maxX);
+    var newUICamera = AABBRangeX(minX, maxX);
     uiCameraAnimation =
-        Tween(begin: uiCamera, end: newUICamera)
+        Tween(begin: currentRangeX, end: newUICamera)
             .animate(CurvedAnimation(
             parent: uiCameraAnimationController,
             curve: Curves.decelerate
         ));
     uiCameraAnimationController.reset();
     uiCameraAnimationController.forward();
-    */
   }
 
   void onHorizontalDragUpdate(DragUpdateDetails details) {

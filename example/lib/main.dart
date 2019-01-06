@@ -25,7 +25,8 @@ class _MyAppState extends State<MyApp> {
     style = CandlesticksStyle(
       backgroundColor: Color(0xff21232e),
       cameraDuration: Duration(milliseconds: 500),
-      viewPortX: 40,
+      initAfterNData: 500,
+      defaultViewPortX: 40,
       candlesStyle: CandlesStyle(
           positiveColor: Colors.redAccent,
           negativeColor: Colors.greenAccent,
@@ -73,7 +74,8 @@ class _MyAppState extends State<MyApp> {
                       style = CandlesticksStyle(
                         backgroundColor: Colors.white,
                         cameraDuration: Duration(milliseconds: 500),
-                        viewPortX: 10,
+                        initAfterNData: 500,
+                        defaultViewPortX: 40,
                         candlesStyle: CandlesStyle(
                             positiveColor: Colors.redAccent,
                             negativeColor: Colors.greenAccent,
@@ -94,7 +96,8 @@ class _MyAppState extends State<MyApp> {
                       style = CandlesticksStyle(
                         backgroundColor: Colors.black,
                         cameraDuration: Duration(milliseconds: 500),
-                        viewPortX: 40,
+                        initAfterNData: 500,
+                        defaultViewPortX: 40,
                         candlesStyle: CandlesStyle(
                             positiveColor: Colors.greenAccent,
                             negativeColor: Colors.redAccent,
