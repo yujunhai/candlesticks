@@ -6,6 +6,7 @@ import 'package:candlesticks/2d/ui_animated_widget.dart';
 import 'package:candlesticks/2d/candle_data.dart';
 import 'package:candlesticks/widgets/ma/ma_style.dart';
 import 'package:candlesticks/widgets/candlesticks_context_widget.dart';
+import 'package:candlesticks/widgets/aabb/aabb_context.dart';
 
 class MaView extends UIAnimatedView<UIOPath, UIOPoint> {
   List<double> _sum;
@@ -87,12 +88,12 @@ class MaView extends UIAnimatedView<UIOPath, UIOPoint> {
 
 class MaWidgetState extends State<MaWidget> {
 
-  CandlesticksContext candlesticksContext;
+  AABBContext candlesticksContext;
 
   @override void didChangeDependencies() {
     // TODO: implement didChangeDependencies
     super.didChangeDependencies();
-    candlesticksContext = CandlesticksContext.of(context);
+    candlesticksContext = AABBContext.of(context);
   }
 
   @override

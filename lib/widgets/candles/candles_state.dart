@@ -7,6 +7,7 @@ import 'package:candlesticks/2d/uiobjects/uio_candles.dart';
 import 'package:candlesticks/2d/uiobjects/uio_point.dart';
 import 'package:candlesticks/2d/candle_data.dart';
 import 'package:candlesticks/widgets/candlesticks_context_widget.dart';
+import 'package:candlesticks/widgets/aabb/aabb_context.dart';
 
 
 abstract class CandlesState extends State<CandlesWidget>
@@ -19,7 +20,7 @@ abstract class CandlesState extends State<CandlesWidget>
   Paint positivePainter;
   Paint negativePainter;
   StreamSubscription<ExtCandleData> subscription;
-  CandlesticksContext candlesticksContext;
+  AABBContext candlesticksContext;
 
   CandlesState()
       : super();
@@ -76,7 +77,7 @@ abstract class CandlesState extends State<CandlesWidget>
         var begin = UIOCandles(<UIOCandle>[UIOCandle(
             UIOPoint(candleUIObject.origin.x, candleUIObject.origin.y),
             UIOPoint(candleUIObject.r.x, 0), 0, 0, widget.style.paddingX,
-            painter: candleUIObject.painter)
+            painter: candleUIObject.painter, index: candleData.index)
         ]);
         var end = UIOCandles(<UIOCandle>[candleUIObject]);
         uiPainterDataAnimation = Tween(begin: begin, end: end).animate(
@@ -109,7 +110,7 @@ abstract class CandlesState extends State<CandlesWidget>
   @override void didChangeDependencies() {
     // TODO: implement didChangeDependencies
     super.didChangeDependencies();
-    candlesticksContext = CandlesticksContext.of(context);
+    candlesticksContext = AABBContext.of(context);
   }
 
   @override

@@ -5,6 +5,8 @@ import 'package:candlesticks/widgets/candles/candles_widget.dart';
 import 'package:candlesticks/widgets/ma/ma_view.dart';
 import 'package:candlesticks/2d/candle_data.dart';
 import 'package:candlesticks/widgets/candlesticks_context_widget.dart';
+import 'package:candlesticks/widgets/aabb/aabb_widget.dart';
+import 'package:candlesticks/widgets/aabb/aabb_range.dart';
 
 class CandlesticksView extends CandlesticksState {
   CandlesticksView({Stream<CandleData> dataStream})
@@ -14,12 +16,13 @@ class CandlesticksView extends CandlesticksState {
   @override
   Widget build(BuildContext context) {
     if (isWaitingForInitData()) {
-        return Container(
-          child: Center(
-            child: CircularProgressIndicator(),
-          ),
-        );
+      return Container(
+        child: Center(
+          child: CircularProgressIndicator(),
+        ),
+      );
     }
+
     return GestureDetector(
       onHorizontalDragEnd: onHorizontalDragEnd,
       onHorizontalDragUpdate: onHorizontalDragUpdate,
@@ -29,28 +32,12 @@ class CandlesticksView extends CandlesticksState {
           ]),
           builder: (BuildContext context, Widget child) {
             return CandlesticksContext(
-                onAABBChange: onAABBChange,
-                uiCamera: uiCameraAnimation==null?null:calUICamera(uiCameraAnimation.value.viewPort.min.x, uiCameraAnimation.value.viewPort.max.x),
-                child: Container(
-                    decoration: BoxDecoration(
-                      color: widget.candlesticksStyle.backgroundColor,
-                    ),
-                    child: Stack(
-                      children: <Widget>[
-                        Positioned.fill(
-                            child: CandlesWidget(
-                              dataStream: exdataStream,
-                              style: widget.candlesticksStyle.candlesStyle,
-                            )
-                        ),
-                        Positioned.fill(
-                          child: MaWidget(
-                            dataStream: exdataStream,
-                            style: widget.candlesticksStyle.maStyle,
-                          ),
-                        ),
-                      ],
-                    )
+              candlesX: candlesX,
+                child: AABBWidget(
+                  extdataStream: exdataStream,
+                  durationMs: durationMs,
+                  rangeX: uiCameraAnimation.value,
+                  candlesticksStyle: widget.candlesticksStyle,
                 ));
           }
       ),

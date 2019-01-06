@@ -6,6 +6,7 @@ import 'package:candlesticks/2d/uicamera.dart';
 import 'package:candlesticks/2d/uiwidget.dart';
 import 'package:candlesticks/2d/candle_data.dart';
 import 'package:candlesticks/widgets/candlesticks_context_widget.dart';
+import 'package:candlesticks/widgets/aabb/aabb_context.dart';
 
 const ZERO = 0.00000001;
 
@@ -18,7 +19,7 @@ abstract class UIAnimatedState<T extends UIObjects<TT,
   AnimationController uiObjectAnimationController;
   Animation<T> uiAnimatedObject;
   StreamSubscription<ExtCandleData> subscription;
-  CandlesticksContext candlesticksContext;
+  AABBContext candlesticksContext;
 
   T getCandles();
 
@@ -133,7 +134,7 @@ abstract class UIAnimatedState<T extends UIObjects<TT,
   @override void didChangeDependencies() {
     // TODO: implement didChangeDependencies
     super.didChangeDependencies();
-    candlesticksContext = CandlesticksContext.of(context);
+    candlesticksContext = AABBContext.of(context);
   }
 
   @override
