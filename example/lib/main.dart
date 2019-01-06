@@ -71,7 +71,7 @@ class _MyAppState extends State<MyApp> {
 //                      dataStreamFuture = DataSource.instance.initTZB(5);
                       print('切换颜色 红绿');
                       style = CandlesticksStyle(
-                        backgroundColor: Color(0xff21232e),
+                        backgroundColor: Colors.white,
                         cameraDuration: Duration(milliseconds: 500),
                         viewPortX: 40,
                         candlesStyle: CandlesStyle(
@@ -92,7 +92,7 @@ class _MyAppState extends State<MyApp> {
 //                      dataStreamFuture = DataSource.instance.initTZB(5);
                       print('切换颜色 绿红');
                       style = CandlesticksStyle(
-                        backgroundColor: Color(0xff21232e),
+                        backgroundColor: Colors.black,
                         cameraDuration: Duration(milliseconds: 500),
                         viewPortX: 40,
                         candlesStyle: CandlesStyle(
