@@ -137,6 +137,7 @@ abstract class CandlesticksState extends State<CandlesticksWidget>
     var maxX = rangeX.maxX;
     minX -= dx;
     maxX -= dx;
+    var width = maxX - minX;
 
     var baseX = this.candlesX.first;
     var startIndex = (minX - baseX) ~/ this.durationMs;
@@ -152,6 +153,15 @@ abstract class CandlesticksState extends State<CandlesticksWidget>
     }
     if (endIndex >= this.candlesX.length) {
       endIndex = this.candlesX.length - 1;
+    }
+    if(minX < this.candlesX.first) {
+      minX = this.candlesX.first;
+      maxX = minX + width;
+    }
+
+    if(maxX > this.candlesX.last + this.durationMs) {
+      maxX = this.candlesX.last + this.durationMs;
+      minX = maxX - width;
     }
 
     var newRangeX = AABBRangeX(minX, maxX);
