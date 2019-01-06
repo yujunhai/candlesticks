@@ -32,11 +32,12 @@ class CandlesticksView extends CandlesticksState {
           ]),
           builder: (BuildContext context, Widget child) {
             return CandlesticksContext(
-              candlesX: candlesX,
+                onCandleDataFinish: onCandleDataFinish,
+                candlesX: candlesX,
                 child: AABBWidget(
                   extdataStream: exdataStream,
                   durationMs: durationMs,
-                  rangeX: uiCameraAnimation.value,
+                  rangeX: uiCameraAnimation?.value,
                   candlesticksStyle: widget.candlesticksStyle,
                 ));
           }

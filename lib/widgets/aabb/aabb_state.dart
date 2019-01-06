@@ -40,6 +40,7 @@ abstract class AABBState extends State<AABBWidget>
   onAABBChange(ExtCandleData candleData, UIORect aabb) {
     this.candlesMaxY.update(candleData.index, aabb.max.y);
     this.candlesMinY.update(candleData.index, aabb.min.y);
+    candlesticksContext.onCandleDataFinish(candleData);
   }
 
 
@@ -65,11 +66,11 @@ abstract class AABBState extends State<AABBWidget>
     }
 
     var minY = this.candlesMinY.min(startIndex, endIndex);
-    if(minY == null) {
+    if (minY == null) {
       return null;
     }
     var maxY = this.candlesMaxY.min(startIndex, endIndex);
-    if(maxY == null) {
+    if (maxY == null) {
       return null;
     }
 

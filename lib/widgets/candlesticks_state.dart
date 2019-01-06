@@ -44,41 +44,10 @@ abstract class CandlesticksState extends State<CandlesticksWidget>
         durationMs: this.durationMs, first: first);
 
     this.exdataStreamController.sink.add(extCandleData);
-
     if (isWaitingForInitData()) {
       setState(() {
 
       });
-    } else {
-      if (uiCameraAnimation == null) {
-        var maxX = candlesX.last + durationMs;
-        var minX = maxX - durationMs * widget.candlesticksStyle.defaultViewPortX;
-        var rangeX = AABBRangeX(minX, maxX);
-        uiCameraAnimation =
-            Tween(begin: rangeX, end: rangeX).animate(
-                uiCameraAnimationController);
-        uiCameraAnimationController.reset();
-        setState(() {
-
-        });
-      }else {
-        var currentRangeX = this.uiCameraAnimation.value;
-        if((currentRangeX.minX <= candlesX.last) && (candlesX.last <= currentRangeX.maxX)) {
-          var maxX = candlesX.last + durationMs;
-          var minX = maxX - durationMs * widget.candlesticksStyle.defaultViewPortX;
-          var rangeX = AABBRangeX(minX, maxX);
-
-          uiCameraAnimation =
-              Tween(begin: uiCameraAnimation.value, end: rangeX).animate(
-                  uiCameraAnimationController);
-          uiCameraAnimationController.reset();
-          uiCameraAnimationController.forward();
-          print("asdf");
-          setState(() {
-
-          });
-        }
-      }
     }
   }
 
@@ -96,7 +65,25 @@ abstract class CandlesticksState extends State<CandlesticksWidget>
     _onCandleData(candleData);
   }
 
+  onCandleDataFinish(ExtCandleData candleData) {
+    if (uiCameraAnimation == null) {
+      var maxX = candlesX.last + durationMs;
+      var minX = maxX -
+          durationMs * widget.candlesticksStyle.defaultViewPortX;
+      var rangeX = AABBRangeX(minX, maxX);
+      uiCameraAnimation =
+          Tween(begin: rangeX, end: rangeX).animate(
+              uiCameraAnimationController);
+      uiCameraAnimationController.reset();
+      setState(() {
+
+      });
+    }
+  }
+
   void onHorizontalDragEnd(DragEndDetails details) {
+    return;
+    /*
     //区间的最大值， 最小值。
     if (uiCameraAnimation == null) {
       return;
@@ -135,6 +122,7 @@ abstract class CandlesticksState extends State<CandlesticksWidget>
         ));
     uiCameraAnimationController.reset();
     uiCameraAnimationController.forward();
+    */
   }
 
   void onHorizontalDragUpdate(DragUpdateDetails details) {

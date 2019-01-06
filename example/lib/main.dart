@@ -21,7 +21,7 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    dataStreamFuture = DataSource.instance.initTZB(5);
+    dataStreamFuture = DataSource.instance.initTZB(1);
     style = CandlesticksStyle(
       backgroundColor: Color(0xff21232e),
       cameraDuration: Duration(milliseconds: 500),
