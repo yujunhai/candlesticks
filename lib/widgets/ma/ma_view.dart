@@ -86,9 +86,18 @@ class MaView extends UIAnimatedView<UIOPath, UIOPoint> {
 }
 
 class MaWidgetState extends State<MaWidget> {
+
+  CandlesticksContext candlesticksContext;
+
+  @override void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    super.didChangeDependencies();
+    candlesticksContext = CandlesticksContext.of(context);
+  }
+
   @override
   Widget build(BuildContext context) {
-    var uiCamera = CandlesticksContext.of(context).uiCamera;
+    var uiCamera = candlesticksContext?.uiCamera;
     return Stack(
       children: <Widget>[
         Positioned.fill(

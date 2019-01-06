@@ -24,6 +24,7 @@ abstract class CandlesticksState extends State<CandlesticksWidget>
   List<double> candlesX = List<double>();
   TreedListMin<double> candlesMaxY = TreedListMin(null, reverse: -1);
   TreedListMin<double> candlesMinY = TreedListMin(null);
+  StreamSubscription<CandleData> subscription;
 
   CandlesticksState({Stream<CandleData> dataStream})
       : super();
@@ -176,7 +177,7 @@ abstract class CandlesticksState extends State<CandlesticksWidget>
     super.initState(); //插入监听器
     exdataStreamController = new StreamController<ExtCandleData>();
     exdataStream = exdataStreamController.stream.asBroadcastStream();
-    widget.dataStream.listen(onCandleData);
+    subscription = widget.dataStream.listen(onCandleData);
     uiCameraAnimationController = AnimationController(
         duration: widget.candlesticksStyle.cameraDuration, vsync: this);
   }
@@ -189,6 +190,10 @@ abstract class CandlesticksState extends State<CandlesticksWidget>
 
   @override
   void dispose() {
+    subscription.cancel();
+    exdataStreamController.close();
+    uiCameraAnimationController.dispose();
+
     super.dispose(); //删除监听器
   }
 }

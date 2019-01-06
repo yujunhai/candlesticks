@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'dart:async';
 
 import 'package:candlesticks/2d/uiobject.dart';
 import 'package:candlesticks/2d/uicamera.dart';
@@ -16,6 +17,8 @@ abstract class UIAnimatedState<T extends UIObjects<TT,
   T fixedUIObject;
   AnimationController uiObjectAnimationController;
   Animation<T> uiAnimatedObject;
+  StreamSubscription<ExtCandleData> subscription;
+  CandlesticksContext candlesticksContext;
 
   T getCandles();
 
@@ -36,7 +39,7 @@ abstract class UIAnimatedState<T extends UIObjects<TT,
     if (point == null) {
       return;
     }
-    CandlesticksContext.of(context).onAABBChange(
+    candlesticksContext.onAABBChange(
         candleData, point.aabb());
 
     if (uiAnimatedObject == null) {
@@ -121,15 +124,16 @@ abstract class UIAnimatedState<T extends UIObjects<TT,
   void initState() {
     // TODO: implement initState
     super.initState(); //插入监听器
-    widget.dataStream.listen(onData);
+    subscription = widget.dataStream.listen(onData);
 
     uiObjectAnimationController = AnimationController(
         duration: this.widget.duration, vsync: this);
   }
 
-  @override
-  void didChangeDependencies() {
+  @override void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
     super.didChangeDependencies();
+    candlesticksContext = CandlesticksContext.of(context);
   }
 
   @override
@@ -140,6 +144,9 @@ abstract class UIAnimatedState<T extends UIObjects<TT,
 
   @override
   void dispose() {
+    subscription?.cancel();
+    uiObjectAnimationController.dispose();
+
     super.dispose(); //删除监听器
   }
 }

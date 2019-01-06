@@ -13,9 +13,7 @@ class CandlesView extends CandlesState {
 
   @override
   Widget build(BuildContext context) {
-    var uiCamera = CandlesticksContext
-        .of(context)
-        .uiCamera;
+    var uiCamera = candlesticksContext?.uiCamera;
     return UIGestureDetector(
         onTap: () {
           print("tap candles");

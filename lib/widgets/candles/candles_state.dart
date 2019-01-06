@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'dart:async';
 
 import 'package:candlesticks/widgets/candles/candles_widget.dart';
 import 'package:candlesticks/2d/uiobjects/uio_candle.dart';
@@ -17,21 +18,21 @@ abstract class CandlesState extends State<CandlesWidget>
 
   Paint positivePainter;
   Paint negativePainter;
+  StreamSubscription<ExtCandleData> subscription;
+  CandlesticksContext candlesticksContext;
 
   CandlesState()
       : super();
 
   void onData(ExtCandleData candleData) {
-    var uiCamera = CandlesticksContext
-        .of(context)
-        .uiCamera;
+    var uiCamera = candlesticksContext?.uiCamera;
 
     var candleUIObject = UIOCandle.fromData(candleData, widget.style.paddingX,
         candleData.open <= candleData.close
             ? positivePainter
             : negativePainter, index: candleData.index);
 
-    CandlesticksContext.of(context).onAABBChange(
+    candlesticksContext.onAABBChange(
         candleData, candleUIObject.aabb());
     if(uiPainterData == null) {
       uiPainterData = UIOCandles([]);
@@ -105,6 +106,12 @@ abstract class CandlesState extends State<CandlesWidget>
   void onHorizontalDragUpdate(DragUpdateDetails details) {
   }
 
+  @override void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    super.didChangeDependencies();
+    candlesticksContext = CandlesticksContext.of(context);
+  }
+
   @override
   void initState() {
     // TODO: implement initState
@@ -118,36 +125,7 @@ abstract class CandlesState extends State<CandlesWidget>
 
     uiPainterDataAnimationController = AnimationController(
         duration: widget.style.duration, vsync: this);
-    widget.dataStream.listen(onData);
-
-//    List<UIOCandle> candleUIObjectList = [];
-    /*
-    widget.initData?.forEach((ExtCandleData candleData) {
-      var candleUIObject = UIOCandle.fromData(candleData, widget.style.paddingX,
-          candleData.open <= candleData.close
-              ? positivePainter
-              : negativePainter);
-      UIOCandle last;
-      if (candleUIObjectList.length > 0) {
-        last = candleUIObjectList[candleUIObjectList.length - 1];
-      }
-      if ((last != null) && (candleUIObject.origin.x == last.origin.x)) {
-        candleUIObjectList.removeLast();
-      }
-      candleUIObjectList.add(candleUIObject);
-    });
-    UIOCandle lastObject;
-    if (candleUIObjectList.length > 0) {
-      lastObject = candleUIObjectList.removeLast();
-    }
-    this.uiPainterData = UIOCandles(candleUIObjectList);
-    if (lastObject != null) {
-      uiPainterDataAnimation = Tween(
-          begin: UIOCandles([lastObject]),
-          end: UIOCandles([lastObject]))
-          .animate(uiPainterDataAnimationController);
-    }
-    */
+    subscription = widget.dataStream.listen(onData);
   }
 
   @override
@@ -158,6 +136,9 @@ abstract class CandlesState extends State<CandlesWidget>
 
   @override
   void dispose() {
+    uiPainterDataAnimationController.dispose();
+    subscription?.cancel();
+
     super.dispose(); //删除监听器
   }
 }

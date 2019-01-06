@@ -13,71 +13,20 @@ class DataSource {
     return instance;
   }
 
-  final ReplaySubject<CandleData> subject = ReplaySubject<CandleData>();
+  ReplaySubject<CandleData> subject;
 
   var channel;
 
   DataSource._internal();
 
-  Future<List> initHuobi(int minute) async {
-    var completer = new Completer<List>();
-    var symbol = "ethusdt";
-    var period = "${minute}min";
-    var market = "market.$symbol.kline.$period";
-
-    channel = await IOWebSocketChannel.connect(
-        "wss://api.huobi.pro/ws");
-    channel.sink.add(
-        '{"sub":"${market}","id":"id11"}}');
-
-    channel.stream.listen((request) {
-      var msg = json.decode(utf8.decode(request));
-      //print(msg);
-      if (msg['ch'] == market) {
-//                print(msg['data']);
-        List dataK = [];
-        msg['data'].forEach((item) {
-          var d = {};
-          try {
-            d['time'] = int.parse(item[0]);
-            d['open'] = double.parse(item[1]);
-            d['high'] = double.parse(item[2]);
-            d['low'] = double.parse(item[3]);
-            d['close'] = double.parse(item[4]);
-            d['volume'] = double.parse(item[5]);
-            d['virgin'] = item;
-          } catch (e) {
-            print(e);
-          }
-
-          dataK.add(d);
-          if (completer.isCompleted) {
-            subject.sink.add(CandleData.fromArray(item));
-          }
-        });
-        if (!completer.isCompleted) {
-          completer.complete(dataK);
-        }
-//        kChartsKey.currentState.data = data;
-//                print('pull_kline_graph');
-//        kChartsKey.currentState.init();
-//                channel.sink.close(5678, "raisin");
-      } else if (msg['ping'] != null) {
-        int now = DateTime
-            .now()
-            .millisecond;
-        channel.sink.add(
-            '{"pong":"${now}"}}');
-      }
-    });
-
-    return completer.future;
-  }
-
-  initTZB(int minute) async {
+  Future<Stream<CandleData>> initTZB(int minute) async {
+    if(subject != null) {
+      subject.close();
+    }
+    subject = ReplaySubject<CandleData>();
     var symbol = "eth_usdt";
 
-    channel = await IOWebSocketChannel.connect(
+    channel = IOWebSocketChannel.connect(
         "wss://ws.tokenbinary.io/sub");
     /*
         channel.sink.add(
@@ -120,12 +69,18 @@ class DataSource {
 //                channel.sink.close(5678, "raisin");
       }
     });
+    return subject.stream;
   }
 
-  initRBTC(int minute) async {
+  Future<Stream<CandleData>> initRBTC(int minute) async {
+    if(subject != null) {
+      subject.close();
+    }
+    subject = ReplaySubject<CandleData>();
+
     var symbol = "eth_usdt";
 
-    channel = await IOWebSocketChannel.connect(
+    channel = IOWebSocketChannel.connect(
         "wss://market-api.rbtc.io/sub");
     channel.sink.add(
         '{"method":"pull_heart","data":{"time":"1541066934853"}}');
@@ -162,6 +117,6 @@ class DataSource {
 //                channel.sink.close(5678, "raisin");
       }
     });
-    return;
+    return subject.stream;
   }
 }
