@@ -73,7 +73,7 @@ class _MyAppState extends State<MyApp> {
                       style = CandlesticksStyle(
                         backgroundColor: Colors.white,
                         cameraDuration: Duration(milliseconds: 500),
-                        viewPortX: 40,
+                        viewPortX: 10,
                         candlesStyle: CandlesStyle(
                             positiveColor: Colors.redAccent,
                             negativeColor: Colors.greenAccent,

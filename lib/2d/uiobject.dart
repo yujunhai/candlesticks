@@ -4,9 +4,8 @@ import 'package:candlesticks/2d/uiobjects/uio_rect.dart';
 import 'package:candlesticks/2d/uicamera.dart';
 
 class UIOCullingRange {
-    int minIndex;
-    int maxIndex;
-
+    final int minIndex;
+    final int maxIndex;
     UIOCullingRange(this.minIndex, this.maxIndex);
 }
 
@@ -98,7 +97,7 @@ abstract class UIObjects<T extends UIAnimatedObject<T>, TT extends UIObjectsAcce
     }
 
     int _anyCullingIndex(UICamera uiCamera, {UIOCullingRange range}) {
-        if ((uiObjects == null) || (uiObjects.length <= 0)) {
+        if ((uiCamera == null)|| (uiObjects == null) || (uiObjects.length <= 0)) {
             return null;
         }
 

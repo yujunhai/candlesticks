@@ -40,7 +40,7 @@ class DataSource {
     channel.sink.add(
         '{"method":"pull_gamble_user_market","data":{"market":"${symbol}","gamble":true}}');
     channel.sink.add(
-        '{"method":"pull_gamble_kline_graph","data":{"market":"${symbol}","k_line_type":"${minute}","k_line_count":"500"}}');
+        '{"method":"pull_gamble_kline_graph","data":{"market":"${symbol}","k_line_type":"${minute}","k_line_count":"30"}}');
 
     channel.stream.listen((request) {
       var msg = json.decode(utf8.decode(request));
@@ -68,10 +68,6 @@ class DataSource {
 
           subject.sink.add(CandleData.fromArray(item));
         });
-//        kChartsKey.currentState.data = data;
-//                print('pull_kline_graph');
-//        kChartsKey.currentState.init();
-//                channel.sink.close(5678, "raisin");
       }
     });
     return subject.stream;
@@ -92,7 +88,7 @@ class DataSource {
     channel.sink.add(
         '{"method":"pull_user_market","data":{"market":"${symbol}"}}');
     channel.sink.add(
-        '{"method":"pull_kline_graph","data":{"market":"${symbol}","k_line_type":"${minute}","k_line_count":"300"}}');
+        '{"method":"pull_kline_graph","data":{"market":"${symbol}","k_line_type":"${minute}","k_line_count":"30"}}');
 
     channel.stream.listen((request) {
       var msg = json.decode(utf8.decode(request));

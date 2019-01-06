@@ -30,7 +30,7 @@ class CandlesticksView extends CandlesticksState {
           builder: (BuildContext context, Widget child) {
             return CandlesticksContext(
                 onAABBChange: onAABBChange,
-                uiCamera: uiCameraAnimation?.value,
+                uiCamera: uiCameraAnimation==null?null:calUICamera(uiCameraAnimation.value.viewPort.min.x, uiCameraAnimation.value.viewPort.max.x),
                 child: Container(
                     decoration: BoxDecoration(
                       color: widget.candlesticksStyle.backgroundColor,

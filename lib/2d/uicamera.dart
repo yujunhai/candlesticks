@@ -57,6 +57,14 @@ class UICamera {
             point.dx / size.width, (size.height - point.dy) / size.height);
     }
 
+    double viewPortToScreenDx(Size size, double dx) {
+        return dx * size.width;
+    }
+
+    double viewPortToScreenDy(Size size, double dy) {
+        return dy * size.height;
+    }
+
     double screenToViewPortDx(Size size, double dx) {
         return dx / size.width;
     }
