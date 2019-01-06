@@ -22,9 +22,14 @@ class DataSource {
   Future<Stream<CandleData>> initTZB(int minute) async {
     if(subject != null) {
       subject.close();
+      subject = null;
     }
     subject = ReplaySubject<CandleData>();
     var symbol = "eth_usdt";
+    if(channel != null) {
+      channel.sink.close();
+      channel = null;
+    }
 
     channel = IOWebSocketChannel.connect(
         "wss://ws.tokenbinary.io/sub");

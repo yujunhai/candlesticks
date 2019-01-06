@@ -33,6 +33,14 @@ abstract class CandlesticksState extends State<CandlesticksWidget>
     return this.candlesX.length < widget.candlesticksStyle.viewPortX;
   }
 
+  double durationMs() {
+    if(this.candlesX.length < 2) {
+      return 0;
+    }
+
+    return this.candlesX[1] - this.candlesX[0];
+  }
+
   ExtCandleData onCandleData(CandleData candleData) {
     if ((candlesX.length <= 0) || (candleData.timeMs > candlesX.last)) {
       candlesX.add(candleData.timeMs.toDouble());
@@ -41,7 +49,7 @@ abstract class CandlesticksState extends State<CandlesticksWidget>
     }
     this.exdataStreamController.sink.add(ExtCandleData(
         candleData, index: candlesX.length - 1,
-        durationMs: this.widget.candlesticksStyle.durationMs));
+        durationMs: this.durationMs()));
 
     if(isWaitingForInitData()) {
       setState(() {
@@ -91,6 +99,9 @@ abstract class CandlesticksState extends State<CandlesticksWidget>
     if (to > this.candlesX.length) {
       to = this.candlesX.length - 1;
     }
+    if(from == to) {
+      return UIORect(UIOPoint(0, 0), UIOPoint(0, 0));
+    }
     var minY = this.candlesMinY.min(from, to);
     if (minY == null) {
       minY = 0;
@@ -99,12 +110,11 @@ abstract class CandlesticksState extends State<CandlesticksWidget>
     if (maxY == null) {
       maxY = 0;
     }
-    var durationMs = widget.candlesticksStyle.durationMs;
     if (from < 0) {
       return null;
     }
     var minX = this.candlesX[from];
-    var maxX = this.candlesX[to] + durationMs;
+    var maxX = this.candlesX[to] + durationMs();
     return UIORect(UIOPoint(minX, minY), UIOPoint(maxX, maxY));
   }
 
@@ -147,8 +157,8 @@ abstract class CandlesticksState extends State<CandlesticksWidget>
     maxX -= dx;
 
     var baseX = this.candlesX.first;
-    var startIndex = (minX - baseX) ~/ widget.candlesticksStyle.durationMs;
-    var endIndex = (maxX - baseX) ~/ widget.candlesticksStyle.durationMs;
+    var startIndex = (minX - baseX) ~/ this.durationMs();
+    var endIndex = (maxX - baseX) ~/ this.durationMs();
     var minY = this.candlesMinY.min(startIndex, endIndex);
     if (minY == null) {
       minY = 0;

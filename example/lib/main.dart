@@ -16,10 +16,11 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  int count = 0;
   @override
   void initState() {
     super.initState();
-    dataStreamFuture = DataSource.instance.initTZB(minute);
+    dataStreamFuture = DataSource.instance.initTZB(5);
   }
 
   GlobalKey<KChartsState> kChartsKey = new GlobalKey<KChartsState>();
@@ -43,12 +44,17 @@ class _MyAppState extends State<MyApp> {
               child: Row(children: <Widget>[
                 RaisedButton(
                   onPressed: () {
-                    this.dataStreamFuture = getStream();
+                    count++;
+                    if(count % 2 == 0) {
+                      dataStreamFuture = DataSource.instance.initTZB(5);
+                      print('切换K线 5');
+                    }else {
+                      dataStreamFuture = DataSource.instance.initTZB(1);
+                      print('切换K线 1');
+                    }
                     setState(() {
 
                     });
-                    print(
-                        '切换K线');
                   },
                 )
               ])),
@@ -61,13 +67,15 @@ class _MyAppState extends State<MyApp> {
                   if (snapshot.connectionState != ConnectionState.done) {
                     return Container();
                   }
+                  if(!snapshot.hasData) {
+                    return Container();
+                  }
                   return CandlesticksWidget(
                     dataStream: snapshot.data,
                     candlesticksStyle: CandlesticksStyle(
                       backgroundColor: Color(0xff21232e),
                       cameraDuration: Duration(milliseconds: 500),
                       viewPortX: 40,
-                      durationMs: 1000 * 60 * minute,
                       candlesStyle: CandlesStyle(
                           positiveColor: Colors.redAccent,
                           negativeColor: Colors.greenAccent,

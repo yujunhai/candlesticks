@@ -27,7 +27,7 @@ class CandleData {
 
 class ExtCandleData extends CandleData {
     final int index;
-    final int durationMs;
+    final double durationMs;
 
     ExtCandleData(CandleData candleData, {this.index, this.durationMs}) : super(
         timeMs:candleData.timeMs,
