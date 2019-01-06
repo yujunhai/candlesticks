@@ -30,16 +30,16 @@ class AABBView extends AABBState {
             child: Stack(
               children: <Widget>[
                 Positioned.fill(
-                    child: CandlesWidget(
-                      dataStream: exdataStream,
-                      style: widget.candlesticksStyle.candlesStyle,
-                    )
-                ),
-                Positioned.fill(
                   child: MaWidget(
                     dataStream: exdataStream,
                     style: widget.candlesticksStyle.maStyle,
                   ),
+                ),
+                Positioned.fill(
+                    child: CandlesWidget(
+                      dataStream: exdataStream,
+                      style: widget.candlesticksStyle.candlesStyle,
+                    )
                 ),
               ],
             )
