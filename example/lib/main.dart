@@ -46,11 +46,14 @@ class _MyAppState extends State<MyApp> {
                   onPressed: () {
                     count++;
                     if(count % 2 == 0) {
+                      dataStreamFuture = DataSource.instance.initTZB(1);
+                      print('切换K线 1');
+                    } if(count % 2 == 1){
                       dataStreamFuture = DataSource.instance.initTZB(5);
                       print('切换K线 5');
                     }else {
-                      dataStreamFuture = DataSource.instance.initTZB(1);
-                      print('切换K线 1');
+                      print('切换K线 5');
+                      dataStreamFuture = DataSource.instance.initTZB(5);
                     }
                     setState(() {
 
@@ -64,10 +67,7 @@ class _MyAppState extends State<MyApp> {
                 future: dataStreamFuture,
                 builder: (BuildContext context,
                     AsyncSnapshot<Stream<CandleData>> snapshot) {
-                  if (snapshot.connectionState != ConnectionState.done) {
-                    return Container();
-                  }
-                  if(!snapshot.hasData) {
+                  if((snapshot.connectionState != ConnectionState.done ) || (!snapshot.hasData) || (snapshot.data == null)) {
                     return Container();
                   }
                   return CandlesticksWidget(
