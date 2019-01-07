@@ -31,15 +31,15 @@ abstract class AABBState extends State<AABBWidget>
 
   onCandleData(ExtCandleData candleData) {
     if (candleData.first) {
-      this.candlesMaxY.add(candleData.high);
-      this.candlesMinY.add(candleData.low);
+      this.candlesMaxY.add(double.negativeInfinity);
+      this.candlesMinY.add(double.infinity);
     }
     exdataStreamController.sink.add(candleData);
   }
 
   onAABBChange(ExtCandleData candleData, UIORect aabb) {
-    this.candlesMaxY.update(candleData.index, aabb.max.y);
     this.candlesMinY.update(candleData.index, aabb.min.y);
+    this.candlesMaxY.update(candleData.index, aabb.max.y);
     candlesticksContext.onCandleDataFinish(candleData);
   }
 

@@ -15,12 +15,14 @@ class AABBWidget extends StatefulWidget {
     this.durationMs,
     this.rangeX,
     this.candlesticksStyle,
+    this.child,
   }) :super(key: key);
 
   final Stream<ExtCandleData> extdataStream;
   final double durationMs;
   final AABBRangeX rangeX;
   final CandlesticksStyle candlesticksStyle;
+  final Widget child;
 
   @override
   AABBView createState() => AABBView();

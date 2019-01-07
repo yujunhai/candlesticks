@@ -6,6 +6,7 @@ import 'package:candlesticks/2d/uiobjects/uio_rect.dart';
 class AABBContext extends InheritedWidget {
   final UICamera uiCamera;
   final double durationMs;
+  final Stream<ExtCandleData> extDataStream;
 
   final Function(ExtCandleData candleData, UIORect aabb) onAABBChange;
 
@@ -15,6 +16,7 @@ class AABBContext extends InheritedWidget {
     @required this.onAABBChange,
     @required this.durationMs,
     @required Widget child,
+    @required this.extDataStream,
   }) : super(key: key, child: child);
 
   static AABBContext of(BuildContext context) {

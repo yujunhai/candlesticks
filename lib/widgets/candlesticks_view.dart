@@ -7,6 +7,7 @@ import 'package:candlesticks/2d/candle_data.dart';
 import 'package:candlesticks/widgets/candlesticks_context_widget.dart';
 import 'package:candlesticks/widgets/aabb/aabb_widget.dart';
 import 'package:candlesticks/widgets/aabb/aabb_range.dart';
+import 'package:candlesticks/widgets/main_board/main_board_widget.dart';
 
 class CandlesticksView extends CandlesticksState {
   CandlesticksView({Stream<CandleData> dataStream})
@@ -39,6 +40,10 @@ class CandlesticksView extends CandlesticksState {
                   durationMs: durationMs,
                   rangeX: uiCameraAnimation?.value,
                   candlesticksStyle: widget.candlesticksStyle,
+                  child: MainBoardWidget(
+                    candlesticksStyle: widget.candlesticksStyle,
+                    extdataStream: exdataStream,
+                  ),
                 ));
           }
       ),

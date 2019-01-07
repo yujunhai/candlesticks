@@ -21,27 +21,8 @@ class AABBView extends AABBState {
         onAABBChange: onAABBChange,
         uiCamera: uiCamera,
         durationMs: widget.durationMs,
-        child:
-        Container(
-            decoration: BoxDecoration(
-              color: widget.candlesticksStyle.backgroundColor,
-            ),
-            child: Stack(
-              children: <Widget>[
-                Positioned.fill(
-                  child: MaWidget(
-                    dataStream: exdataStream,
-                    style: widget.candlesticksStyle.maStyle,
-                  ),
-                ),
-                Positioned.fill(
-                    child: CandlesWidget(
-                      dataStream: exdataStream,
-                      style: widget.candlesticksStyle.candlesStyle,
-                    )
-                ),
-              ],
-            )
-        ));
+        child:widget.child,
+        extDataStream: exdataStream,
+    );
   }
 }
