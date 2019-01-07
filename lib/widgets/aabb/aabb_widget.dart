@@ -11,14 +11,14 @@ class AABBWidget extends StatefulWidget {
 
   AABBWidget({
     Key key,
-    this.extdataStream,
+    this.extDataStream,
     this.durationMs,
     this.rangeX,
     this.candlesticksStyle,
     this.child,
   }) :super(key: key);
 
-  final Stream<ExtCandleData> extdataStream;
+  final Stream<ExtCandleData> extDataStream;
   final double durationMs;
   final AABBRangeX rangeX;
   final CandlesticksStyle candlesticksStyle;

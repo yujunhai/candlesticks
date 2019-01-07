@@ -82,7 +82,7 @@ abstract class AABBState extends State<AABBWidget>
   void initState() {
     // TODO: implement initState
     super.initState(); //插入监听器
-    subscription = widget.extdataStream.listen(onCandleData);
+    subscription = widget.extDataStream.listen(onCandleData);
     exdataStreamController = new StreamController<ExtCandleData>();
     exdataStream = exdataStreamController.stream.asBroadcastStream();
   }

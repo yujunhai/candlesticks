@@ -36,7 +36,7 @@ class CandlesticksView extends CandlesticksState {
                 onCandleDataFinish: onCandleDataFinish,
                 candlesX: candlesX,
                 child: AABBWidget(
-                  extdataStream: exdataStream,
+                  extDataStream: exdataStream,
                   durationMs: durationMs,
                   rangeX: uiCameraAnimation?.value,
                   candlesticksStyle: widget.candlesticksStyle,
