@@ -9,9 +9,9 @@ import 'package:candlesticks/widgets/aabb/aabb_context.dart';
 import 'package:candlesticks/widgets/ma/ma_view.dart';
 import 'package:candlesticks/widgets/candles/candles_widget.dart';
 
-class MainBoardWidget extends StatelessWidget {
+class MainWidget extends StatelessWidget {
 
-  MainBoardWidget({
+  MainWidget({
     Key key,
     this.extdataStream,
     this.candlesticksStyle,
