@@ -28,11 +28,14 @@ class MiddleWidget extends StatelessWidget {
           close: close,
           high: extCandleData.volume,
           low: 0,
-          volume: extCandleData.volume);
+          volume: extCandleData.volume
+      );
       return ExtCandleData(candleData,
           durationMs: extCandleData.durationMs,
           first: extCandleData.first,
-          index: extCandleData.index);
+          index: extCandleData.index,
+          getValue: (candleData) => candleData.volume,
+      );
     });
   }
 

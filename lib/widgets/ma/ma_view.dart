@@ -50,7 +50,7 @@ class MaView extends UIAnimatedView<UIOPath, UIOPoint> {
     }
     this._sum[candleData.index] =
         (candleData.index > 0 ? this._sum[candleData.index - 1] : 0) +
-            candleData.close;
+            candleData.getValue(candleData);
 
     var y = movingAverage(candleData.index, count);
     if (y != null) {

@@ -25,12 +25,17 @@ class CandleData {
             volume = double.parse(item[5]);
 }
 
+double defaultValue(ExtCandleData candleData) {
+  return candleData.close;
+}
+
 class ExtCandleData extends CandleData {
     final int index;
     final double durationMs;
     final bool first;
+    final double Function(ExtCandleData candleData) getValue;
 
-    ExtCandleData(CandleData candleData, {this.index, this.durationMs, this.first}) : super(
+    ExtCandleData(CandleData candleData, {this.index, this.durationMs, this.first, this.getValue = defaultValue}) : super(
         timeMs:candleData.timeMs,
         open:candleData.open,
         close:candleData.close,
