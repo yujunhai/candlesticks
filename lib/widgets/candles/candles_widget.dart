@@ -22,7 +22,7 @@ class CandlesView extends UIAnimatedView<UIOCandles, UIOCandle> {
 
 
   CandlesView({this.positivePainter, this.negativePainter, this.style})
-      : super(animationCount:1);
+      : super(animationCount:2);
 
   @override
   UIOCandle getCandle(ExtCandleData candleData) {
@@ -39,21 +39,20 @@ class CandlesView extends UIAnimatedView<UIOCandles, UIOCandle> {
   }
 
   @override
-  UIOCandles getBeginAnimation(UIOCandles lastAnimationUIObject,
-      UIOCandle candleUIObject) {
-    var begin = UIOCandles(<UIOCandle>[UIOCandle(
-        UIOPoint(candleUIObject.origin.x, candleUIObject.origin.y),
-        UIOPoint(candleUIObject.r.x, 0), 0, 0, style.paddingX,
-        painter: candleUIObject.painter, index: candleUIObject.index)
-    ]);
-    return begin;
+  UIOCandles getBeginAnimation(UIOCandles lastAnimationUIObject, UIOCandle candleUIObject) {
+    var path = lastAnimationUIObject.clone();
+    var currentCandle = UIOCandle(UIOPoint(candleUIObject.origin.x, candleUIObject.origin.y), UIOPoint(candleUIObject.r.x, 0), 0, 0, style.paddingX, painter: candleUIObject.painter, index: candleUIObject.index);
+    path.uiObjects.add(currentCandle);
+
+    return path;
   }
 
   @override
   UIOCandles getEndAnimation(UIOCandles lastAnimationUIObject,
       UIOCandle candleUIObject) {
-    var end = UIOCandles(<UIOCandle>[candleUIObject]);
-    return end;
+    var path = lastAnimationUIObject.clone();
+    path.uiObjects.add(candleUIObject);
+    return path;
   }
 
   @override
