@@ -34,30 +34,29 @@ class CandlesticksView extends CandlesticksState {
           ]),
           builder: (BuildContext context, Widget child) {
             return CandlesticksContext(
-                onCandleDataFinish: onCandleDataFinish,
-                candlesX: candlesX,
-                child: AABBWidget(
-                  extDataStream: exdataStream,
-                  durationMs: durationMs,
-                  rangeX: uiCameraAnimation?.value,
-                  candlesticksStyle: widget.candlesticksStyle,
-                  child: Column(
-                      children: <Widget>[
-                        Expanded(
-                            flex: 6,
-                            child: TopWidget(
-                              candlesticksStyle: widget.candlesticksStyle,
-                              extdataStream: exdataStream,
-                            )),
-                        Expanded(
-                            flex: 1,
-                            child: MiddleWidget(
-                              candlesticksStyle: widget.candlesticksStyle,
-                              extdataStream: exdataStream,
-                            )
+              onCandleDataFinish: onCandleDataFinish,
+              candlesX: candlesX,
+              child: Column(
+                  children: <Widget>[
+                    Expanded(
+                        flex: 6,
+                        child: TopWidget(
+                          durationMs: durationMs,
+                          rangeX: uiCameraAnimation?.value,
+                          candlesticksStyle: widget.candlesticksStyle,
+                          extDataStream: exdataStream,
+                        )),
+                    Expanded(
+                        flex: 1,
+                        child: MiddleWidget(
+                          durationMs: durationMs,
+                          rangeX: uiCameraAnimation?.value,
+                          candlesticksStyle: widget.candlesticksStyle,
+                          extDataStream: exdataStream,
                         )
-                      ]),
-                ));
+                    )
+                  ]),
+            );
           }
       ),
     );
