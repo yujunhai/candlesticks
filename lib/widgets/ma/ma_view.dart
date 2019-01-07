@@ -14,7 +14,7 @@ class MaView extends UIAnimatedView<UIOPath, UIOPoint> {
   Paint painter;
   Color color;
 
-  MaView(this.count, this.color) : super() {
+  MaView(this.count, this.color) : super(animationCount:2) {
     this._sum = List<double>();
 
     painter = new Paint()

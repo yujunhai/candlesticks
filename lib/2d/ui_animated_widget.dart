@@ -15,6 +15,7 @@ abstract class UIAnimatedState<T extends UIObjects<TT,
     TT>> extends State<UIAnimatedWidget<T, TT>>
     with TickerProviderStateMixin {
 
+  final int animationCount;
   T fixedUIObject;
   AnimationController uiObjectAnimationController;
   Animation<T> uiAnimatedObject;
@@ -29,7 +30,7 @@ abstract class UIAnimatedState<T extends UIObjects<TT,
 
   T getEndAnimation(T lastAnimationUIObject, TT point);
 
-  UIAnimatedState() : super();
+  UIAnimatedState({this.animationCount}) : super();
 
   void onData(ExtCandleData candleData) {
     if (fixedUIObject == null) {
@@ -53,7 +54,7 @@ abstract class UIAnimatedState<T extends UIObjects<TT,
     }
 
     var currentUIPathData = this.uiAnimatedObject?.value;
-    if (currentUIPathData.uiObjects.length < 2) {
+    if (currentUIPathData.uiObjects.length < this.animationCount) {
       T endPath = currentUIPathData.clone();
       endPath.uiObjects.add(point);
       uiAnimatedObject = Tween(begin: endPath, end: endPath).animate(
@@ -83,14 +84,19 @@ abstract class UIAnimatedState<T extends UIObjects<TT,
         uiObjectAnimationController.reset();
       }
     }else {
-      uiObjectAnimationController.value = 1;
-      if(fixedUIObject.uiObjects.isNotEmpty) {
-        fixedUIObject.uiObjects.removeLast();
-      }
       var lastAnimationUIObject = uiAnimatedObject.value.clone();
-      var first = lastAnimationUIObject.uiObjects.removeAt(0);
-      fixedUIObject.uiObjects.add(first);
-      fixedUIObject.uiObjects.add(lastAnimationUIObject.uiObjects.first);
+      if(animationCount > 1) {
+        uiObjectAnimationController.value = 1;
+        if(fixedUIObject.uiObjects.isNotEmpty) {
+          fixedUIObject.uiObjects.removeLast();
+        }
+        var first = lastAnimationUIObject.uiObjects.removeAt(0);
+        fixedUIObject.uiObjects.add(first);
+        fixedUIObject.uiObjects.add(lastAnimationUIObject.uiObjects.first);
+      }else {
+        var first = lastAnimationUIObject.uiObjects.removeAt(0);
+        fixedUIObject.uiObjects.add(first);
+      }
 
       if(inView) {
         var beginPath = getBeginAnimation(lastAnimationUIObject, point);
@@ -152,10 +158,9 @@ abstract class UIAnimatedState<T extends UIObjects<TT,
   }
 }
 
-abstract class UIAnimatedView<T extends UIObjects<TT,
-    T>, TT extends UIAnimatedObject<
-    TT>> extends UIAnimatedState<T, TT> {
-  UIAnimatedView() : super();
+abstract class UIAnimatedView<T extends UIObjects<TT, T>, TT extends UIAnimatedObject<TT>> extends UIAnimatedState<T, TT> {
+
+  UIAnimatedView({animationCount}) : super(animationCount:animationCount);
 
   @override
   Widget build(BuildContext context) {
