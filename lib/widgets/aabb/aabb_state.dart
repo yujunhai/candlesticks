@@ -87,15 +87,8 @@ abstract class AABBState extends State<AABBWidget>
       return UICamera(UIORect(UIOPoint(0, 0), UIOPoint(0, 0)));
     }
 
-    var baseX = candlesX.first;
-    int startIndex = (minX - baseX) ~/ widget.durationMs;
-    if (startIndex >= candlesX.length) {
-      startIndex = candlesX.length - 1;
-    }
-    int endIndex = (maxX - baseX) ~/ widget.durationMs;
-    if (endIndex >= candlesX.length) {
-      endIndex = candlesX.length - 1;
-    }
+    int startIndex = getCandleIndexByX(minX);
+    int endIndex = getCandleIndexByX(maxX);
 
     var minY = this.candlesMinY.min(startIndex, endIndex);
     if (minY == null) {
