@@ -25,7 +25,12 @@ class CandlesValuePainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     double dx = 20;
     Offset p = uiCamera.viewPortToScreenPoint(size, uiCamera.worldToViewPortPoint(point));
-    Offset pText = p + Offset(dx, 0);
+
+    double dir = 1;
+    if(p.dx > size.width / 2) {
+      dir = -1;
+    }
+    Offset pText = p + Offset(dx, 0) * dir;
     String price = point.y.toStringAsFixed(4);
 
 
@@ -43,7 +48,7 @@ class CandlesValuePainter extends CustomPainter {
     );
     currentTextPainter.layout();
 //    p += Offset(0, -currentTextPainter.height / 2);
-    var pLeftTop = pText + Offset(0, -currentTextPainter.height / 2);
+    var pLeftTop = pText + Offset(0, -currentTextPainter.height / 2) - Offset(dir<0?currentTextPainter.width:0, 0);
     if(pLeftTop.dy + currentTextPainter.height > size.height) {
       return;
     }
