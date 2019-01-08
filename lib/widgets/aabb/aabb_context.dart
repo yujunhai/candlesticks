@@ -3,6 +3,7 @@ import 'package:candlesticks/2d/uicamera.dart';
 import 'package:candlesticks/2d/candle_data.dart';
 import 'package:candlesticks/2d/uiobjects/uio_rect.dart';
 import 'package:candlesticks/2d/uiobjects/uio_point.dart';
+import 'package:candlesticks/2d/uiobject.dart';
 
 class AABBContext extends InheritedWidget {
   final UICamera uiCamera;
@@ -11,7 +12,7 @@ class AABBContext extends InheritedWidget {
   final UIOPoint minPoint;
   final UIOPoint maxPoint;
 
-  final Function(ExtCandleData candleData, UIORect aabb) onAABBChange;
+  final Function(ExtCandleData candleData, UIObject uiobject) onAABBChange;
 
   AABBContext({
     Key key,

@@ -12,18 +12,20 @@ import 'package:candlesticks/2d/treedlist.dart';
 import 'package:candlesticks/2d/candle_data.dart';
 import 'package:candlesticks/2d/uiobjects/uio_path.dart';
 import 'package:candlesticks/widgets/candlesticks_context_widget.dart';
+import 'package:candlesticks/2d/uiobject.dart';
 
 
 const ZERO = 0.00000001;
 
 abstract class AABBState extends State<AABBWidget>
     with TickerProviderStateMixin {
-  TreedListMin<double> candlesMaxY = TreedListMin(null, reverse: -1);
-  TreedListMin<double> candlesMinY = TreedListMin(null);
+
+  TreedListMin<double> uiObjectsMaxY = TreedListMin(null, reverse: -1);
+  TreedListMin<double> uiObjectsMinY = TreedListMin(null);
   StreamSubscription<CandleData> subscription;
   CandlesticksContext candlesticksContext;
-  StreamController<ExtCandleData> exdataStreamController;
-  Stream<ExtCandleData> exdataStream;
+  StreamController<ExtCandleData> exDataStreamController;
+  Stream<ExtCandleData> exDataStream;
 
 
   AABBState() : super();
@@ -31,15 +33,16 @@ abstract class AABBState extends State<AABBWidget>
 
   onCandleData(ExtCandleData candleData) {
     if (candleData.first) {
-      this.candlesMaxY.add(double.negativeInfinity);
-      this.candlesMinY.add(double.infinity);
+      this.uiObjectsMaxY.add(double.negativeInfinity);
+      this.uiObjectsMinY.add(double.infinity);
     }
-    exdataStreamController.sink.add(candleData);
+    exDataStreamController.sink.add(candleData);
   }
 
-  onAABBChange(ExtCandleData candleData, UIORect aabb) {
-    this.candlesMinY.update(candleData.index, aabb.min.y);
-    this.candlesMaxY.update(candleData.index, aabb.max.y);
+  onAABBChange(ExtCandleData candleData, UIObject uiobject) {
+    print(uiobject);
+    this.uiObjectsMinY.update(candleData.index, uiobject.aabb().min.y);
+    this.uiObjectsMaxY.update(candleData.index, uiobject.aabb().max.y);
     candlesticksContext.onCandleDataFinish(candleData);
   }
 
@@ -65,8 +68,8 @@ abstract class AABBState extends State<AABBWidget>
     var baseX = candlesX.first;
     var startIndex = getCandleIndexByX(widget.rangeX.minX);
     var endIndex = getCandleIndexByX(widget.rangeX.maxX);
-    var minIndex = this.candlesMinY.minIndex(startIndex, endIndex);
-    return UIOPoint(baseX + minIndex * widget.durationMs + widget.durationMs / 2, candlesMinY.get(minIndex));
+    var minIndex = this.uiObjectsMinY.minIndex(startIndex, endIndex);
+    return UIOPoint(baseX + minIndex * widget.durationMs + widget.durationMs / 2, uiObjectsMinY.get(minIndex));
   }
 
   UIOPoint getMaxPoint() {
@@ -77,8 +80,8 @@ abstract class AABBState extends State<AABBWidget>
     var baseX = candlesX.first;
     var startIndex = getCandleIndexByX(widget.rangeX.minX);
     var endIndex = getCandleIndexByX(widget.rangeX.maxX);
-    var minIndex = this.candlesMaxY.minIndex(startIndex, endIndex);
-    return UIOPoint(baseX + minIndex * widget.durationMs + widget.durationMs / 2, candlesMaxY.get(minIndex));
+    var minIndex = this.uiObjectsMaxY.minIndex(startIndex, endIndex);
+    return UIOPoint(baseX + minIndex * widget.durationMs + widget.durationMs / 2, uiObjectsMaxY.get(minIndex));
   }
 
   UICamera calUICamera(double minX, double maxX, double paddingY) {
@@ -94,11 +97,11 @@ abstract class AABBState extends State<AABBWidget>
     int startIndex = getCandleIndexByX(minX);
     int endIndex = getCandleIndexByX(maxX);
 
-    var minY = this.candlesMinY.min(startIndex, endIndex);
+    var minY = this.uiObjectsMinY.min(startIndex, endIndex);
     if (minY == null) {
       return null;
     }
-    var maxY = this.candlesMaxY.min(startIndex, endIndex);
+    var maxY = this.uiObjectsMaxY.min(startIndex, endIndex);
     if (maxY == null) {
       return null;
     }
@@ -117,8 +120,8 @@ abstract class AABBState extends State<AABBWidget>
     // TODO: implement initState
     super.initState(); //插入监听器
     subscription = widget.extDataStream.listen(onCandleData);
-    exdataStreamController = new StreamController<ExtCandleData>();
-    exdataStream = exdataStreamController.stream.asBroadcastStream();
+    exDataStreamController = new StreamController<ExtCandleData>();
+    exDataStream = exDataStreamController.stream.asBroadcastStream();
   }
 
   @override void didChangeDependencies() {
@@ -136,7 +139,7 @@ abstract class AABBState extends State<AABBWidget>
   @override
   void dispose() {
     subscription.cancel();
-    exdataStreamController.close();
+    exDataStreamController.close();
 
     super.dispose(); //删除监听器
   }

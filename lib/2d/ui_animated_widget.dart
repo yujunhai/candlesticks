@@ -42,7 +42,7 @@ abstract class UIAnimatedState<T extends UIObjects<TT,
       return;
     }
     candlesticksContext.onAABBChange(
-        candleData, point.aabb());
+        candleData, point);
 
     if (uiAnimatedObject == null) {
       T endPath = getCandles();

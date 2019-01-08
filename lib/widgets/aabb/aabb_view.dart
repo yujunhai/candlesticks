@@ -19,7 +19,7 @@ class AABBView extends AABBState {
       uiCamera: uiCamera,
       durationMs: widget.durationMs,
       child: widget.child,
-      extDataStream: exdataStream,
+      extDataStream: exDataStream,
       minPoint: this.getMinPoint(),
       maxPoint: this.getMaxPoint(),
     );
