@@ -12,6 +12,7 @@ class AABBContext extends InheritedWidget {
   final UIOPoint minPoint;
   final UIOPoint maxPoint;
 
+  final ExtCandleData Function(double x) getExtCandleDataIndexByX;
   final Function(ExtCandleData candleData, UIObject uiobject) onAABBChange;
 
   AABBContext({
@@ -23,6 +24,7 @@ class AABBContext extends InheritedWidget {
     @required this.extDataStream,
     @required this.minPoint,
     @required this.maxPoint,
+    @required this.getExtCandleDataIndexByX,
   }) : super(key: key, child: child);
 
   static AABBContext of(BuildContext context) {

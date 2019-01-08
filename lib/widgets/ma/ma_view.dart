@@ -10,6 +10,7 @@ import 'package:candlesticks/widgets/aabb/aabb_context.dart';
 import 'package:candlesticks/widgets/ma/ma_value_widget.dart';
 import 'package:candlesticks/widgets/ma/ma_context.dart';
 import 'package:candlesticks/widgets/ma/ma_value_data.dart';
+import 'package:candlesticks/widgets/floating/floating_widget.dart';
 
 
 class MaView extends UIAnimatedView<UIOPath, UIOPoint> {
@@ -113,15 +114,24 @@ class MaWidgetState extends State<MaWidget> {
   MaValueData maValueData;
 
   onMaChange(int count, double value, double currentValue) {
-    if(maValueData == null) {
+    if (maValueData == null) {
       maValueData = MaValueData();
     }
-    if(count == widget.style.shortCount) {
-      maValueData = MaValueData(shortValue:value, middleValue:maValueData.middleValue, longValue:maValueData.longValue, currentValue: currentValue);
-    }else if(count == widget.style.middleCount) {
-      maValueData = MaValueData(shortValue:maValueData.shortValue, middleValue:value, longValue:maValueData.longValue, currentValue: currentValue);
-    }else {
-      maValueData = MaValueData(shortValue:maValueData.shortValue, middleValue:maValueData.middleValue, longValue:value, currentValue: currentValue);
+    if (count == widget.style.shortCount) {
+      maValueData = MaValueData(shortValue: value,
+          middleValue: maValueData.middleValue,
+          longValue: maValueData.longValue,
+          currentValue: currentValue);
+    } else if (count == widget.style.middleCount) {
+      maValueData = MaValueData(shortValue: maValueData.shortValue,
+          middleValue: value,
+          longValue: maValueData.longValue,
+          currentValue: currentValue);
+    } else {
+      maValueData = MaValueData(shortValue: maValueData.shortValue,
+          middleValue: maValueData.middleValue,
+          longValue: value,
+          currentValue: currentValue);
     }
     setState(() {
 
@@ -170,6 +180,7 @@ class MaWidgetState extends State<MaWidget> {
                   maStyle: widget.style,
                 )
             ),
+
           ],
         ));
   }

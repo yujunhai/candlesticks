@@ -15,6 +15,7 @@ class AABBView extends AABBState {
           calUICamera(widget.rangeX.minX, widget.rangeX.maxX, widget.paddingY);
     }
     return AABBContext(
+      getExtCandleDataIndexByX: getExtCandleDataIndexByX,
       onAABBChange: onAABBChange,
       uiCamera: uiCamera,
       durationMs: widget.durationMs,

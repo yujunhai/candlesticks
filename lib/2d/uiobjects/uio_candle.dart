@@ -16,9 +16,10 @@ class UIOCandle implements UIAnimatedObject<UIOCandle> {
   final double top;
   final double bottom;
   final double marginX;
+  final double volume;
 
   UIOCandle(this.origin, this.r, this.top, this.bottom, this.marginX,
-      {this.painter, this.index});
+      {this.painter, this.index, this.volume});
 
   UIOCandle.fromData(ExtCandleData data, this.marginX, this.painter,
       {this.index})
@@ -28,7 +29,8 @@ class UIOCandle implements UIAnimatedObject<UIOCandle> {
         r = UIOPoint(data.durationMs.toDouble(), data.close - data.open,
             painter: painter),
         top = (data.high - data.open),
-        bottom = (data.open - data.low);
+        bottom = (data.open - data.low),
+        volume=data.volume;
 
   //clone
   UIOCandle clone() {
@@ -37,7 +39,9 @@ class UIOCandle implements UIAnimatedObject<UIOCandle> {
     var top = this.top;
     var bottom = this.bottom;
     return UIOCandle(
-        origin, r, top, bottom, marginX, painter: this.painter, index: index);
+        origin, r, top, bottom, marginX, painter: this.painter,
+        index: index,
+        volume: volume);
   }
 
   //culling
@@ -47,18 +51,18 @@ class UIOCandle implements UIAnimatedObject<UIOCandle> {
     var minX = s.x;
     var maxX = e.x;
     var minY = s.y - bottom;
-    if(s.y < minY) {
+    if (s.y < minY) {
       minY = s.y;
     }
-    if(e.y < minY) {
+    if (e.y < minY) {
       minY = e.y;
     }
 
     var maxY = s.y + top;
-    if(s.y > maxY) {
+    if (s.y > maxY) {
       maxY = s.y;
     }
-    if(e.y > maxY) {
+    if (e.y > maxY) {
       maxY = e.y;
     }
 

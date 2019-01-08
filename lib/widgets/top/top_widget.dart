@@ -7,6 +7,7 @@ import 'package:candlesticks/widgets/ma/ma_view.dart';
 import 'package:candlesticks/widgets/candles/candles_widget.dart';
 import 'package:candlesticks/widgets/aabb/aabb_widget.dart';
 import 'package:candlesticks/widgets/graticule/graticule_widget.dart';
+import 'package:candlesticks/widgets/floating/floating_widget.dart';
 
 class TopWidget extends StatelessWidget {
 
@@ -55,6 +56,12 @@ class TopWidget extends StatelessWidget {
                     dataStream: widget.extDataStream,
                     style: widget.candlesticksStyle.maStyle,
                   ),
+                ),
+                Positioned.fill(
+                    child: TopFloatingWidget(
+                      candle: null,
+                      left: null,
+                    )
                 ),
               ],
             )

@@ -29,6 +29,7 @@ abstract class AABBState extends State<AABBWidget>
   CandlesticksContext candlesticksContext;
   StreamController<ExtCandleData> exDataStreamController;
   Stream<ExtCandleData> exDataStream;
+  List<ExtCandleData> candleDataList = List<ExtCandleData>();//这个可以优化掉。
 
 
   AABBState() : super();
@@ -54,9 +55,25 @@ abstract class AABBState extends State<AABBWidget>
       var aabb = uiobject.aabb();
       this.uiCandlesMinY.update(candleData.index, aabb.min.y);
       this.uiCandlesMaxY.update(candleData.index, aabb.max.y);
+
+      if(candleData.first) {
+        this.candleDataList.add(candleData);
+      }
     }
 
     candlesticksContext.onCandleDataFinish(candleData);
+  }
+
+  ExtCandleData getExtCandleDataIndex(int index) {
+    if((candleDataList == null) || (index < 0) || (index >= this.candleDataList.length)) {
+      return null;
+    }
+    return this.candleDataList[index];
+  }
+
+  ExtCandleData getExtCandleDataIndexByX(double x) {
+    var index = getCandleIndexByX(x);
+    return getExtCandleDataIndex(index);
   }
 
   int getCandleIndexByX(double x) {
