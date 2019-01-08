@@ -20,6 +20,9 @@ const ZERO = 0.00000001;
 abstract class AABBState extends State<AABBWidget>
     with TickerProviderStateMixin {
 
+  TreedListMin<double> uiCandlesMaxY = TreedListMin(null, reverse: -1);
+  TreedListMin<double> uiCandlesMinY = TreedListMin(null);
+
   TreedListMin<double> uiObjectsMaxY = TreedListMin(null, reverse: -1);
   TreedListMin<double> uiObjectsMinY = TreedListMin(null);
   StreamSubscription<CandleData> subscription;
@@ -35,14 +38,24 @@ abstract class AABBState extends State<AABBWidget>
     if (candleData.first) {
       this.uiObjectsMaxY.add(double.negativeInfinity);
       this.uiObjectsMinY.add(double.infinity);
+
+      this.uiCandlesMaxY.add(double.negativeInfinity);
+      this.uiCandlesMinY.add(double.infinity);
     }
     exDataStreamController.sink.add(candleData);
   }
 
   onAABBChange(ExtCandleData candleData, UIObject uiobject) {
-    print(uiobject);
-    this.uiObjectsMinY.update(candleData.index, uiobject.aabb().min.y);
-    this.uiObjectsMaxY.update(candleData.index, uiobject.aabb().max.y);
+    var uiObjectAABB = uiobject.aabb();
+    this.uiObjectsMinY.update(candleData.index, uiObjectAABB.min.y);
+    this.uiObjectsMaxY.update(candleData.index, uiObjectAABB.max.y);
+
+    if(uiobject is UIOCandle) {
+      var aabb = uiobject.aabb();
+      this.uiCandlesMinY.update(candleData.index, aabb.min.y);
+      this.uiCandlesMaxY.update(candleData.index, aabb.max.y);
+    }
+
     candlesticksContext.onCandleDataFinish(candleData);
   }
 
@@ -68,8 +81,8 @@ abstract class AABBState extends State<AABBWidget>
     var baseX = candlesX.first;
     var startIndex = getCandleIndexByX(widget.rangeX.minX);
     var endIndex = getCandleIndexByX(widget.rangeX.maxX);
-    var minIndex = this.uiObjectsMinY.minIndex(startIndex, endIndex);
-    return UIOPoint(baseX + minIndex * widget.durationMs + widget.durationMs / 2, uiObjectsMinY.get(minIndex));
+    var minIndex = this.uiCandlesMinY.minIndex(startIndex, endIndex);
+    return UIOPoint(baseX + minIndex * widget.durationMs + widget.durationMs / 2, uiCandlesMinY.get(minIndex));
   }
 
   UIOPoint getMaxPoint() {
@@ -80,8 +93,8 @@ abstract class AABBState extends State<AABBWidget>
     var baseX = candlesX.first;
     var startIndex = getCandleIndexByX(widget.rangeX.minX);
     var endIndex = getCandleIndexByX(widget.rangeX.maxX);
-    var minIndex = this.uiObjectsMaxY.minIndex(startIndex, endIndex);
-    return UIOPoint(baseX + minIndex * widget.durationMs + widget.durationMs / 2, uiObjectsMaxY.get(minIndex));
+    var minIndex = this.uiCandlesMaxY.minIndex(startIndex, endIndex);
+    return UIOPoint(baseX + minIndex * widget.durationMs + widget.durationMs / 2, uiCandlesMaxY.get(minIndex));
   }
 
   UICamera calUICamera(double minX, double maxX, double paddingY) {
