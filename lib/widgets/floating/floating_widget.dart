@@ -78,21 +78,22 @@ class MaFloatingState extends State<TopFloatingWidget> {
 
   Widget getText(String text, String data, TextStyle textStyle,
       [TextStyle textStyleColor,]) {
-    return new Row(
-      crossAxisAlignment: CrossAxisAlignment.end,
-      children: <Widget>[
-        new Expanded(
-          flex: 4,
-          child: new Text(text,
-            style: textStyleColor is TextStyle ? textStyleColor : textStyle,
-            textAlign: TextAlign.left,),
-        ),
-        new Expanded(
-          flex: 8,
-          child: new Text(data, style: textStyle, textAlign: TextAlign.right,),
-        ),
-      ],
-    );
+    return Row(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: <Widget>[
+          new Expanded(
+            flex: 4,
+            child: new Text(text,
+              style: textStyleColor is TextStyle ? textStyleColor : textStyle,
+              textAlign: TextAlign.left,),
+          ),
+          new Expanded(
+            flex: 8,
+            child: new Text(
+              data, style: textStyle, textAlign: TextAlign.right,),
+          ),
+        ],
+      );
   }
 
   @override
@@ -113,44 +114,28 @@ class MaFloatingState extends State<TopFloatingWidget> {
     TextStyle textStyle = new TextStyle(
         color: tapTextFontColor, fontSize: tapTextSize, height: tapTextHeight);
 
-    return Stack(
-        children: [
-          Offstage(
-              offstage: visible,
-              child: Container(
-                  padding: EdgeInsets.fromLTRB(5.0, 0.0, 5.0, 5.0),
-                  decoration: new BoxDecoration(
-                    border: new Border.all(
-                      width: 0.5,
-                      color: Colors.white.withOpacity(0.4),
-                    ),
-                    color: Color(0xff21232e).withOpacity(0.9),
-                  ),
-                  child: new Column(
-                    children: [
-                      getText("asdf", "123.123", textStyle)
-                    ],
-                  ))
-            /*CustomPaint(
-            painter: TopFloatingPainter(
-              left: touchOnLeft,
-              extCandleData: extCandleData,
-            ),
-            size: Size.infinite
-        )*/
-          ),
-          Container(
-            width: double.infinity, height: double.infinity,
-            child:
-            GestureDetector(
-                onTapDown: onTapDown,
-                behavior: HitTestBehavior.translucent,
+    return GestureDetector(
+        onTapDown: onTapDown,
+        behavior: HitTestBehavior.translucent,
+        child: Offstage(
+            offstage: visible,
+            child: SizedBox(
+                width: 10,
                 child: Container(
-                    width: double.infinity, height: double.infinity
-                )),
-          )
-        ]
-
+                    padding: EdgeInsets.fromLTRB(5.0, 0.0, 5.0, 5.0),
+                    decoration: new BoxDecoration(
+                      border: new Border.all(
+                        width: 0.5,
+                        color: Colors.white.withOpacity(0.4),
+                      ),
+                      color: Color(0xff21232e).withOpacity(0.9),
+                    ),
+                    child: new Column(
+                      children: [
+                        getText("asdf", "123.123", textStyle)
+                      ],
+                    )))
+        )
     );
   }
 }
