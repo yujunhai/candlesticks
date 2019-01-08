@@ -20,8 +20,8 @@ class AABBView extends AABBState {
       durationMs: widget.durationMs,
       child: widget.child,
       extDataStream: exdataStream,
-      minLabelX: this.getMinLableX(),
-      maxLabelX: this.getMaxLableX(),
+      minPoint: this.getMinPoint(),
+      maxPoint: this.getMaxPoint(),
     );
   }
 }

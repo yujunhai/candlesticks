@@ -67,19 +67,19 @@ class CandlesView extends UIAnimatedView<UIOCandles, UIOCandle> {
 }
 
 class CandlesWidgetState extends State<CandlesWidget> {
-  AABBContext candlesticksContext;
+  AABBContext aabbContext;
   Paint positivePainter;
   Paint negativePainter;
 
   @override void didChangeDependencies() {
     // TODO: implement didChangeDependencies
     super.didChangeDependencies();
-    candlesticksContext = AABBContext.of(context);
+    aabbContext = AABBContext.of(context);
   }
 
   @override
   Widget build(BuildContext context) {
-    var uiCamera = candlesticksContext?.uiCamera;
+    var uiCamera = aabbContext?.uiCamera;
 
     return Stack(
         children: <Widget>[

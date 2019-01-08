@@ -2,13 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:candlesticks/2d/uicamera.dart';
 import 'package:candlesticks/2d/candle_data.dart';
 import 'package:candlesticks/2d/uiobjects/uio_rect.dart';
+import 'package:candlesticks/2d/uiobjects/uio_point.dart';
 
 class AABBContext extends InheritedWidget {
   final UICamera uiCamera;
   final double durationMs;
   final Stream<ExtCandleData> extDataStream;
-  final double minLabelX;
-  final double maxLabelX;
+  final UIOPoint minPoint;
+  final UIOPoint maxPoint;
 
   final Function(ExtCandleData candleData, UIORect aabb) onAABBChange;
 
@@ -19,8 +20,8 @@ class AABBContext extends InheritedWidget {
     @required this.durationMs,
     @required Widget child,
     @required this.extDataStream,
-    @required this.minLabelX,
-    @required this.maxLabelX,
+    @required this.minPoint,
+    @required this.maxPoint,
   }) : super(key: key, child: child);
 
   static AABBContext of(BuildContext context) {
