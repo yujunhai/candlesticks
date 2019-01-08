@@ -44,6 +44,9 @@ class CandlesValuePainter extends CustomPainter {
     currentTextPainter.layout();
 //    p += Offset(0, -currentTextPainter.height / 2);
     var pLeftTop = pText + Offset(0, -currentTextPainter.height / 2);
+    if(pLeftTop.dy + currentTextPainter.height > size.height) {
+      return;
+    }
     currentTextPainter.paint(canvas, pLeftTop);
 
     var linePainter = Paint()..color=Colors.white;
