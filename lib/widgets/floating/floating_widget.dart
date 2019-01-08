@@ -35,7 +35,7 @@ class TopFloatingPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    if(extCandleData == null) {
+    if (extCandleData == null) {
       return;
     }
     double x = paintLabel(canvas, size, 0, "Current:");
@@ -43,7 +43,8 @@ class TopFloatingPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(TopFloatingPainter oldPainter) {
-    return this.left != oldPainter.left || this.extCandleData != oldPainter.extCandleData;
+    return this.left != oldPainter.left ||
+        this.extCandleData != oldPainter.extCandleData;
   }
 }
 
@@ -54,19 +55,44 @@ class MaFloatingState extends State<TopFloatingWidget> {
   ExtCandleData extCandleData;
 
   onTapDown(TapDownDetails details) {
+    visible = !visible;
+    setState(() {
+
+    });
+    return;
     var aabbContext = AABBContext.of(context);
     var uiCamera = aabbContext.uiCamera;
-    if(details.globalPosition.dx <= context.size.width / 2) {
+    if (details.globalPosition.dx <= context.size.width / 2) {
       touchOnLeft = true;
-    }else {
+    } else {
       touchOnLeft = false;
     }
 
-    var worldPoint = uiCamera.viewPortToWorldPoint(uiCamera.screenToViewPortPoint(context.size, details.globalPosition));
+    var worldPoint = uiCamera.viewPortToWorldPoint(
+        uiCamera.screenToViewPortPoint(context.size, details.globalPosition));
     extCandleData = aabbContext.getExtCandleDataIndexByX(worldPoint.x);
     setState(() {
 
     });
+  }
+
+  Widget getText(String text, String data, TextStyle textStyle,
+      [TextStyle textStyleColor,]) {
+    return new Row(
+      crossAxisAlignment: CrossAxisAlignment.end,
+      children: <Widget>[
+        new Expanded(
+          flex: 4,
+          child: new Text(text,
+            style: textStyleColor is TextStyle ? textStyleColor : textStyle,
+            textAlign: TextAlign.left,),
+        ),
+        new Expanded(
+          flex: 8,
+          child: new Text(data, style: textStyle, textAlign: TextAlign.right,),
+        ),
+      ],
+    );
   }
 
   @override
@@ -77,15 +103,54 @@ class MaFloatingState extends State<TopFloatingWidget> {
       return Container();
     }
 
-    return GestureDetector(
-        onTapDown: onTapDown,
-        child: CustomPaint(
+    /// 选中K线 字体颜色
+    Color tapTextFontColor = Colors.white.withOpacity(0.5);
+
+    /// 选中K线 文本框边框颜色
+    Color tapTextBorderColor = Colors.white.withOpacity(0.4);
+    double tapTextHeight = 1.4;
+    double tapTextSize = 8.0;
+    TextStyle textStyle = new TextStyle(
+        color: tapTextFontColor, fontSize: tapTextSize, height: tapTextHeight);
+
+    return Stack(
+        children: [
+          Offstage(
+              offstage: visible,
+              child: Container(
+                  padding: EdgeInsets.fromLTRB(5.0, 0.0, 5.0, 5.0),
+                  decoration: new BoxDecoration(
+                    border: new Border.all(
+                      width: 0.5,
+                      color: Colors.white.withOpacity(0.4),
+                    ),
+                    color: Color(0xff21232e).withOpacity(0.9),
+                  ),
+                  child: new Column(
+                    children: [
+                      getText("asdf", "123.123", textStyle)
+                    ],
+                  ))
+            /*CustomPaint(
             painter: TopFloatingPainter(
               left: touchOnLeft,
               extCandleData: extCandleData,
             ),
             size: Size.infinite
-        )
+        )*/
+          ),
+          Container(
+            width: double.infinity, height: double.infinity,
+            child:
+            GestureDetector(
+                onTapDown: onTapDown,
+                behavior: HitTestBehavior.translucent,
+                child: Container(
+                    width: double.infinity, height: double.infinity
+                )),
+          )
+        ]
+
     );
   }
 }
