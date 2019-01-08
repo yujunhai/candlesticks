@@ -37,6 +37,7 @@ class _MyAppState extends State<MyApp> {
           cameraPaddingY: 0.1,
           duration: Duration(milliseconds: 200)),
       maStyle: MaStyle(
+          cameraPaddingY: 0.2,
           shortCount: 5,
           maShort: Colors.yellowAccent,
           middleCount: 15,
@@ -88,6 +89,7 @@ class _MyAppState extends State<MyApp> {
                             cameraPaddingY: 0.1,
                             duration: Duration(milliseconds: 200)),
                         maStyle: MaStyle(
+                            cameraPaddingY: 0.1,
                             shortCount: 5,
                             maShort: Colors.yellowAccent,
                             middleCount: 15,
@@ -112,6 +114,7 @@ class _MyAppState extends State<MyApp> {
                             cameraPaddingY: 0.1,
                             duration: Duration(milliseconds: 200)),
                         maStyle: MaStyle(
+                            cameraPaddingY: 0.1,
                             shortCount: 5,
                             maShort: Colors.yellowAccent,
                             middleCount: 15,

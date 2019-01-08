@@ -52,7 +52,7 @@ class MiddleWidget extends StatelessWidget {
         durationMs: durationMs,
         rangeX: rangeX,
         candlesticksStyle: widget.candlesticksStyle,
-        paddingY: 0,
+        paddingY: widget.candlesticksStyle.maStyle.cameraPaddingY,
         child: Container(
             decoration: BoxDecoration(
               color: widget.candlesticksStyle.backgroundColor,

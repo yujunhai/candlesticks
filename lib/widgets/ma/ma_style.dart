@@ -12,9 +12,11 @@ class MaStyle {
 
     Duration duration;
 
+    double cameraPaddingY;
+
     MaStyle({this.shortCount, this.maShort,
         this.middleCount, this.maMiddle,
         this.longCount, this.maLong,
-        this.duration});
+        this.duration, this.cameraPaddingY});
 }
 
