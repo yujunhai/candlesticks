@@ -22,7 +22,7 @@ class CandlesView extends UIAnimatedView<UIOCandles, UIOCandle> {
 
 
   CandlesView({this.positivePainter, this.negativePainter, this.style})
-      : super(animationCount:2);
+      : super(animationCount: 2);
 
   @override
   UIOCandle getCandle(ExtCandleData candleData) {
@@ -39,9 +39,13 @@ class CandlesView extends UIAnimatedView<UIOCandles, UIOCandle> {
   }
 
   @override
-  UIOCandles getBeginAnimation(UIOCandles lastAnimationUIObject, UIOCandle candleUIObject) {
+  UIOCandles getBeginAnimation(UIOCandles lastAnimationUIObject,
+      UIOCandle candleUIObject) {
     var path = lastAnimationUIObject.clone();
-    var currentCandle = UIOCandle(UIOPoint(candleUIObject.origin.x, candleUIObject.origin.y), UIOPoint(candleUIObject.r.x, 0), 0, 0, style.paddingX, painter: candleUIObject.painter, index: candleUIObject.index);
+    var currentCandle = UIOCandle(
+        UIOPoint(candleUIObject.origin.x, candleUIObject.origin.y),
+        UIOPoint(candleUIObject.r.x, 0), 0, 0, style.paddingX,
+        painter: candleUIObject.painter, index: candleUIObject.index);
     path.uiObjects.add(currentCandle);
 
     return path;
@@ -77,17 +81,31 @@ class CandlesWidgetState extends State<CandlesWidget> {
   Widget build(BuildContext context) {
     var uiCamera = candlesticksContext?.uiCamera;
 
-    return UIAnimatedWidget<UIOCandles, UIOCandle>(
-      dataStream: widget.dataStream,
-      uiCamera: uiCamera,
-      duration: widget.style.duration,
-      state: () =>
-          CandlesView(
-            positivePainter: positivePainter,
-            negativePainter: negativePainter,
-            style: widget.style,
-          ),
-    );
+    return Stack(
+        children: <Widget>[
+          Positioned.fill(child: UIAnimatedWidget<UIOCandles, UIOCandle>(
+            dataStream: widget.dataStream,
+            uiCamera: uiCamera,
+            duration: widget.style.duration,
+            state: () =>
+                CandlesView(
+                  positivePainter: positivePainter,
+                  negativePainter: negativePainter,
+                  style: widget.style,
+                ),
+          )),
+          Positioned.fill(child: UIAnimatedWidget<UIOCandles, UIOCandle>(
+            dataStream: widget.dataStream,
+            uiCamera: uiCamera,
+            duration: widget.style.duration,
+            state: () =>
+                CandlesView(
+                  positivePainter: positivePainter,
+                  negativePainter: negativePainter,
+                  style: widget.style,
+                ),
+          ))
+        ]);
   }
 
   @override

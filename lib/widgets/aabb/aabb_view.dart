@@ -11,14 +11,17 @@ class AABBView extends AABBState {
   Widget build(BuildContext context) {
     var uiCamera;
     if (widget.rangeX != null) {
-      uiCamera = calUICamera(widget.rangeX.minX, widget.rangeX.maxX, widget.paddingY);
+      uiCamera =
+          calUICamera(widget.rangeX.minX, widget.rangeX.maxX, widget.paddingY);
     }
     return AABBContext(
-        onAABBChange: onAABBChange,
-        uiCamera: uiCamera,
-        durationMs: widget.durationMs,
-        child:widget.child,
-        extDataStream: exdataStream,
+      onAABBChange: onAABBChange,
+      uiCamera: uiCamera,
+      durationMs: widget.durationMs,
+      child: widget.child,
+      extDataStream: exdataStream,
+      minLabelX: this.getMinLableX(),
+      maxLabelX: this.getMaxLableX(),
     );
   }
 }

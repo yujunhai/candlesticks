@@ -43,6 +43,39 @@ abstract class AABBState extends State<AABBWidget>
     candlesticksContext.onCandleDataFinish(candleData);
   }
 
+  int getCandleIndexByX(double x) {
+    var candlesX = candlesticksContext.candlesX;
+
+    var baseX = candlesX.first;
+    int xIndex = (x - baseX) ~/ widget.durationMs;
+    if (xIndex >= candlesX.length) {
+      xIndex = candlesX.length - 1;
+    }
+    if(xIndex < 0) {
+      xIndex = 0;
+    }
+    return xIndex;
+  }
+
+  double getMinLableX() {
+    if ((widget.rangeX == null) || (widget.rangeX.maxX == null) || (widget.rangeX.minX == null)) {
+      return null;
+    }
+    var startIndex = getCandleIndexByX(widget.rangeX.minX);
+    var endIndex = getCandleIndexByX(widget.rangeX.maxX);
+    var minIndex = this.candlesMinY.minIndex(startIndex, endIndex);
+    return minIndex * widget.durationMs + widget.durationMs / 2;
+  }
+
+  double getMaxLableX() {
+    if ((widget.rangeX == null) || (widget.rangeX.maxX == null) || (widget.rangeX.minX == null)) {
+      return null;
+    }
+    var startIndex = getCandleIndexByX(widget.rangeX.minX);
+    var endIndex = getCandleIndexByX(widget.rangeX.maxX);
+    var minIndex = this.candlesMaxY.minIndex(startIndex, endIndex);
+    return minIndex * widget.durationMs + widget.durationMs / 2;
+  }
 
   UICamera calUICamera(double minX, double maxX, double paddingY) {
     var candlesX = candlesticksContext.candlesX;
@@ -50,12 +83,11 @@ abstract class AABBState extends State<AABBWidget>
     if ((candlesX.length <= 0) || (minX == null) || (maxX == null)) {
       return UICamera(UIORect(UIOPoint(0, 0), UIOPoint(0, 0)));
     }
-
-    var baseX = candlesX.first;
     if (widget.durationMs <= 0) {
       return UICamera(UIORect(UIOPoint(0, 0), UIOPoint(0, 0)));
     }
 
+    var baseX = candlesX.first;
     int startIndex = (minX - baseX) ~/ widget.durationMs;
     if (startIndex >= candlesX.length) {
       startIndex = candlesX.length - 1;
@@ -78,7 +110,8 @@ abstract class AABBState extends State<AABBWidget>
     var realMinY = minY - realHeight * paddingY;
     var realMaxY = realMinY + realHeight;
 
-    return UICamera(UIORect(UIOPoint(minX, realMinY), UIOPoint(maxX, realMaxY)));
+    return UICamera(
+        UIORect(UIOPoint(minX, realMinY), UIOPoint(maxX, realMaxY)));
   }
 
 

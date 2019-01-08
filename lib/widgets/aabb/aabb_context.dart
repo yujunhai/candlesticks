@@ -7,6 +7,8 @@ class AABBContext extends InheritedWidget {
   final UICamera uiCamera;
   final double durationMs;
   final Stream<ExtCandleData> extDataStream;
+  final double minLabelX;
+  final double maxLabelX;
 
   final Function(ExtCandleData candleData, UIORect aabb) onAABBChange;
 
@@ -17,6 +19,8 @@ class AABBContext extends InheritedWidget {
     @required this.durationMs,
     @required Widget child,
     @required this.extDataStream,
+    @required this.minLabelX,
+    @required this.maxLabelX,
   }) : super(key: key, child: child);
 
   static AABBContext of(BuildContext context) {
