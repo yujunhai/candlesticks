@@ -6,6 +6,7 @@ import 'package:candlesticks/widgets/candlesticks_style.dart';
 import 'package:candlesticks/widgets/ma/ma_view.dart';
 import 'package:candlesticks/widgets/candles/candles_widget.dart';
 import 'package:candlesticks/widgets/aabb/aabb_widget.dart';
+import 'package:candlesticks/widgets/graticule/graticule_widget.dart';
 
 class TopWidget extends StatelessWidget {
 
@@ -30,6 +31,7 @@ class TopWidget extends StatelessWidget {
         durationMs: durationMs,
         rangeX: rangeX,
         candlesticksStyle: widget.candlesticksStyle,
+        paddingY: widget.candlesticksStyle.candlesStyle.cameraPaddingY,
         child: Container(
             decoration: BoxDecoration(
               color: widget.candlesticksStyle.backgroundColor,
@@ -37,9 +39,9 @@ class TopWidget extends StatelessWidget {
             child: Stack(
               children: <Widget>[
                 Positioned.fill(
-                  child: MaWidget(
-                    dataStream: widget.extDataStream,
-                    style: widget.candlesticksStyle.maStyle,
+                  child: GraticuleWidget(
+                    candlesticksStyle: this.candlesticksStyle,
+                    paddingY: 0.1,
                   ),
                 ),
                 Positioned.fill(
@@ -47,6 +49,12 @@ class TopWidget extends StatelessWidget {
                       dataStream: widget.extDataStream,
                       style: widget.candlesticksStyle.candlesStyle,
                     )
+                ),
+                Positioned.fill(
+                  child: MaWidget(
+                    dataStream: widget.extDataStream,
+                    style: widget.candlesticksStyle.maStyle,
+                  ),
                 ),
               ],
             )

@@ -5,7 +5,8 @@ class CandlesStyle {
     Color negativeColor;
     double paddingX;
     Duration duration;
+    double cameraPaddingY;
 
-    CandlesStyle({this.positiveColor, this.negativeColor, this.paddingX, this.duration});
+    CandlesStyle({this.positiveColor, this.negativeColor, this.paddingX, this.duration, this.cameraPaddingY});
 }
 

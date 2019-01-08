@@ -44,7 +44,7 @@ abstract class AABBState extends State<AABBWidget>
   }
 
 
-  UICamera calUICamera(double minX, double maxX) {
+  UICamera calUICamera(double minX, double maxX, double paddingY) {
     var candlesX = candlesticksContext.candlesX;
 
     if ((candlesX.length <= 0) || (minX == null) || (maxX == null)) {
@@ -74,7 +74,11 @@ abstract class AABBState extends State<AABBWidget>
       return null;
     }
 
-    return UICamera(UIORect(UIOPoint(minX, minY), UIOPoint(maxX, maxY)));
+    var realHeight = (maxY - minY) / (1 - 2 * paddingY);
+    var realMinY = minY - realHeight * paddingY;
+    var realMaxY = realMinY + realHeight;
+
+    return UICamera(UIORect(UIOPoint(minX, realMinY), UIOPoint(maxX, realMaxY)));
   }
 
 

@@ -11,7 +11,7 @@ class AABBView extends AABBState {
   Widget build(BuildContext context) {
     var uiCamera;
     if (widget.rangeX != null) {
-      uiCamera = calUICamera(widget.rangeX.minX, widget.rangeX.maxX);
+      uiCamera = calUICamera(widget.rangeX.minX, widget.rangeX.maxX, widget.paddingY);
     }
     return AABBContext(
         onAABBChange: onAABBChange,

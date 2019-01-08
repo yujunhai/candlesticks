@@ -27,10 +27,14 @@ class _MyAppState extends State<MyApp> {
       cameraDuration: Duration(milliseconds: 500),
       initAfterNData: 500,
       defaultViewPortX: 40,
+      fractionDigits:8,
+      nX: 5,
+      nY: 4,
       candlesStyle: CandlesStyle(
           positiveColor: Colors.redAccent,
           negativeColor: Colors.greenAccent,
           paddingX: 0.5,
+          cameraPaddingY: 0.1,
           duration: Duration(milliseconds: 200)),
       maStyle: MaStyle(
           shortCount: 5,
@@ -76,10 +80,12 @@ class _MyAppState extends State<MyApp> {
                         cameraDuration: Duration(milliseconds: 500),
                         initAfterNData: 500,
                         defaultViewPortX: 40,
+                        fractionDigits:8,
                         candlesStyle: CandlesStyle(
                             positiveColor: Colors.redAccent,
                             negativeColor: Colors.greenAccent,
                             paddingX: 0.5,
+                            cameraPaddingY: 0.1,
                             duration: Duration(milliseconds: 200)),
                         maStyle: MaStyle(
                             shortCount: 5,
@@ -98,10 +104,12 @@ class _MyAppState extends State<MyApp> {
                         cameraDuration: Duration(milliseconds: 500),
                         initAfterNData: 500,
                         defaultViewPortX: 40,
+                        fractionDigits:8,
                         candlesStyle: CandlesStyle(
                             positiveColor: Colors.greenAccent,
                             negativeColor: Colors.redAccent,
                             paddingX: 0.5,
+                            cameraPaddingY: 0.1,
                             duration: Duration(milliseconds: 200)),
                         maStyle: MaStyle(
                             shortCount: 5,

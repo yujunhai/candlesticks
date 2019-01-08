@@ -16,6 +16,7 @@ class AABBWidget extends StatefulWidget {
     this.rangeX,
     this.candlesticksStyle,
     this.child,
+    this.paddingY,
   }) :super(key: key);
 
   final Stream<ExtCandleData> extDataStream;
@@ -23,6 +24,7 @@ class AABBWidget extends StatefulWidget {
   final AABBRangeX rangeX;
   final CandlesticksStyle candlesticksStyle;
   final Widget child;
+  final double paddingY;
 
   @override
   AABBView createState() => AABBView();
