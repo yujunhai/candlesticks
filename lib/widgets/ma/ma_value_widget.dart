@@ -25,26 +25,32 @@ class MaValuePainter extends CustomPainter {
     this.maValueData,
   });
 
-  @override
-  void paint(Canvas canvas, Size size) {
-    var worldY = maValueData.shortValue;
-    var priceStr = worldY.toStringAsFixed(4);
 
-    TextPainter textPainter = TextPainter(
+
+  double paintLabel(Canvas canvas, Size size, double x, String text) {
+    TextPainter currentTextPainter = TextPainter(
         textDirection: TextDirection.ltr,
         maxLines: 1,
         textAlign: TextAlign.end,
         text: TextSpan(
-          text: priceStr,
+          text: text,
           style: TextStyle(
             color: Colors.white,
             fontSize: 10.0,
           ),
         )
     );
+    currentTextPainter.layout();
+    currentTextPainter.paint(canvas, Offset(x, 0));
+    return currentTextPainter.width + 3;
+  }
 
-    textPainter.layout();
-    textPainter.paint(canvas, Offset(0, 0));
+  @override
+  void paint(Canvas canvas, Size size) {
+    double x = paintLabel(canvas, size, 0, "Current:" + maValueData.currentValue.toStringAsFixed(4));
+    x += paintLabel(canvas, size, x, "MA${maStyle.shortCount}:" + maValueData.shortValue.toStringAsFixed(4));
+    x += paintLabel(canvas, size, x, "MA${maStyle.middleCount}:" + maValueData.middleValue.toStringAsFixed(4));
+    x += paintLabel(canvas, size, x, "MA${maStyle.longCount}:" + maValueData.longValue.toStringAsFixed(4));
   }
 
   @override
