@@ -6,6 +6,9 @@ import 'package:candlesticks/2d/uicamera.dart';
 import 'package:candlesticks/2d/uiobjects/uio_point.dart';
 import 'package:candlesticks/widgets/candlesticks_style.dart';
 import 'package:candlesticks/widgets/ma/ma_style.dart';
+import 'package:candlesticks/widgets/ma/ma_context.dart';
+import 'package:candlesticks/widgets/ma/ma_value_widget.dart';
+import 'package:candlesticks/widgets/ma/ma_value_data.dart';
 
 class MaValuePainter extends CustomPainter {
 
@@ -13,15 +16,18 @@ class MaValuePainter extends CustomPainter {
   final double paddingY;
   final MaStyle maStyle;
 
+  MaValueData maValueData;
+
   MaValuePainter({
     this.uiCamera,
     this.paddingY,
     this.maStyle,
+    this.maValueData,
   });
 
   @override
   void paint(Canvas canvas, Size size) {
-    var worldY = 123.4312;
+    var worldY = maValueData.shortValue;
     var priceStr = worldY.toStringAsFixed(4);
 
     TextPainter textPainter = TextPainter(
@@ -43,17 +49,19 @@ class MaValuePainter extends CustomPainter {
 
   @override
   bool shouldRepaint(CustomPainter oldDelegate) {
-    return true;
+    return this.maStyle != null;
   }
 }
 
 class MaValueWidget extends StatelessWidget {
   MaValueWidget({
     Key key,
+    this.maValueData,
     this.maStyle,
     this.paddingY,
   }) : super(key: key);
 
+  final MaValueData maValueData;
   final double paddingY;
   final MaStyle maStyle;
 
@@ -67,6 +75,7 @@ class MaValueWidget extends StatelessWidget {
 
     return CustomPaint(
         painter: MaValuePainter(
+          maValueData: this.maValueData,
           uiCamera: uiCamera,
           paddingY: paddingY,
           maStyle: this.maStyle,

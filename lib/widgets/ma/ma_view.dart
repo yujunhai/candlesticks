@@ -8,6 +8,8 @@ import 'package:candlesticks/widgets/ma/ma_style.dart';
 import 'package:candlesticks/widgets/candlesticks_context_widget.dart';
 import 'package:candlesticks/widgets/aabb/aabb_context.dart';
 import 'package:candlesticks/widgets/ma/ma_value_widget.dart';
+import 'package:candlesticks/widgets/ma/ma_context.dart';
+import 'package:candlesticks/widgets/ma/ma_value_data.dart';
 
 
 class MaView extends UIAnimatedView<UIOPath, UIOPoint> {
@@ -16,7 +18,9 @@ class MaView extends UIAnimatedView<UIOPath, UIOPoint> {
   Paint painter;
   Color color;
 
-  MaView(this.count, this.color) : super(animationCount:2) {
+  MaContext maContext;
+
+  MaView(this.count, this.color) : super(animationCount: 2) {
     this._sum = List<double>();
 
     painter = new Paint()
@@ -58,6 +62,7 @@ class MaView extends UIAnimatedView<UIOPath, UIOPoint> {
     if (y != null) {
       var point = UIOPoint(candleData.timeMs.toDouble() +
           candleData.durationMs.toDouble() / 2.0, y, index: candleData.index);
+      maContext.onMaChange(count, y, candleData.getValue(candleData));
       return point;
     }
     return null;
@@ -74,11 +79,18 @@ class MaView extends UIAnimatedView<UIOPath, UIOPoint> {
     path.uiObjects.add(path.uiObjects.last.clone());
     return path;
   }
+
   @override
   UIOPath getEndAnimation(UIOPath lastAnimationUIObject, UIOPoint point) {
     var path = lastAnimationUIObject.clone();
     path.uiObjects.add(point);
     return path;
+  }
+
+  @override void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    super.didChangeDependencies();
+    maContext = MaContext.of(context);
   }
 
   @override
@@ -98,47 +110,68 @@ class MaWidgetState extends State<MaWidget> {
     candlesticksContext = AABBContext.of(context);
   }
 
+  MaValueData maValueData;
+
+  onMaChange(int count, double value, double currentValue) {
+    if(maValueData == null) {
+      maValueData = MaValueData();
+    }
+    if(count == widget.style.shortCount) {
+      maValueData = MaValueData(shortValue:value, middleValue:maValueData.middleValue, longValue:maValueData.longValue, currentValue: currentValue);
+    }else if(count == widget.style.middleCount) {
+      maValueData = MaValueData(shortValue:maValueData.shortValue, middleValue:value, longValue:maValueData.longValue, currentValue: currentValue);
+    }else {
+      maValueData = MaValueData(shortValue:maValueData.shortValue, middleValue:maValueData.middleValue, longValue:value, currentValue: currentValue);
+    }
+    setState(() {
+
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     var uiCamera = candlesticksContext?.uiCamera;
-    return Stack(
-      children: <Widget>[
-        Positioned.fill(
-            child: UIAnimatedWidget<UIOPath, UIOPoint>(
-              dataStream: widget.dataStream,
-              uiCamera: uiCamera,
-              duration: widget.style.duration,
-              state: () =>
-                  MaView(
-                      widget.style.shortCount, widget.style.maShort),
-            )
-        ),
-        Positioned.fill(
-            child: UIAnimatedWidget<UIOPath, UIOPoint>(
-              dataStream: widget.dataStream,
-              uiCamera: uiCamera,
-              duration: widget.style.duration,
-              state: () =>
-                  MaView(widget.style.middleCount,
-                      widget.style.maMiddle),
-            )
-        ),
-        Positioned.fill(
-            child: UIAnimatedWidget<UIOPath, UIOPoint>(
-              dataStream: widget.dataStream,
-              uiCamera: uiCamera,
-              duration: widget.style.duration,
-              state: () =>
-                  MaView(widget.style.longCount, widget.style.maLong),
-            )
-        ),
-        Positioned.fill(
-            child: MaValueWidget(
-              maStyle: widget.style,
-            )
-        ),
-      ],
-    );
+    return MaContext(
+        onMaChange: onMaChange,
+        child: Stack(
+          children: <Widget>[
+            Positioned.fill(
+                child: UIAnimatedWidget<UIOPath, UIOPoint>(
+                  dataStream: widget.dataStream,
+                  uiCamera: uiCamera,
+                  duration: widget.style.duration,
+                  state: () =>
+                      MaView(
+                          widget.style.shortCount, widget.style.maShort),
+                )
+            ),
+            Positioned.fill(
+                child: UIAnimatedWidget<UIOPath, UIOPoint>(
+                  dataStream: widget.dataStream,
+                  uiCamera: uiCamera,
+                  duration: widget.style.duration,
+                  state: () =>
+                      MaView(widget.style.middleCount,
+                          widget.style.maMiddle),
+                )
+            ),
+            Positioned.fill(
+                child: UIAnimatedWidget<UIOPath, UIOPoint>(
+                  dataStream: widget.dataStream,
+                  uiCamera: uiCamera,
+                  duration: widget.style.duration,
+                  state: () =>
+                      MaView(widget.style.longCount, widget.style.maLong),
+                )
+            ),
+            Positioned.fill(
+                child: MaValueWidget(
+                  maValueData: maValueData,
+                  maStyle: widget.style,
+                )
+            ),
+          ],
+        ));
   }
 }
 
