@@ -14,6 +14,7 @@ import 'package:candlesticks/2d/candle_data.dart';
 import 'package:candlesticks/widgets/ma/ma_style.dart';
 import 'package:candlesticks/widgets/candlesticks_context_widget.dart';
 import 'package:candlesticks/widgets/aabb/aabb_context.dart';
+import 'package:candlesticks/widgets/candles/candles_value_widget.dart';
 
 class CandlesView extends UIAnimatedView<UIOCandles, UIOCandle> {
   final CandlesStyle style;
@@ -94,17 +95,16 @@ class CandlesWidgetState extends State<CandlesWidget> {
                   style: widget.style,
                 ),
           )),
-          Positioned.fill(child: UIAnimatedWidget<UIOCandles, UIOCandle>(
-            dataStream: widget.dataStream,
-            uiCamera: uiCamera,
-            duration: widget.style.duration,
-            state: () =>
-                CandlesView(
-                  positivePainter: positivePainter,
-                  negativePainter: negativePainter,
-                  style: widget.style,
-                ),
-          ))
+          Positioned.fill(
+            child: CandlesValueWidget(
+              point: aabbContext.minPoint,
+            ),
+          ),
+          Positioned.fill(
+            child: CandlesValueWidget(
+              point: aabbContext.maxPoint,
+            ),
+          )
         ]);
   }
 

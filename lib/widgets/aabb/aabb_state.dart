@@ -61,20 +61,24 @@ abstract class AABBState extends State<AABBWidget>
     if ((widget.rangeX == null) || (widget.rangeX.maxX == null) || (widget.rangeX.minX == null)) {
       return null;
     }
+    var candlesX = candlesticksContext.candlesX;
+    var baseX = candlesX.first;
     var startIndex = getCandleIndexByX(widget.rangeX.minX);
     var endIndex = getCandleIndexByX(widget.rangeX.maxX);
     var minIndex = this.candlesMinY.minIndex(startIndex, endIndex);
-    return UIOPoint(minIndex * widget.durationMs + widget.durationMs / 2, candlesMinY.get(minIndex));
+    return UIOPoint(baseX + minIndex * widget.durationMs + widget.durationMs / 2, candlesMinY.get(minIndex));
   }
 
   UIOPoint getMaxPoint() {
     if ((widget.rangeX == null) || (widget.rangeX.maxX == null) || (widget.rangeX.minX == null)) {
       return null;
     }
+    var candlesX = candlesticksContext.candlesX;
+    var baseX = candlesX.first;
     var startIndex = getCandleIndexByX(widget.rangeX.minX);
     var endIndex = getCandleIndexByX(widget.rangeX.maxX);
     var minIndex = this.candlesMaxY.minIndex(startIndex, endIndex);
-    return UIOPoint(minIndex * widget.durationMs + widget.durationMs / 2, candlesMinY.get(minIndex));
+    return UIOPoint(baseX + minIndex * widget.durationMs + widget.durationMs / 2, candlesMaxY.get(minIndex));
   }
 
   UICamera calUICamera(double minX, double maxX, double paddingY) {
