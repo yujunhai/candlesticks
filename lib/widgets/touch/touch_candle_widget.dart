@@ -50,7 +50,7 @@ class TopFloatingPainter extends CustomPainter {
   }
 }
 
-class MaFloatingState extends State<TopFloatingWidget> {
+class TouchCandleState extends State<TouchCandleWidget> {
   ExtCandleData extCandleData;
 
   @override
@@ -82,8 +82,8 @@ class MaFloatingState extends State<TopFloatingWidget> {
   }
 }
 
-class TopFloatingWidget extends StatefulWidget {
-  TopFloatingWidget({
+class TouchCandleWidget extends StatefulWidget {
+  TouchCandleWidget({
     Key key,
     this.left,
     this.candle
@@ -93,5 +93,5 @@ class TopFloatingWidget extends StatefulWidget {
   final UIOCandle candle;
 
   @override
-  MaFloatingState createState() => MaFloatingState();
+  TouchCandleState createState() => TouchCandleState();
 }
