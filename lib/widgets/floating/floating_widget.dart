@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 
 import 'package:candlesticks/widgets/aabb/aabb_context.dart';
+import 'package:candlesticks/widgets/candlesticks_context_widget.dart';
 import 'package:candlesticks/2d/uiobjects/uio_candle.dart';
 import 'package:candlesticks/2d/candle_data.dart';
+import 'package:candlesticks/2d/uicamera.dart';
 
 class TopFloatingPainter extends CustomPainter {
 
@@ -50,16 +52,15 @@ class TopFloatingPainter extends CustomPainter {
 
 class MaFloatingState extends State<TopFloatingWidget> {
 
-  bool visible = false;
   bool touchOnLeft;
   ExtCandleData extCandleData;
 
-  onTapDown(TapDownDetails details) {
-    visible = !visible;
-    setState(() {
-
-    });
-    return;
+  @override
+  void initState() {
+    super.initState();
+    print("asdf");
+  }
+  onTapUp(TapUpDetails details) {
     var aabbContext = AABBContext.of(context);
     var uiCamera = aabbContext.uiCamera;
     if (details.globalPosition.dx <= context.size.width / 2) {
@@ -71,9 +72,9 @@ class MaFloatingState extends State<TopFloatingWidget> {
     var worldPoint = uiCamera.viewPortToWorldPoint(
         uiCamera.screenToViewPortPoint(context.size, details.globalPosition));
     extCandleData = aabbContext.getExtCandleDataIndexByX(worldPoint.x);
-    setState(() {
 
-    });
+    var candlesticksContext = CandlesticksContext.of(context);
+    candlesticksContext.onTouchCandle(extCandleData);
   }
 
   Widget getText(String text, String data, TextStyle textStyle,
@@ -100,9 +101,10 @@ class MaFloatingState extends State<TopFloatingWidget> {
   Widget build(BuildContext context) {
     var aabbContext = AABBContext.of(context);
     var uiCamera = aabbContext.uiCamera;
-    if (uiCamera == null) {
+    if(uiCamera == null) {
       return Container();
     }
+    var candlesticksContext = CandlesticksContext.of(context);
 
     /// 选中K线 字体颜色
     Color tapTextFontColor = Colors.white.withOpacity(0.5);
@@ -113,15 +115,20 @@ class MaFloatingState extends State<TopFloatingWidget> {
     double tapTextSize = 8.0;
     TextStyle textStyle = new TextStyle(
         color: tapTextFontColor, fontSize: tapTextSize, height: tapTextHeight);
+    print("rebuild ${candlesticksContext.visible}");
+    print(candlesticksContext.visible);
 
     return GestureDetector(
-        onTapDown: onTapDown,
+        onTapUp: onTapUp,
         behavior: HitTestBehavior.translucent,
-        child: Offstage(
-            offstage: visible,
+        /*
+        child: Container()Offstage(
+            offstage: !candlesticksContext.visible,
             child: SizedBox(
                 width: 10,
                 child: Container(
+                  width: 10.0,
+                    height: 10.0,
                     padding: EdgeInsets.fromLTRB(5.0, 0.0, 5.0, 5.0),
                     decoration: new BoxDecoration(
                       border: new Border.all(
@@ -136,6 +143,7 @@ class MaFloatingState extends State<TopFloatingWidget> {
                       ],
                     )))
         )
+        */
     );
   }
 }

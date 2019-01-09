@@ -117,7 +117,7 @@ abstract class CandlesticksState extends State<CandlesticksWidget>
     uiCameraAnimation =
         Tween(begin: currentRangeX, end: newUICamera)
             .animate(CurvedAnimation(
-            parent: uiCameraAnimationController,
+            parent: uiCameraAnimationContrller,
             curve: Curves.decelerate
         ));
     uiCameraAnimationController.reset();
@@ -170,11 +170,22 @@ abstract class CandlesticksState extends State<CandlesticksWidget>
         Tween(begin: newRangeX, end: newRangeX).animate(
             uiCameraAnimationController);
     uiCameraAnimationController.reset();
+    visible = false;
+    print("false");
     setState(() {
 
     });
   }
 
+  bool visible;
+  onTouchCandle(ExtCandleData candleData) {
+    print(candleData);
+    visible = true;
+    print("true index:${candleData.index}");
+    setState(() {
+
+    });
+  }
 
   @override
   void initState() {
@@ -187,6 +198,7 @@ abstract class CandlesticksState extends State<CandlesticksWidget>
     subscription = widget.dataStream.listen(onCandleData);
     uiCameraAnimationController = AnimationController(
         duration: widget.candlesticksStyle.cameraDuration, vsync: this);
+    visible = false;
   }
 
   @override

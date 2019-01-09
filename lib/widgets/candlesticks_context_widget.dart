@@ -7,12 +7,16 @@ import 'package:candlesticks/2d/uiobjects/uio_rect.dart';
 class CandlesticksContext extends InheritedWidget {
   final List<double> candlesX;
   final Function(ExtCandleData candleData) onCandleDataFinish;
+  final bool visible;
+  final Function(ExtCandleData candleData) onTouchCandle;
 
   CandlesticksContext({
     Key key,
     @required this.candlesX,
     @required Widget child,
     @required this.onCandleDataFinish,
+    @required this.visible,
+    @required this.onTouchCandle,
   }) : super(key: key, child: child);
 
   static CandlesticksContext of(BuildContext context) {
