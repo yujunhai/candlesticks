@@ -171,7 +171,6 @@ abstract class CandlesticksState extends State<CandlesticksWidget>
             uiCameraAnimationController);
     uiCameraAnimationController.reset();
     visible = false;
-    print("false");
     setState(() {
 
     });
