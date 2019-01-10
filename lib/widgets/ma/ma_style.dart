@@ -1,22 +1,22 @@
 import 'package:flutter/material.dart';
 
 class MaStyle {
-    Color maLong;
+    Color longColor;
     int longCount;
 
-    Color maMiddle;
+    Color middleColor;
     int middleCount;
 
-    Color maShort;
+    Color shortColor;
     int shortCount;
 
     Duration duration;
 
     double cameraPaddingY;
 
-    MaStyle({this.shortCount, this.maShort,
-        this.middleCount, this.maMiddle,
-        this.longCount, this.maLong,
+    MaStyle({this.shortCount, this.shortColor,
+        this.middleCount, this.middleColor,
+        this.longCount, this.longColor,
         this.duration, this.cameraPaddingY});
 }
 

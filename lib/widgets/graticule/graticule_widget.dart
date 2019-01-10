@@ -77,7 +77,7 @@ class GraticulePainter extends CustomPainter {
     var endY = size.height * (1 - paddingY);
     var painter = Paint()
       ..style = PaintingStyle.stroke
-      ..color = Colors.white;
+      ..color = candlesticksStyle.lineColor;
     int n = this.candlesticksStyle.nY;
     double height = (endY - beginY) / n;
 

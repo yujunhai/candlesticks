@@ -152,7 +152,7 @@ class MaWidgetState extends State<MaWidget> {
                   duration: widget.style.duration,
                   state: () =>
                       MaView(
-                          widget.style.shortCount, widget.style.maShort),
+                          widget.style.shortCount, widget.style.shortColor),
                 )
             ),
             Positioned.fill(
@@ -162,7 +162,7 @@ class MaWidgetState extends State<MaWidget> {
                   duration: widget.style.duration,
                   state: () =>
                       MaView(widget.style.middleCount,
-                          widget.style.maMiddle),
+                          widget.style.middleColor),
                 )
             ),
             Positioned.fill(
@@ -171,7 +171,7 @@ class MaWidgetState extends State<MaWidget> {
                   uiCamera: uiCamera,
                   duration: widget.style.duration,
                   state: () =>
-                      MaView(widget.style.longCount, widget.style.maLong),
+                      MaView(widget.style.longCount, widget.style.longColor),
                 )
             ),
             Positioned.fill(

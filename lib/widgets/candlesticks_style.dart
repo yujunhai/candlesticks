@@ -8,6 +8,7 @@ class CandlesticksStyle {
   final int initAfterNData;
   final int defaultViewPortX;
   final Color backgroundColor;
+  final Color lineColor;
   //标线
   final int fractionDigits;
   final double paddingY;
@@ -19,6 +20,6 @@ class CandlesticksStyle {
   final MaStyle maStyle;
 
   CandlesticksStyle(
-      {this.floatingStyle, this.candlesStyle, this.maStyle, this.cameraDuration, this.initAfterNData, this.backgroundColor, this.defaultViewPortX,
+      {this.floatingStyle, this.lineColor, this.candlesStyle, this.maStyle, this.cameraDuration, this.initAfterNData, this.backgroundColor, this.defaultViewPortX,
         this.fractionDigits, this.paddingY, this.nX, this.nY});
 }

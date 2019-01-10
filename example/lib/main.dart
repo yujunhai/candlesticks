@@ -14,6 +14,39 @@ class MyApp extends StatefulWidget {
   _MyAppState createState() => new _MyAppState();
 }
 
+CandlesticksStyle DefaultCandleStyle = CandlesticksStyle(
+  backgroundColor: Color(0xff21232e),
+  cameraDuration: Duration(milliseconds: 500),
+  initAfterNData: 500,
+  defaultViewPortX: 40,
+  fractionDigits:8,
+  lineColor: Colors.white.withOpacity(0.3),
+  nX: 5,
+  nY: 4,
+  floatingStyle: FloatingStyle(
+    backGroundColor: Colors.black.withOpacity(0.8),
+    frontSize: 10,
+    borderColor: Colors.white,
+    frontColor: Colors.white,
+    crossColor: Colors.white,
+  ),
+  candlesStyle: CandlesStyle(
+      positiveColor: Colors.redAccent,
+      negativeColor: Colors.greenAccent,
+      paddingX: 0.5,
+      cameraPaddingY: 0.1,
+      duration: Duration(milliseconds: 200)),
+  maStyle: MaStyle(
+      cameraPaddingY: 0.2,
+      shortCount: 5,
+      shortColor: Colors.yellowAccent,
+      middleCount: 15,
+      middleColor: Colors.greenAccent,
+      longCount: 30,
+      longColor: Colors.deepPurpleAccent,
+      duration: Duration(milliseconds: 200)),
+);
+
 class _MyAppState extends State<MyApp> {
   int count = 0;
 
@@ -21,37 +54,7 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
     dataStreamFuture = DataSource.instance.initTZB(1);
-    style = CandlesticksStyle(
-      backgroundColor: Color(0xff21232e),
-      cameraDuration: Duration(milliseconds: 500),
-      initAfterNData: 500,
-      defaultViewPortX: 40,
-      fractionDigits:8,
-      nX: 5,
-      nY: 4,
-      floatingStyle: FloatingStyle(
-        backGroundColor: Colors.black.withOpacity(0.8),
-        frontSize: 10,
-        borderColor: Colors.white,
-        frontColor: Colors.white,
-        crossColor: Colors.white,
-      ),
-      candlesStyle: CandlesStyle(
-          positiveColor: Colors.redAccent,
-          negativeColor: Colors.greenAccent,
-          paddingX: 0.5,
-          cameraPaddingY: 0.1,
-          duration: Duration(milliseconds: 200)),
-      maStyle: MaStyle(
-          cameraPaddingY: 0.2,
-          shortCount: 5,
-          maShort: Colors.yellowAccent,
-          middleCount: 15,
-          maMiddle: Colors.greenAccent,
-          longCount: 30,
-          maLong: Colors.deepPurpleAccent,
-          duration: Duration(milliseconds: 200)),
-    );
+    style = DefaultCandleStyle;
   }
 
   Future<Stream<CandleData>> dataStreamFuture;
@@ -72,76 +75,21 @@ class _MyAppState extends State<MyApp> {
                   onPressed: () {
                     count++;
                     if (count % 4 == 0) {
-                      dataStreamFuture = DataSource.instance.initTZB(1);
-                      print('切换K线 1');
+                     // dataStreamFuture = DataSource.instance.initTZB(1);
+                      //print('切换K线 1');
                     }
                     if (count % 4 == 1) {
-                      dataStreamFuture = DataSource.instance.initTZB(5);
-                      print('切换K线 5');
+                      //dataStreamFuture = DataSource.instance.initTZB(5);
+                      //print('切换K线 5');
                     } else if (count % 4 == 2) {
 //                      dataStreamFuture = DataSource.instance.initTZB(5);
                       print('切换颜色 红绿');
-                      style = CandlesticksStyle(
-                        backgroundColor: Colors.white,
-                        cameraDuration: Duration(milliseconds: 500),
-                        initAfterNData: 500,
-                        defaultViewPortX: 40,
-                        fractionDigits:8,
-                        floatingStyle: FloatingStyle(
-                          backGroundColor: Colors.black.withOpacity(0.8),
-                          frontSize: 10,
-                          frontColor: Colors.white,
-                          crossColor: Colors.white,
-                          borderColor: Colors.white,
-                        ),
-                        candlesStyle: CandlesStyle(
-                            positiveColor: Colors.redAccent,
-                            negativeColor: Colors.greenAccent,
-                            paddingX: 0.5,
-                            cameraPaddingY: 0.1,
-                            duration: Duration(milliseconds: 200)),
-                        maStyle: MaStyle(
-                            cameraPaddingY: 0.1,
-                            shortCount: 5,
-                            maShort: Colors.yellowAccent,
-                            middleCount: 15,
-                            maMiddle: Colors.greenAccent,
-                            longCount: 30,
-                            maLong: Colors.deepPurpleAccent,
-                            duration: Duration(milliseconds: 200)),
-                      );
+                      style = DefaultCandleStyle;
                     } else if (count % 4 == 3) {
 //                      dataStreamFuture = DataSource.instance.initTZB(5);
                       print('切换颜色 绿红');
-                      style = CandlesticksStyle(
-                        backgroundColor: Colors.black,
-                        cameraDuration: Duration(milliseconds: 500),
-                        initAfterNData: 500,
-                        defaultViewPortX: 40,
-                        fractionDigits:8,
-                        floatingStyle: FloatingStyle(
-                          backGroundColor: Colors.black.withOpacity(0.8),
-                          frontSize: 10,
-                          frontColor: Colors.white,
-                          crossColor: Colors.white,
-                          borderColor: Colors.white,
-                        ),
-                        candlesStyle: CandlesStyle(
-                            positiveColor: Colors.greenAccent,
-                            negativeColor: Colors.redAccent,
-                            paddingX: 0.5,
-                            cameraPaddingY: 0.1,
-                            duration: Duration(milliseconds: 200)),
-                        maStyle: MaStyle(
-                            cameraPaddingY: 0.1,
-                            shortCount: 5,
-                            maShort: Colors.yellowAccent,
-                            middleCount: 15,
-                            maMiddle: Colors.greenAccent,
-                            longCount: 30,
-                            maLong: Colors.deepPurpleAccent,
-                            duration: Duration(milliseconds: 200)),
-                      );
+                      DefaultCandleStyle.maStyle.shortColor = Colors.white;
+                      style = DefaultCandleStyle;
                     }
                     setState(() {
 
