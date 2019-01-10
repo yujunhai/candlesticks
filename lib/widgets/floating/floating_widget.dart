@@ -120,18 +120,21 @@ class TopFloatingPainter extends CustomPainter {
     var crossPainter = Paint();
     crossPainter.color = style.floatingStyle.crossColor;
     crossPainter.style = PaintingStyle.stroke;
+    var touchWorldPoint = UIOPoint(extCandleData.timeMs + extCandleData.durationMs / 2, 0);
+    var touchScenePoint = uiCamera.viewPortToScreenPoint(size, uiCamera.worldToViewPortPoint(touchWorldPoint));
+    var realTouchPoint = Offset(touchScenePoint.dx, touchScenePoint.dy);
     canvas.drawLine(
-        Offset(touchPoint.dx, 0), Offset(touchPoint.dx, size.height),
+        Offset(touchScenePoint.dx, 0), Offset(touchScenePoint.dx, size.height),
         crossPainter);
-    canvas.drawLine(Offset(0, touchPoint.dy), Offset(size.width, touchPoint.dy),
+    canvas.drawLine(Offset(0, realTouchPoint.dy), Offset(size.width, realTouchPoint.dy),
         crossPainter);
     Paint maxCircle = new Paint();
     maxCircle
-      ..shader = ui.Gradient.radial(touchPoint, 3, [
+      ..shader = ui.Gradient.radial(realTouchPoint, 3, [
         Colors.white.withOpacity(0.8),
         Colors.white.withOpacity(0.1),
       ], [0.0, 1.0], TileMode.clamp);
-    canvas.drawCircle(touchPoint, 3, maxCircle);
+    canvas.drawCircle(realTouchPoint, 3, maxCircle);
   }
 
   @override
