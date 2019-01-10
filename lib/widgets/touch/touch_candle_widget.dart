@@ -6,50 +6,6 @@ import 'package:candlesticks/2d/uiobjects/uio_candle.dart';
 import 'package:candlesticks/2d/candle_data.dart';
 import 'package:candlesticks/2d/uicamera.dart';
 
-class TopFloatingPainter extends CustomPainter {
-
-  final bool left;
-  final ExtCandleData extCandleData;
-
-  TopFloatingPainter({
-    this.left,
-    this.extCandleData
-  });
-
-
-  double paintLabel(Canvas canvas, Size size, double x, String text) {
-    TextPainter currentTextPainter = TextPainter(
-        textDirection: TextDirection.ltr,
-        maxLines: 1,
-        textAlign: TextAlign.end,
-        text: TextSpan(
-          text: text,
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 10.0,
-          ),
-        )
-    );
-    currentTextPainter.layout();
-    currentTextPainter.paint(canvas, Offset(x, 0));
-    return currentTextPainter.width + 3;
-  }
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    if (extCandleData == null) {
-      return;
-    }
-    double x = paintLabel(canvas, size, 0, "Current:");
-  }
-
-  @override
-  bool shouldRepaint(TopFloatingPainter oldPainter) {
-    return this.left != oldPainter.left ||
-        this.extCandleData != oldPainter.extCandleData;
-  }
-}
-
 class TouchCandleState extends State<TouchCandleWidget> {
   ExtCandleData extCandleData;
 
@@ -57,6 +13,7 @@ class TouchCandleState extends State<TouchCandleWidget> {
   void initState() {
     super.initState();
   }
+
   onTapUp(TapUpDetails details) {
     var aabbContext = AABBContext.of(context);
     var uiCamera = aabbContext.uiCamera;
