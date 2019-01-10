@@ -48,10 +48,10 @@ class MaValuePainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    double x = paintLabel(canvas, size, 0, "Current:" + maValueData.currentValue.toStringAsFixed(4), style.maStyle.currentColor);
-    x += paintLabel(canvas, size, x, "MA${style.maStyle.shortCount}:" + maValueData.shortValue.toStringAsFixed(4), style.maStyle.shortColor);
-    x += paintLabel(canvas, size, x, "MA${style.maStyle.middleCount}:" + maValueData.middleValue.toStringAsFixed(4), style.maStyle.middleColor);
-    x += paintLabel(canvas, size, x, "MA${style.maStyle.longCount}:" + maValueData.longValue.toStringAsFixed(4), style.maStyle.longColor);
+    double x = paintLabel(canvas, size, 0, "Current:" + maValueData.currentValue.toStringAsFixed(style.fractionDigits), style.maStyle.currentColor);
+    x += paintLabel(canvas, size, x, "MA${style.maStyle.shortCount}:" + maValueData.shortValue.toStringAsFixed(style.fractionDigits), style.maStyle.shortColor);
+    x += paintLabel(canvas, size, x, "MA${style.maStyle.middleCount}:" + maValueData.middleValue.toStringAsFixed(style.fractionDigits), style.maStyle.middleColor);
+    x += paintLabel(canvas, size, x, "MA${style.maStyle.longCount}:" + maValueData.longValue.toStringAsFixed(style.fractionDigits), style.maStyle.longColor);
   }
 
   @override

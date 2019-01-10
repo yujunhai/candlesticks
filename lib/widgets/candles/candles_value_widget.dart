@@ -15,10 +15,12 @@ class CandlesValuePainter extends CustomPainter {
 
   final UICamera uiCamera;
   final UIOPoint point;
+  final CandlesticksStyle style;
 
   CandlesValuePainter({
     this.uiCamera,
     this.point,
+    this.style,
   });
 
   @override
@@ -31,7 +33,7 @@ class CandlesValuePainter extends CustomPainter {
       dir = -1;
     }
     Offset pText = p + Offset(dx, 0) * dir;
-    String price = point.y.toStringAsFixed(4);
+    String price = point.y.toStringAsFixed(style.fractionDigits);
 
 
     TextPainter currentTextPainter = TextPainter(
@@ -76,8 +78,10 @@ class CandlesValueWidget extends StatelessWidget {
   CandlesValueWidget({
     Key key,
     this.point,
+    this.style
   }) : super(key: key);
 
+  final CandlesticksStyle style;
   final UIOPoint point;
 
   @override
@@ -90,8 +94,9 @@ class CandlesValueWidget extends StatelessWidget {
 
     return CustomPaint(
         painter: CandlesValuePainter(
+          style: style,
           uiCamera: uiCamera,
-          point: this.point,
+          point: point,
         ),
         size: Size.infinite
     );

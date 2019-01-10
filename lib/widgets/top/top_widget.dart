@@ -46,7 +46,7 @@ class TopWidget extends StatelessWidget {
                 Positioned.fill(
                     child: CandlesWidget(
                       dataStream: widget.extDataStream,
-                      style: widget.candlesticksStyle.candlesStyle,
+                      style: widget.candlesticksStyle,
                     )
                 ),
                 Positioned.fill(

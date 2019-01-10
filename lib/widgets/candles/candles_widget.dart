@@ -15,9 +15,10 @@ import 'package:candlesticks/widgets/ma/ma_style.dart';
 import 'package:candlesticks/widgets/candlesticks_context_widget.dart';
 import 'package:candlesticks/widgets/aabb/aabb_context.dart';
 import 'package:candlesticks/widgets/candles/candles_value_widget.dart';
+import 'package:candlesticks/widgets/candlesticks_style.dart';
 
 class CandlesView extends UIAnimatedView<UIOCandles, UIOCandle> {
-  final CandlesStyle style;
+  final CandlesticksStyle style;
   Paint positivePainter;
   Paint negativePainter;
 
@@ -27,7 +28,7 @@ class CandlesView extends UIAnimatedView<UIOCandles, UIOCandle> {
 
   @override
   UIOCandle getCandle(ExtCandleData candleData) {
-    var candleUIObject = UIOCandle.fromData(candleData, style.paddingX,
+    var candleUIObject = UIOCandle.fromData(candleData, style.candlesStyle.paddingX,
         candleData.open <= candleData.close
             ? positivePainter
             : negativePainter, index: candleData.index);
@@ -45,7 +46,7 @@ class CandlesView extends UIAnimatedView<UIOCandles, UIOCandle> {
     var path = lastAnimationUIObject.clone();
     var currentCandle = UIOCandle(
         UIOPoint(candleUIObject.origin.x, candleUIObject.origin.y),
-        UIOPoint(candleUIObject.r.x, 0), 0, 0, style.paddingX,
+        UIOPoint(candleUIObject.r.x, 0), 0, 0, style.candlesStyle.paddingX,
         painter: candleUIObject.painter, index: candleUIObject.index);
     path.uiObjects.add(currentCandle);
 
@@ -87,7 +88,7 @@ class CandlesWidgetState extends State<CandlesWidget> {
           Positioned.fill(child: UIAnimatedWidget<UIOCandles, UIOCandle>(
             dataStream: widget.dataStream,
             uiCamera: uiCamera,
-            duration: widget.style.duration,
+            duration: widget.style.candlesStyle.duration,
             state: () =>
                 CandlesView(
                   positivePainter: positivePainter,
@@ -98,10 +99,12 @@ class CandlesWidgetState extends State<CandlesWidget> {
           Positioned.fill(
             child: CandlesValueWidget(
               point: aabbContext.minPoint,
+              style: widget.style,
             ),
           ),
           Positioned.fill(
             child: CandlesValueWidget(
+              style: widget.style,
               point: aabbContext.maxPoint,
             ),
           )
@@ -113,10 +116,10 @@ class CandlesWidgetState extends State<CandlesWidget> {
     // TODO: implement initState
     super.initState();
     positivePainter = new Paint()
-      ..color = widget.style.positiveColor
+      ..color = widget.style.candlesStyle.positiveColor
       ..style = PaintingStyle.fill;
     negativePainter = new Paint()
-      ..color = widget.style.negativeColor
+      ..color = widget.style.candlesStyle.negativeColor
       ..style = PaintingStyle.fill;
   }
 }
@@ -130,7 +133,7 @@ class CandlesWidget extends StatefulWidget {
   }) : super(key: key);
 
   final Stream<ExtCandleData> dataStream;
-  final CandlesStyle style;
+  final CandlesticksStyle style;
 
   @override
   CandlesWidgetState createState() => CandlesWidgetState();

@@ -10,7 +10,7 @@ CandlesticksStyle DefaultDarkCandleStyle = CandlesticksStyle(
   defaultViewPortX: 40,
   minViewPortX: 16,
   maxViewPortX: 128,
-  fractionDigits:8,
+  fractionDigits:4,
   lineColor: Colors.white.withOpacity(0.2),
   nX: 5,
   nY: 4,
