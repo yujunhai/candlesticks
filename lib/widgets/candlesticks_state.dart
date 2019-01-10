@@ -107,8 +107,11 @@ abstract class CandlesticksState extends State<CandlesticksWidget>
 
     var currentRangeX = this.uiCameraAnimation.value;
     var width = currentRangeX.width;
-    double a = width * 3;
+    double a = width * 5;
     var viewPortDx = details.primaryVelocity.abs() / context.size.width;
+    if(viewPortDx ~/durationMs > 2) {
+      viewPortDx = 2;
+    }
     var worldDx = width * viewPortDx;
 
     double speed = worldDx; //per second
