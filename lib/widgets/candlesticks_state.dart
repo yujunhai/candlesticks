@@ -171,6 +171,7 @@ abstract class CandlesticksState extends State<CandlesticksWidget>
 
     RenderBox getBox = context.findRenderObject();
     startX = startRangeX.minX + (getBox.globalToLocal(details.focalPoint).dx / context.size.width) * startRangeX.width;
+    touching = true;
   }
 
   onScaleUpdate(ScaleUpdateDetails details) {

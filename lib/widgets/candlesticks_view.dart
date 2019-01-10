@@ -38,6 +38,8 @@ class CandlesticksView extends CandlesticksState {
 
       onScaleUpdate: onScaleUpdate,
       onScaleStart: handleScaleStart,
+
+
       child: AnimatedBuilder(
           animation: Listenable.merge([
             uiCameraAnimation,
