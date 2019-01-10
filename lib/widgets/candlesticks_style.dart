@@ -8,6 +8,8 @@ CandlesticksStyle DefaultDarkCandleStyle = CandlesticksStyle(
   cameraDuration: Duration(milliseconds: 500),
   initAfterNData: 500,
   defaultViewPortX: 40,
+  minViewPortX: 16,
+  maxViewPortX: 128,
   fractionDigits:8,
   lineColor: Colors.white.withOpacity(0.2),
   nX: 5,
@@ -41,6 +43,8 @@ class CandlesticksStyle {
   final Duration cameraDuration;
   final int initAfterNData;
   final int defaultViewPortX;
+  final int minViewPortX;
+  final int maxViewPortX;
   final Color backgroundColor;
   final Color lineColor;
   //标线
@@ -54,6 +58,6 @@ class CandlesticksStyle {
   final MaStyle maStyle;
 
   CandlesticksStyle(
-      {this.floatingStyle, this.lineColor, this.candlesStyle, this.maStyle, this.cameraDuration, this.initAfterNData, this.backgroundColor, this.defaultViewPortX,
+      {this.minViewPortX, this.maxViewPortX, this.floatingStyle, this.lineColor, this.candlesStyle, this.maStyle, this.cameraDuration, this.initAfterNData, this.backgroundColor, this.defaultViewPortX,
         this.fractionDigits, this.paddingY, this.nX, this.nY});
 }

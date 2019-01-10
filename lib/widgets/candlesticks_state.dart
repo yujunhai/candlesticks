@@ -163,65 +163,39 @@ abstract class CandlesticksState extends State<CandlesticksWidget>
     });
   }
 
-  Offset _startingFocalPoint;
-  Offset _previousOffset;
-  Offset _offset = Offset.zero;
-  double _previousZoom;
-  double _zoom = 1.0;
+  double startX;
+  AABBRangeX startRangeX;
 
   void handleScaleStart(ScaleStartDetails details) {
-    setState(() {
-      _startingFocalPoint = details.focalPoint;
-      _previousOffset = _offset;
-      _previousZoom = _zoom;
-    });
-  }
+    startRangeX = uiCameraAnimation.value;
 
-  void handleScaleReset() {
-    setState(() {
-      _zoom = 1.0;
-      _offset = Offset.zero;
-    });
+    RenderBox getBox = context.findRenderObject();
+    startX = startRangeX.minX + (getBox.globalToLocal(details.focalPoint).dx / context.size.width) * startRangeX.width;
   }
 
   onScaleUpdate(ScaleUpdateDetails details) {
-    _zoom = _previousZoom * details.scale;
-
-    // Ensure that item under the focal point stays in the same place despite zooming
-    final Offset normalizedOffset = (_startingFocalPoint - _previousOffset) /
-        _previousZoom;
-    _offset = details.focalPoint - normalizedOffset * _zoom;
-
-    RenderBox getBox = context.findRenderObject();
-    var focalPoint = getBox.globalToLocal(details.focalPoint);
-    var rangeX = uiCameraAnimation.value;
-    var width = rangeX.width * _zoom;
-
-
-    if(width > this.durationMs * 100) {
-      width = this.durationMs * 100;
+    double scale = details.scale;
+    var originWidth = startRangeX.width * scale;
+    var width = originWidth * scale;
+    if (width > this.durationMs * widget.candlesticksStyle.maxViewPortX) {
+      width = this.durationMs * widget.candlesticksStyle.maxViewPortX;
     }
-    if(width < this.durationMs * 10) {
-      width = this.durationMs * 10;
+    if (width < this.durationMs * widget.candlesticksStyle.minViewPortX) {
+      width = this.durationMs * widget.candlesticksStyle.maxViewPortX;
     }
-    var rateX = (focalPoint.dx / context.size.width);
-    var x = (rangeX.minX + rangeX.maxX) * rateX;
-    var minX = x - width * rateX;
-    var maxX = minX + width;
-    var newRangeX = AABBRangeX(minX, maxX);
-    print(rangeX.width);
-    print(details.scale);
-    print(width);
 
+    var dx = (startX - startRangeX.minX) * scale;
+
+    double minX = startX - dx;
     if (minX < this.candlesX.first) {
       minX = this.candlesX.first;
-      maxX = minX + width;
     }
-
+    var maxX = minX + width;
     if (maxX > this.candlesX.last + this.durationMs) {
       maxX = this.candlesX.last + this.durationMs;
-      minX = maxX - width;
     }
+    var newRangeX = AABBRangeX(minX, maxX);
+
     uiCameraAnimation =
         Tween(begin: newRangeX, end: newRangeX).animate(
             uiCameraAnimationController);

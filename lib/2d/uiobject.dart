@@ -127,10 +127,10 @@ abstract class UIObjects<T extends UIAnimatedObject<T>, TT extends UIObjectsAcce
         if (uiObjects[midIndex].aabb().cross(uiCamera.viewPort)) {
             return midIndex;
         }
-        if(uiObjects[0].aabb().max.x < uiCamera.viewPort.min.x) {
+        if(uiObjects.last.aabb().max.x < uiCamera.viewPort.min.x) {
             return null;
         }
-        if(uiObjects[uiObjects.length - 1].aabb().min.x > uiCamera.viewPort.max.x) {
+        if(uiObjects.first.aabb().min.x > uiCamera.viewPort.max.x) {
             return null;
         }
         for (var i = 0; i < uiObjects.length; i++) {
