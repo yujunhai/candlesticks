@@ -9,25 +9,26 @@ import 'package:candlesticks/widgets/ma/ma_style.dart';
 import 'package:candlesticks/widgets/ma/ma_context.dart';
 import 'package:candlesticks/widgets/ma/ma_value_widget.dart';
 import 'package:candlesticks/widgets/ma/ma_value_data.dart';
+import 'package:candlesticks/widgets/candlesticks_style.dart';
 
 class MaValuePainter extends CustomPainter {
 
   final UICamera uiCamera;
   final double paddingY;
-  final MaStyle maStyle;
+  final CandlesticksStyle style;
 
   MaValueData maValueData;
 
   MaValuePainter({
     this.uiCamera,
     this.paddingY,
-    this.maStyle,
+    this.style,
     this.maValueData,
   });
 
 
 
-  double paintLabel(Canvas canvas, Size size, double x, String text) {
+  double paintLabel(Canvas canvas, Size size, double x, String text, Color color) {
     TextPainter currentTextPainter = TextPainter(
         textDirection: TextDirection.ltr,
         maxLines: 1,
@@ -35,7 +36,7 @@ class MaValuePainter extends CustomPainter {
         text: TextSpan(
           text: text,
           style: TextStyle(
-            color: Colors.white,
+            color: color,
             fontSize: 10.0,
           ),
         )
@@ -47,15 +48,15 @@ class MaValuePainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    double x = paintLabel(canvas, size, 0, "Current:" + maValueData.currentValue.toStringAsFixed(4));
-    x += paintLabel(canvas, size, x, "MA${maStyle.shortCount}:" + maValueData.shortValue.toStringAsFixed(4));
-    x += paintLabel(canvas, size, x, "MA${maStyle.middleCount}:" + maValueData.middleValue.toStringAsFixed(4));
-    x += paintLabel(canvas, size, x, "MA${maStyle.longCount}:" + maValueData.longValue.toStringAsFixed(4));
+    double x = paintLabel(canvas, size, 0, "Current:" + maValueData.currentValue.toStringAsFixed(4), style.maStyle.currentColor);
+    x += paintLabel(canvas, size, x, "MA${style.maStyle.shortCount}:" + maValueData.shortValue.toStringAsFixed(4), style.maStyle.shortColor);
+    x += paintLabel(canvas, size, x, "MA${style.maStyle.middleCount}:" + maValueData.middleValue.toStringAsFixed(4), style.maStyle.middleColor);
+    x += paintLabel(canvas, size, x, "MA${style.maStyle.longCount}:" + maValueData.longValue.toStringAsFixed(4), style.maStyle.longColor);
   }
 
   @override
-  bool shouldRepaint(CustomPainter oldDelegate) {
-    return this.maStyle != null;
+  bool shouldRepaint(MaValuePainter oldPainter) {
+    return true;
   }
 }
 
@@ -63,13 +64,13 @@ class MaValueWidget extends StatelessWidget {
   MaValueWidget({
     Key key,
     this.maValueData,
-    this.maStyle,
+    this.style,
     this.paddingY,
   }) : super(key: key);
 
   final MaValueData maValueData;
   final double paddingY;
-  final MaStyle maStyle;
+  final CandlesticksStyle style;
 
   @override
   Widget build(BuildContext context) {
@@ -84,7 +85,7 @@ class MaValueWidget extends StatelessWidget {
           maValueData: this.maValueData,
           uiCamera: uiCamera,
           paddingY: paddingY,
-          maStyle: this.maStyle,
+          style: this.style,
         ),
         size: Size.infinite
     );

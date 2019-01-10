@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 class MaValueData {
   final double currentValue;
   final double shortValue;

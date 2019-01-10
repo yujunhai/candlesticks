@@ -11,6 +11,7 @@ import 'package:candlesticks/widgets/ma/ma_value_widget.dart';
 import 'package:candlesticks/widgets/ma/ma_context.dart';
 import 'package:candlesticks/widgets/ma/ma_value_data.dart';
 import 'package:candlesticks/widgets/touch/touch_candle_widget.dart';
+import 'package:candlesticks/widgets/candlesticks_style.dart';
 
 
 class MaView extends UIAnimatedView<UIOPath, UIOPoint> {
@@ -117,12 +118,12 @@ class MaWidgetState extends State<MaWidget> {
     if (maValueData == null) {
       maValueData = MaValueData();
     }
-    if (count == widget.style.shortCount) {
+    if (count == widget.style.maStyle.shortCount) {
       maValueData = MaValueData(shortValue: value,
           middleValue: maValueData.middleValue,
           longValue: maValueData.longValue,
           currentValue: currentValue);
-    } else if (count == widget.style.middleCount) {
+    } else if (count == widget.style.maStyle.middleCount) {
       maValueData = MaValueData(shortValue: maValueData.shortValue,
           middleValue: value,
           longValue: maValueData.longValue,
@@ -149,35 +150,35 @@ class MaWidgetState extends State<MaWidget> {
                 child: UIAnimatedWidget<UIOPath, UIOPoint>(
                   dataStream: widget.dataStream,
                   uiCamera: uiCamera,
-                  duration: widget.style.duration,
+                  duration: widget.style.maStyle.duration,
                   state: () =>
                       MaView(
-                          widget.style.shortCount, widget.style.shortColor),
+                          widget.style.maStyle.shortCount, widget.style.maStyle.shortColor),
                 )
             ),
             Positioned.fill(
                 child: UIAnimatedWidget<UIOPath, UIOPoint>(
                   dataStream: widget.dataStream,
                   uiCamera: uiCamera,
-                  duration: widget.style.duration,
+                  duration: widget.style.maStyle.duration,
                   state: () =>
-                      MaView(widget.style.middleCount,
-                          widget.style.middleColor),
+                      MaView(widget.style.maStyle.middleCount,
+                          widget.style.maStyle.middleColor),
                 )
             ),
             Positioned.fill(
                 child: UIAnimatedWidget<UIOPath, UIOPoint>(
                   dataStream: widget.dataStream,
                   uiCamera: uiCamera,
-                  duration: widget.style.duration,
+                  duration: widget.style.maStyle.duration,
                   state: () =>
-                      MaView(widget.style.longCount, widget.style.longColor),
+                      MaView(widget.style.maStyle.longCount, widget.style.maStyle.longColor),
                 )
             ),
             Positioned.fill(
                 child: MaValueWidget(
                   maValueData: maValueData,
-                  maStyle: widget.style,
+                  style: widget.style,
                 )
             ),
 
@@ -195,7 +196,7 @@ class MaWidget extends StatefulWidget {
   }) : super(key: key);
 
   final Stream<ExtCandleData> dataStream;
-  final MaStyle style;
+  final CandlesticksStyle style;
 
   @override
   MaWidgetState createState() => MaWidgetState();

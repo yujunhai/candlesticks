@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class MaStyle {
+    Color currentColor;
+
     Color longColor;
     int longCount;
 
@@ -17,6 +19,6 @@ class MaStyle {
     MaStyle({this.shortCount, this.shortColor,
         this.middleCount, this.middleColor,
         this.longCount, this.longColor,
-        this.duration, this.cameraPaddingY});
+        this.duration, this.cameraPaddingY, this.currentColor});
 }
 

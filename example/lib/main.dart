@@ -14,38 +14,7 @@ class MyApp extends StatefulWidget {
   _MyAppState createState() => new _MyAppState();
 }
 
-CandlesticksStyle DefaultCandleStyle = CandlesticksStyle(
-  backgroundColor: Color(0xff21232e),
-  cameraDuration: Duration(milliseconds: 500),
-  initAfterNData: 500,
-  defaultViewPortX: 40,
-  fractionDigits:8,
-  lineColor: Colors.white.withOpacity(0.3),
-  nX: 5,
-  nY: 4,
-  floatingStyle: FloatingStyle(
-    backGroundColor: Colors.black.withOpacity(0.8),
-    frontSize: 10,
-    borderColor: Colors.white,
-    frontColor: Colors.white,
-    crossColor: Colors.white,
-  ),
-  candlesStyle: CandlesStyle(
-      positiveColor: Colors.redAccent,
-      negativeColor: Colors.greenAccent,
-      paddingX: 0.5,
-      cameraPaddingY: 0.1,
-      duration: Duration(milliseconds: 200)),
-  maStyle: MaStyle(
-      cameraPaddingY: 0.2,
-      shortCount: 5,
-      shortColor: Colors.yellowAccent,
-      middleCount: 15,
-      middleColor: Colors.greenAccent,
-      longCount: 30,
-      longColor: Colors.deepPurpleAccent,
-      duration: Duration(milliseconds: 200)),
-);
+CandlesticksStyle DefaultCandleStyle = DefaultDarkCandleStyle;
 
 class _MyAppState extends State<MyApp> {
   int count = 0;

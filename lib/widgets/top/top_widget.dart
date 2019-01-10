@@ -52,7 +52,7 @@ class TopWidget extends StatelessWidget {
                 Positioned.fill(
                   child: MaWidget(
                     dataStream: widget.extDataStream,
-                    style: widget.candlesticksStyle.maStyle,
+                    style: widget.candlesticksStyle,
                   ),
                 ),
                 Positioned.fill(
