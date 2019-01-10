@@ -24,6 +24,7 @@ abstract class CandlesticksState extends State<CandlesticksWidget>
   Animation<AABBRangeX> uiCameraAnimation;
   StreamSubscription<CandleData> subscription;
   bool touching = false;
+  List<ExtCandleData> candleDataList = List<ExtCandleData>(); //这个可以优化掉。
 
 
   CandlesticksState({Stream<CandleData> dataStream})
@@ -43,6 +44,7 @@ abstract class CandlesticksState extends State<CandlesticksWidget>
     var extCandleData = ExtCandleData(
         candleData, index: this.candlesX.length - 1,
         durationMs: this.durationMs, first: first);
+    candleDataList.add(extCandleData);
 
     this.exdataStreamController.sink.add(extCandleData);
     if (isWaitingForInitData()) {
@@ -241,6 +243,48 @@ abstract class CandlesticksState extends State<CandlesticksWidget>
   onTouchCandle(Offset touchPoint, ExtCandleData candleData) {
     extCandleData = candleData;
     this.touchPoint = touchPoint;
+    setState(() {
+
+    });
+  }
+
+  onTapUp(TapUpDetails details) {
+    RenderBox getBox = context.findRenderObject();
+    var currentRangeX = uiCameraAnimation.value;
+    var worldX = currentRangeX.minX + (getBox
+        .globalToLocal(details.globalPosition)
+        .dx / context.size.width) * currentRangeX.width;
+    var extDataIndex = (worldX - candlesX.first) ~/ durationMs;
+    if(extDataIndex < 0) {
+      return;
+    }
+    if(extDataIndex >= this.candleDataList.length) {
+      return;
+    }
+    extCandleData = candleDataList[extDataIndex];
+    setState(() {
+
+    });
+  }
+
+  onTapDown(TapDownDetails details) {
+    touchPoint = details.globalPosition;
+  }
+
+  onLongPress() {
+    RenderBox getBox = context.findRenderObject();
+    var currentRangeX = uiCameraAnimation.value;
+    var worldX = currentRangeX.minX + (getBox
+        .globalToLocal(touchPoint)
+        .dx / context.size.width) * currentRangeX.width;
+    var extDataIndex = (worldX - candlesX.first) ~/ durationMs;
+    if(extDataIndex < 0) {
+      return;
+    }
+    if(extDataIndex >= this.candleDataList.length) {
+      return;
+    }
+    extCandleData = candleDataList[extDataIndex];
     setState(() {
 
     });

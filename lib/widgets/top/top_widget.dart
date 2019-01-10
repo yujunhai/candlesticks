@@ -7,7 +7,6 @@ import 'package:candlesticks/widgets/ma/ma_view.dart';
 import 'package:candlesticks/widgets/candles/candles_widget.dart';
 import 'package:candlesticks/widgets/aabb/aabb_widget.dart';
 import 'package:candlesticks/widgets/graticule/graticule_widget.dart';
-import 'package:candlesticks/widgets/touch/touch_candle_widget.dart';
 import 'package:candlesticks/widgets/candlesticks_context_widget.dart';
 import 'package:candlesticks/widgets/floating/floating_widget.dart';
 
@@ -67,9 +66,6 @@ class TopWidget extends StatelessWidget {
                     candlesticksStyle: this.candlesticksStyle,
                     paddingY: 0.1,
                   ),
-                ),
-                Positioned.fill(
-                    child: TouchCandleWidget()
                 ),
               ],
             )

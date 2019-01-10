@@ -39,6 +39,9 @@ class CandlesticksView extends CandlesticksState {
       onScaleUpdate: onScaleUpdate,
       onScaleStart: handleScaleStart,
 
+      onTapDown: onTapDown,
+      onTapUp: onTapUp,
+      onLongPress: onLongPress,
 
       child: AnimatedBuilder(
           animation: Listenable.merge([

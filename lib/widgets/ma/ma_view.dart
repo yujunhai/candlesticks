@@ -10,7 +10,6 @@ import 'package:candlesticks/widgets/aabb/aabb_context.dart';
 import 'package:candlesticks/widgets/ma/ma_value_widget.dart';
 import 'package:candlesticks/widgets/ma/ma_context.dart';
 import 'package:candlesticks/widgets/ma/ma_value_data.dart';
-import 'package:candlesticks/widgets/touch/touch_candle_widget.dart';
 import 'package:candlesticks/widgets/candlesticks_style.dart';
 
 
