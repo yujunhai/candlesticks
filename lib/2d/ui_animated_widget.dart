@@ -114,18 +114,6 @@ abstract class UIAnimatedState<T extends UIObjects<TT,
     }
   }
 
-  void onHorizontalDragStart(DragStartDetails details) {
-    print("ma start");
-  }
-
-  void onHorizontalDragEnd(DragEndDetails details) {
-    print("ma end");
-  }
-
-  void onHorizontalDragUpdate(DragUpdateDetails details) {
-  }
-
-
   @override
   @mustCallSuper
   void initState() {

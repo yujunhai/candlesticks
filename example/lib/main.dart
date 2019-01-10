@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:candlesticks/gudashi/k_line.dart';
 import 'package:candlesticks/candlesticks.dart';
 import 'dataSource.dart';
 
@@ -48,7 +47,6 @@ class _MyAppState extends State<MyApp> {
     );
   }
 
-  GlobalKey<KChartsState> kChartsKey = new GlobalKey<KChartsState>();
   Future<Stream<CandleData>> dataStreamFuture;
   CandlesticksStyle style;
 

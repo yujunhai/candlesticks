@@ -179,7 +179,6 @@ abstract class CandlesticksState extends State<CandlesticksWidget>
   ExtCandleData extCandleData;
   onTouchCandle(ExtCandleData candleData) {
     extCandleData = candleData;
-    print("true index:${candleData.index}");
     setState(() {
 
     });

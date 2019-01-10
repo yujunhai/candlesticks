@@ -44,12 +44,6 @@ class TopWidget extends StatelessWidget {
             child: Stack(
               children: <Widget>[
                 Positioned.fill(
-                  child: GraticuleWidget(
-                    candlesticksStyle: this.candlesticksStyle,
-                    paddingY: 0.1,
-                  ),
-                ),
-                Positioned.fill(
                     child: CandlesWidget(
                       dataStream: widget.extDataStream,
                       style: widget.candlesticksStyle.candlesStyle,
@@ -64,6 +58,12 @@ class TopWidget extends StatelessWidget {
                 Positioned.fill(
                   child: FloatingWidget(
                     extCandleData: candlesticksContext.extCandleData,
+                  ),
+                ),
+                Positioned.fill(
+                  child: GraticuleWidget(
+                    candlesticksStyle: this.candlesticksStyle,
+                    paddingY: 0.1,
                   ),
                 ),
                 Positioned.fill(
