@@ -23,25 +23,28 @@ class GraticulePainter extends CustomPainter {
         uiCamera.screenToViewPortPoint(size, Offset(x, 0)));
     var worldX = point.x;
     canvas.drawLine(Offset(x, 0), Offset(x, size.height), painter);
-    var priceStr = worldX.toStringAsFixed(this.candlesticksStyle.fractionDigits);
 
-    /*
+
+    var time = new DateTime.fromMillisecondsSinceEpoch(point.x.toInt()).toLocal();
+    String timeStr ="${time.month.toString().padLeft(2,'0')}-${time.day.toString().padLeft(2,'0')} ${time.hour.toString().padLeft(2, '0')}:${time.minute.toString().padLeft(2, '0')}";
+
     TextPainter textPainter = TextPainter(
         textDirection: TextDirection.ltr,
         maxLines: 1,
         textAlign: TextAlign.end,
         text: TextSpan(
-          text: priceStr,
+          text: timeStr,
           style: TextStyle(
             color: Colors.white,
-            fontSize: 10.0,
+            fontSize: 8.0,
           ),
         )
     );
 
     textPainter.layout();
-    textPainter.paint(canvas, Offset(x, 0));
-    */
+//    if((x - textPainter.width / 2 >= 0) && (x + textPainter.width / 2 <= size.width)) {
+      textPainter.paint(canvas, Offset(x - textPainter.width / 2, size.height - textPainter.height));
+//    }
   }
 
   void paintY(Canvas canvas, Size size, double y, Paint painter) {
@@ -88,7 +91,7 @@ class GraticulePainter extends CustomPainter {
     paintY(canvas, size, endY, painter);
 
     double width = size.width / this.candlesticksStyle.nX;
-    for(var i = 0; i < this.candlesticksStyle.nX; i++) {
+    for(var i = 0; i <= this.candlesticksStyle.nX; i++) {
       paintX(canvas, size, width * i, painter);
     }
   }
