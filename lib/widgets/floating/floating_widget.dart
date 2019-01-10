@@ -126,7 +126,6 @@ class TopFloatingPainter extends CustomPainter {
     canvas.drawLine(
         Offset(touchScenePoint.dx, 0), Offset(touchScenePoint.dx, size.height),
         crossPainter);
-    print(realTouchPoint.dy);
     canvas.drawLine(Offset(0, realTouchPoint.dy), Offset(size.width, realTouchPoint.dy),
         crossPainter);
     Paint maxCircle = new Paint();
