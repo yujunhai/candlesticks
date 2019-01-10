@@ -29,6 +29,11 @@ class _MyAppState extends State<MyApp> {
       fractionDigits:8,
       nX: 5,
       nY: 4,
+      floatingStyle: FloatingStyle(
+        frontSize: 10,
+        frontColor: Colors.white,
+        borderColor: Colors.white,
+      ),
       candlesStyle: CandlesStyle(
           positiveColor: Colors.redAccent,
           negativeColor: Colors.greenAccent,
@@ -80,6 +85,11 @@ class _MyAppState extends State<MyApp> {
                         initAfterNData: 500,
                         defaultViewPortX: 40,
                         fractionDigits:8,
+                        floatingStyle: FloatingStyle(
+                          frontSize: 10,
+                          frontColor: Colors.white,
+                          borderColor: Colors.white,
+                        ),
                         candlesStyle: CandlesStyle(
                             positiveColor: Colors.redAccent,
                             negativeColor: Colors.greenAccent,
@@ -105,6 +115,11 @@ class _MyAppState extends State<MyApp> {
                         initAfterNData: 500,
                         defaultViewPortX: 40,
                         fractionDigits:8,
+                        floatingStyle: FloatingStyle(
+                          frontSize: 10,
+                          frontColor: Colors.white,
+                          borderColor: Colors.white,
+                        ),
                         candlesStyle: CandlesStyle(
                             positiveColor: Colors.greenAccent,
                             negativeColor: Colors.redAccent,

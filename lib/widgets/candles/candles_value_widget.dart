@@ -64,33 +64,6 @@ class CandlesValuePainter extends CustomPainter {
       Colors.white.withOpacity(0.1),
     ], [0.0, 1.0], TileMode.clamp);
     canvas.drawCircle(p, 3, maxCircle);
-    /*
-    Map maxData = kPoint.kPointData[kPoint.kMaxPriceIndex];
-    TextPainter textMax = getTextPainter(maxData['high'].toString(), 1);
-    textMax.layout();
-
-    var maxX = maxData['klineX'];
-    var maxBorderX1 = maxData['klineX'];
-    var maxBorderX2 = maxData['klineX'] + kPoint.kPriceBorderW;
-    if(maxX > size.width / 2){
-      maxBorderX2 = maxBorderX1 - kPoint.kPriceBorderW;
-      maxX = maxBorderX2 - 2 - textMax.width;
-    }else{
-      maxBorderX2 = maxBorderX1 + kPoint.kPriceBorderW;
-      maxX = maxBorderX2 + 2;
-    }
-    var maxY = maxData['highY'] - (textMax.height / 2);
-    textMax.paint(canvas, new Offset(maxX, maxY));
-    canvas.drawLine(new Offset(maxBorderX1, maxData['highY']), new Offset(maxBorderX2, maxData['highY']), new Paint()..color = kStyle.priceMinMaxFontColor.withOpacity(0.5));
-    Paint maxCircle = new Paint();
-//      maxCircle..color = kStyle.priceMinMaxFontColor.withOpacity(0.3);
-    maxCircle..shader = new ui.Gradient.radial(new Offset(maxBorderX1, maxData['highY']), kPoint.kMinMaxPriceCircle, [
-      kStyle.priceMinMaxFontColor.withOpacity(0.8),
-      kStyle.priceMinMaxFontColor.withOpacity(0.1),
-    ], [0.0, 1.0], TileMode.clamp);
-    canvas.drawCircle(new Offset(maxBorderX1, maxData['highY']), kPoint.kMinMaxPriceCircle, maxCircle);
-    */
-
   }
 
   @override

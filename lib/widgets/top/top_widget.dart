@@ -57,6 +57,7 @@ class TopWidget extends StatelessWidget {
                 ),
                 Positioned.fill(
                   child: FloatingWidget(
+                    style: candlesticksStyle.floatingStyle,
                     extCandleData: candlesticksContext.extCandleData,
                     touchPoint: candlesticksContext.touchPoint,
                   ),

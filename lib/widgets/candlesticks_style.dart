@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:candlesticks/widgets/ma/ma_style.dart';
 import 'package:candlesticks/widgets/candles/candles_style.dart';
+import 'package:candlesticks/widgets/floating/floating_style.dart';
 
 class CandlesticksStyle {
   final Duration cameraDuration;
@@ -13,10 +14,11 @@ class CandlesticksStyle {
   final int nX;
   final int nY;
 
+  final FloatingStyle floatingStyle;
   final CandlesStyle candlesStyle;
   final MaStyle maStyle;
 
   CandlesticksStyle(
-      {this.candlesStyle, this.maStyle, this.cameraDuration, this.initAfterNData, this.backgroundColor, this.defaultViewPortX,
+      {this.floatingStyle, this.candlesStyle, this.maStyle, this.cameraDuration, this.initAfterNData, this.backgroundColor, this.defaultViewPortX,
         this.fractionDigits, this.paddingY, this.nX, this.nY});
 }
