@@ -29,7 +29,7 @@ abstract class AABBState extends State<AABBWidget>
   CandlesticksContext candlesticksContext;
   StreamController<ExtCandleData> exDataStreamController;
   Stream<ExtCandleData> exDataStream;
-  List<ExtCandleData> candleDataList = List<ExtCandleData>();//这个可以优化掉。
+  List<ExtCandleData> candleDataList = List<ExtCandleData>(); //这个可以优化掉。
 
 
   AABBState() : super();
@@ -51,12 +51,12 @@ abstract class AABBState extends State<AABBWidget>
     this.uiObjectsMinY.update(candleData.index, uiObjectAABB.min.y);
     this.uiObjectsMaxY.update(candleData.index, uiObjectAABB.max.y);
 
-    if(uiobject is UIOCandle) {
+    if (uiobject is UIOCandle) {
       var aabb = uiobject.aabb();
       this.uiCandlesMinY.update(candleData.index, aabb.min.y);
       this.uiCandlesMaxY.update(candleData.index, aabb.max.y);
 
-      if(candleData.first) {
+      if (candleData.first) {
         this.candleDataList.add(candleData);
       }
     }
@@ -65,7 +65,8 @@ abstract class AABBState extends State<AABBWidget>
   }
 
   ExtCandleData getExtCandleDataIndex(int index) {
-    if((candleDataList == null) || (index < 0) || (index >= this.candleDataList.length)) {
+    if ((candleDataList == null) || (index < 0) ||
+        (index >= this.candleDataList.length)) {
       return null;
     }
     return this.candleDataList[index];
@@ -84,14 +85,15 @@ abstract class AABBState extends State<AABBWidget>
     if (xIndex >= candlesX.length) {
       xIndex = candlesX.length - 1;
     }
-    if(xIndex < 0) {
+    if (xIndex < 0) {
       xIndex = 0;
     }
     return xIndex;
   }
 
   UIOPoint getMinPoint() {
-    if ((widget.rangeX == null) || (widget.rangeX.maxX == null) || (widget.rangeX.minX == null)) {
+    if ((widget.rangeX == null) || (widget.rangeX.maxX == null) ||
+        (widget.rangeX.minX == null)) {
       return null;
     }
     var candlesX = candlesticksContext.candlesX;
@@ -99,11 +101,14 @@ abstract class AABBState extends State<AABBWidget>
     var startIndex = getCandleIndexByX(widget.rangeX.minX);
     var endIndex = getCandleIndexByX(widget.rangeX.maxX);
     var minIndex = this.uiCandlesMinY.minIndex(startIndex, endIndex);
-    return UIOPoint(baseX + minIndex * widget.durationMs + widget.durationMs / 2, uiCandlesMinY.get(minIndex));
+    return UIOPoint(
+        baseX + minIndex * widget.durationMs + widget.durationMs / 2,
+        uiCandlesMinY.get(minIndex));
   }
 
   UIOPoint getMaxPoint() {
-    if ((widget.rangeX == null) || (widget.rangeX.maxX == null) || (widget.rangeX.minX == null)) {
+    if ((widget.rangeX == null) || (widget.rangeX.maxX == null) ||
+        (widget.rangeX.minX == null)) {
       return null;
     }
     var candlesX = candlesticksContext.candlesX;
@@ -111,7 +116,9 @@ abstract class AABBState extends State<AABBWidget>
     var startIndex = getCandleIndexByX(widget.rangeX.minX);
     var endIndex = getCandleIndexByX(widget.rangeX.maxX);
     var minIndex = this.uiCandlesMaxY.minIndex(startIndex, endIndex);
-    return UIOPoint(baseX + minIndex * widget.durationMs + widget.durationMs / 2, uiCandlesMaxY.get(minIndex));
+    return UIOPoint(
+        baseX + minIndex * widget.durationMs + widget.durationMs / 2,
+        uiCandlesMaxY.get(minIndex));
   }
 
   UICamera calUICamera(double minX, double maxX, double paddingY) {

@@ -26,9 +26,18 @@ class CandlesticksView extends CandlesticksState {
     }
 
     return GestureDetector(
+      onHorizontalDragStart: (x) {
+        touching = true;
+      },
+      onVerticalDragCancel: () {
+        touching = false;
+      },
       onHorizontalDragEnd: onHorizontalDragEnd,
       onHorizontalDragUpdate: onHorizontalDragUpdate,
+
+
       onScaleUpdate: onScaleUpdate,
+      onScaleStart: handleScaleStart,
       child: AnimatedBuilder(
           animation: Listenable.merge([
             uiCameraAnimation,

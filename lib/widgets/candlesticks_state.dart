@@ -23,6 +23,7 @@ abstract class CandlesticksState extends State<CandlesticksWidget>
   AnimationController uiCameraAnimationController;
   Animation<AABBRangeX> uiCameraAnimation;
   StreamSubscription<CandleData> subscription;
+  bool touching = false;
 
 
   CandlesticksState({Stream<CandleData> dataStream})
@@ -66,7 +67,7 @@ abstract class CandlesticksState extends State<CandlesticksWidget>
   }
 
   onCandleDataFinish(ExtCandleData candleData) {
-    if (uiCameraAnimation == null) {
+    if ((uiCameraAnimation == null) && (!touching)) {
       var maxX = candlesX.last + durationMs;
       var minX = maxX -
           durationMs * widget.candlesticksStyle.defaultViewPortX;
@@ -82,6 +83,7 @@ abstract class CandlesticksState extends State<CandlesticksWidget>
   }
 
   void onHorizontalDragEnd(DragEndDetails details) {
+    touching = false;
     //区间的最大值， 最小值。
     if (uiCameraAnimation == null) {
       return;
@@ -89,16 +91,16 @@ abstract class CandlesticksState extends State<CandlesticksWidget>
 
     var currentRangeX = this.uiCameraAnimation.value;
     var width = currentRangeX.width;
-    double a =  width * 3;
+    double a = width * 3;
     var viewPortDx = details.primaryVelocity.abs() / context.size.width;
     var worldDx = width * viewPortDx;
 
-    double speed = worldDx;//per second
+    double speed = worldDx; //per second
     double durationSecond = speed / a;
     double targetDx = speed * durationSecond +
         a * durationSecond * durationSecond / 2;
-    if(details.primaryVelocity < 0) {
-      targetDx = - targetDx;
+    if (details.primaryVelocity < 0) {
+      targetDx = -targetDx;
     }
 
     double minX = currentRangeX.minX - targetDx;
@@ -161,8 +163,74 @@ abstract class CandlesticksState extends State<CandlesticksWidget>
     });
   }
 
+  Offset _startingFocalPoint;
+  Offset _previousOffset;
+  Offset _offset = Offset.zero;
+  double _previousZoom;
+  double _zoom = 1.0;
+
+  void handleScaleStart(ScaleStartDetails details) {
+    setState(() {
+      _startingFocalPoint = details.focalPoint;
+      _previousOffset = _offset;
+      _previousZoom = _zoom;
+    });
+  }
+
+  void handleScaleReset() {
+    setState(() {
+      _zoom = 1.0;
+      _offset = Offset.zero;
+    });
+  }
+
   onScaleUpdate(ScaleUpdateDetails details) {
-    print(details.rotation);
+    _zoom = _previousZoom * details.scale;
+
+    // Ensure that item under the focal point stays in the same place despite zooming
+    final Offset normalizedOffset = (_startingFocalPoint - _previousOffset) /
+        _previousZoom;
+    _offset = details.focalPoint - normalizedOffset * _zoom;
+
+    RenderBox getBox = context.findRenderObject();
+    var focalPoint = getBox.globalToLocal(details.focalPoint);
+    var rangeX = uiCameraAnimation.value;
+    var width = rangeX.width * _zoom;
+
+
+    if(width > this.durationMs * 100) {
+      width = this.durationMs * 100;
+    }
+    if(width < this.durationMs * 10) {
+      width = this.durationMs * 10;
+    }
+    var rateX = (focalPoint.dx / context.size.width);
+    var x = (rangeX.minX + rangeX.maxX) * rateX;
+    var minX = x - width * rateX;
+    var maxX = minX + width;
+    var newRangeX = AABBRangeX(minX, maxX);
+    print(rangeX.width);
+    print(details.scale);
+    print(width);
+
+    if (minX < this.candlesX.first) {
+      minX = this.candlesX.first;
+      maxX = minX + width;
+    }
+
+    if (maxX > this.candlesX.last + this.durationMs) {
+      maxX = this.candlesX.last + this.durationMs;
+      minX = maxX - width;
+    }
+    uiCameraAnimation =
+        Tween(begin: newRangeX, end: newRangeX).animate(
+            uiCameraAnimationController);
+    uiCameraAnimationController.reset();
+    extCandleData = null;
+    touchPoint = null;
+    setState(() {
+
+    });
   }
 
   ExtCandleData extCandleData;
