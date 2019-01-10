@@ -49,7 +49,6 @@ class CandlesticksView extends CandlesticksState {
           ]),
           builder: (BuildContext context, Widget child) {
             return CandlesticksContext(
-              onTouchCandle: onTouchCandle,
               onCandleDataFinish: onCandleDataFinish,
               candlesX: candlesX,
               extCandleData: extCandleData,

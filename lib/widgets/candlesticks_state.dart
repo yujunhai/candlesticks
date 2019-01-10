@@ -240,20 +240,12 @@ abstract class CandlesticksState extends State<CandlesticksWidget>
   ExtCandleData extCandleData;
   Offset touchPoint;
 
-  onTouchCandle(Offset touchPoint, ExtCandleData candleData) {
-    extCandleData = candleData;
-    this.touchPoint = touchPoint;
-    setState(() {
-
-    });
-  }
-
   onTapUp(TapUpDetails details) {
     RenderBox getBox = context.findRenderObject();
     var currentRangeX = uiCameraAnimation.value;
-    var worldX = currentRangeX.minX + (getBox
-        .globalToLocal(details.globalPosition)
-        .dx / context.size.width) * currentRangeX.width;
+    touchPoint = getBox.globalToLocal(details.globalPosition);
+
+    var worldX = currentRangeX.minX + (touchPoint.dx / context.size.width) * currentRangeX.width;
     var extDataIndex = (worldX - candlesX.first) ~/ durationMs;
     if(extDataIndex < 0) {
       return;
@@ -268,15 +260,13 @@ abstract class CandlesticksState extends State<CandlesticksWidget>
   }
 
   onTapDown(TapDownDetails details) {
-    touchPoint = details.globalPosition;
+    RenderBox getBox = context.findRenderObject();
+    touchPoint = getBox.globalToLocal(details.globalPosition);
   }
 
   onLongPress() {
-    RenderBox getBox = context.findRenderObject();
     var currentRangeX = uiCameraAnimation.value;
-    var worldX = currentRangeX.minX + (getBox
-        .globalToLocal(touchPoint)
-        .dx / context.size.width) * currentRangeX.width;
+    var worldX = currentRangeX.minX + (touchPoint.dx / context.size.width) * currentRangeX.width;
     var extDataIndex = (worldX - candlesX.first) ~/ durationMs;
     if(extDataIndex < 0) {
       return;

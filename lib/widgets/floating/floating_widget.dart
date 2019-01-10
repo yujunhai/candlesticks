@@ -122,10 +122,11 @@ class TopFloatingPainter extends CustomPainter {
     crossPainter.style = PaintingStyle.stroke;
     var touchWorldPoint = UIOPoint(extCandleData.timeMs + extCandleData.durationMs / 2, 0);
     var touchScenePoint = uiCamera.viewPortToScreenPoint(size, uiCamera.worldToViewPortPoint(touchWorldPoint));
-    var realTouchPoint = Offset(touchScenePoint.dx, touchScenePoint.dy);
+    var realTouchPoint = Offset(touchScenePoint.dx, touchPoint.dy);
     canvas.drawLine(
         Offset(touchScenePoint.dx, 0), Offset(touchScenePoint.dx, size.height),
         crossPainter);
+    print(realTouchPoint.dy);
     canvas.drawLine(Offset(0, realTouchPoint.dy), Offset(size.width, realTouchPoint.dy),
         crossPainter);
     Paint maxCircle = new Paint();
