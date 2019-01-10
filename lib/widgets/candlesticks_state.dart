@@ -118,8 +118,6 @@ abstract class CandlesticksState extends State<CandlesticksWidget>
             parent: uiCameraAnimationController,
             curve: Curves.decelerate
         ));
-    print(currentRangeX.width);
-    print(newUICamera.width);
     uiCameraAnimationController.reset();
     uiCameraAnimationController.forward();
   }
@@ -161,6 +159,10 @@ abstract class CandlesticksState extends State<CandlesticksWidget>
     setState(() {
 
     });
+  }
+
+  onScaleUpdate(ScaleUpdateDetails details) {
+    print(details.rotation);
   }
 
   ExtCandleData extCandleData;

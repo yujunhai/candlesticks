@@ -58,7 +58,7 @@ class GraticulePainter extends CustomPainter {
         text: TextSpan(
           text: priceStr,
           style: TextStyle(
-            color: Colors.white,
+            color: Colors.white.withOpacity(0.2),
             fontSize: 10.0,
           ),
         )

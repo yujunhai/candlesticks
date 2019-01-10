@@ -26,7 +26,7 @@ CandlesticksStyle DefaultDarkCandleStyle = CandlesticksStyle(
       cameraPaddingY: 0.1,
       duration: Duration(milliseconds: 200)),
   maStyle: MaStyle(
-      currentColor:Colors.white,
+      currentColor:Colors.white.withOpacity(0.85),
       cameraPaddingY: 0.2,
       shortCount: 5,
       shortColor: Colors.yellowAccent,
