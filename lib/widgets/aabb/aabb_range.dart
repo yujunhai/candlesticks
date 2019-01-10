@@ -9,7 +9,7 @@ class AABBRangeX {
   }
 
   AABBRangeX operator +(AABBRangeX other) {
-    return AABBRangeX(this.minX + other.minX, this.maxX - other.maxX);
+    return AABBRangeX(this.minX + other.minX, this.maxX + other.maxX);
   }
 
   AABBRangeX operator *(double process) {

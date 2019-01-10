@@ -82,8 +82,6 @@ abstract class CandlesticksState extends State<CandlesticksWidget>
   }
 
   void onHorizontalDragEnd(DragEndDetails details) {
-    return;
-    /*
     //区间的最大值， 最小值。
     if (uiCameraAnimation == null) {
       return;
@@ -117,12 +115,13 @@ abstract class CandlesticksState extends State<CandlesticksWidget>
     uiCameraAnimation =
         Tween(begin: currentRangeX, end: newUICamera)
             .animate(CurvedAnimation(
-            parent: uiCameraAnimationContrller,
+            parent: uiCameraAnimationController,
             curve: Curves.decelerate
         ));
+    print(currentRangeX.width);
+    print(newUICamera.width);
     uiCameraAnimationController.reset();
     uiCameraAnimationController.forward();
-    */
   }
 
   void onHorizontalDragUpdate(DragUpdateDetails details) {
@@ -139,30 +138,17 @@ abstract class CandlesticksState extends State<CandlesticksWidget>
     maxX -= dx;
     var width = maxX - minX;
 
-    var baseX = this.candlesX.first;
-    var startIndex = (minX - baseX) ~/ this.durationMs;
-    if (startIndex < 0) {
-      startIndex = 0;
-    }
-    if (startIndex >= this.candlesX.length) {
-      startIndex = this.candlesX.length - 1;
-    }
-    var endIndex = (maxX - baseX) ~/ this.durationMs;
-    if (endIndex < 0) {
-      endIndex = 0;
-    }
-    if (endIndex >= this.candlesX.length) {
-      endIndex = this.candlesX.length - 1;
-    }
     if (minX < this.candlesX.first) {
       minX = this.candlesX.first;
       maxX = minX + width;
     }
 
-    if (maxX > this.candlesX.last + this.durationMs) {
-      maxX = this.candlesX.last + this.durationMs;
+    /*
+    if (maxX > this.candlesX.last + this.durationMs + 100) {
+      maxX = this.candlesX.last + this.durationMs + 100;
       minX = maxX - width;
     }
+    */
 
     var newRangeX = AABBRangeX(minX, maxX);
 
