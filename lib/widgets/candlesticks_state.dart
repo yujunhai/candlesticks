@@ -67,10 +67,9 @@ abstract class CandlesticksState extends State<CandlesticksWidget>
   }
 
   onCandleDataFinish(ExtCandleData candleData) {
-    if ((uiCameraAnimation == null) && (!touching)) {
+    if (uiCameraAnimation == null) {
       var maxX = candlesX.last + durationMs;
-      var minX = maxX -
-          durationMs * widget.candlesticksStyle.defaultViewPortX;
+      var minX = maxX - durationMs * widget.candlesticksStyle.defaultViewPortX;
       var rangeX = AABBRangeX(minX, maxX);
       uiCameraAnimation =
           Tween(begin: rangeX, end: rangeX).animate(
@@ -79,6 +78,21 @@ abstract class CandlesticksState extends State<CandlesticksWidget>
       setState(() {
 
       });
+    } else if ((!touching) && (!this.uiCameraAnimationController.isAnimating)) {
+      var currentRangeX = this.uiCameraAnimation.value;
+      if ((currentRangeX.minX <= candlesX.last) &&
+          (candlesX.last <= currentRangeX.maxX + durationMs * 6)) {
+        var maxX = candlesX.last + durationMs;
+        var minX = maxX - currentRangeX.width;
+        var rangeX = AABBRangeX(minX, maxX);
+        uiCameraAnimation =
+            Tween(begin: rangeX, end: rangeX).animate(
+                uiCameraAnimationController);
+        uiCameraAnimationController.reset();
+        setState(() {
+
+        });
+      }
     }
   }
 
@@ -143,12 +157,10 @@ abstract class CandlesticksState extends State<CandlesticksWidget>
       maxX = minX + width;
     }
 
-    /*
-    if (maxX > this.candlesX.last + this.durationMs + 100) {
-      maxX = this.candlesX.last + this.durationMs + 100;
+    if (maxX > this.candlesX.last + this.durationMs + rangeX.width / 4) {
+      maxX = this.candlesX.last + this.durationMs + rangeX.width / 4;
       minX = maxX - width;
     }
-    */
 
     var newRangeX = AABBRangeX(minX, maxX);
 
@@ -172,7 +184,9 @@ abstract class CandlesticksState extends State<CandlesticksWidget>
     startRangeX = uiCameraAnimation.value;
 
     RenderBox getBox = context.findRenderObject();
-    startX = startRangeX.minX + (getBox.globalToLocal(details.focalPoint).dx / context.size.width) * startRangeX.width;
+    startX = startRangeX.minX + (getBox
+        .globalToLocal(details.focalPoint)
+        .dx / context.size.width) * startRangeX.width;
     touching = true;
   }
 
@@ -189,10 +203,10 @@ abstract class CandlesticksState extends State<CandlesticksWidget>
     }
     */
     var width = startRangeX.width * scale;
-    if(width < durationMs * this.widget.candlesticksStyle.minViewPortX) {
+    if (width < durationMs * this.widget.candlesticksStyle.minViewPortX) {
       width = durationMs * this.widget.candlesticksStyle.minViewPortX;
     }
-    if(width > durationMs * this.widget.candlesticksStyle.maxViewPortX) {
+    if (width > durationMs * this.widget.candlesticksStyle.maxViewPortX) {
       width = durationMs * this.widget.candlesticksStyle.maxViewPortX;
     }
 
