@@ -165,8 +165,10 @@ abstract class CandlesticksState extends State<CandlesticksWidget>
 
   double startX;
   AABBRangeX startRangeX;
+  Offset startPosition;
 
   void handleScaleStart(ScaleStartDetails details) {
+    startPosition = details.focalPoint;
     startRangeX = uiCameraAnimation.value;
 
     RenderBox getBox = context.findRenderObject();
@@ -174,9 +176,10 @@ abstract class CandlesticksState extends State<CandlesticksWidget>
     touching = true;
   }
 
+
   onScaleUpdate(ScaleUpdateDetails details) {
     double scale = details.scale;
-    var originWidth = startRangeX.width * scale;
+    /*
     var width = originWidth * scale;
     if (width > this.durationMs * widget.candlesticksStyle.maxViewPortX) {
       width = this.durationMs * widget.candlesticksStyle.maxViewPortX;
@@ -184,16 +187,26 @@ abstract class CandlesticksState extends State<CandlesticksWidget>
     if (width < this.durationMs * widget.candlesticksStyle.minViewPortX) {
       width = this.durationMs * widget.candlesticksStyle.maxViewPortX;
     }
+    */
+    var width = startRangeX.width * scale;
+    if(width < durationMs * this.widget.candlesticksStyle.minViewPortX) {
+      width = durationMs * this.widget.candlesticksStyle.minViewPortX;
+    }
+    if(width > durationMs * this.widget.candlesticksStyle.maxViewPortX) {
+      width = durationMs * this.widget.candlesticksStyle.maxViewPortX;
+    }
 
     var dx = (startX - startRangeX.minX) * scale;
 
     double minX = startX - dx;
+    double maxX = minX + width;
     if (minX < this.candlesX.first) {
       minX = this.candlesX.first;
+      maxX = minX + width;
     }
-    var maxX = minX + width;
     if (maxX > this.candlesX.last + this.durationMs) {
       maxX = this.candlesX.last + this.durationMs;
+      minX = maxX - width;
     }
     var newRangeX = AABBRangeX(minX, maxX);
 
