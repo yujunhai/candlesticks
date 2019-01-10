@@ -30,9 +30,11 @@ class _MyAppState extends State<MyApp> {
       nX: 5,
       nY: 4,
       floatingStyle: FloatingStyle(
+        backGroundColor: Colors.black.withOpacity(0.8),
         frontSize: 10,
-        frontColor: Colors.white,
         borderColor: Colors.white,
+        frontColor: Colors.white,
+        crossColor: Colors.white,
       ),
       candlesStyle: CandlesStyle(
           positiveColor: Colors.redAccent,
@@ -86,8 +88,10 @@ class _MyAppState extends State<MyApp> {
                         defaultViewPortX: 40,
                         fractionDigits:8,
                         floatingStyle: FloatingStyle(
+                          backGroundColor: Colors.black.withOpacity(0.8),
                           frontSize: 10,
                           frontColor: Colors.white,
+                          crossColor: Colors.white,
                           borderColor: Colors.white,
                         ),
                         candlesStyle: CandlesStyle(
@@ -116,8 +120,10 @@ class _MyAppState extends State<MyApp> {
                         defaultViewPortX: 40,
                         fractionDigits:8,
                         floatingStyle: FloatingStyle(
+                          backGroundColor: Colors.black.withOpacity(0.8),
                           frontSize: 10,
                           frontColor: Colors.white,
+                          crossColor: Colors.white,
                           borderColor: Colors.white,
                         ),
                         candlesStyle: CandlesStyle(

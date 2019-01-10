@@ -4,7 +4,7 @@ import 'package:candlesticks/2d/candle_data.dart';
 import 'package:candlesticks/2d/uiobjects/uio_point.dart';
 import 'package:candlesticks/2d/uicamera.dart';
 import 'package:candlesticks/widgets/aabb/aabb_context.dart';
-import 'package:candlesticks/widgets/floating/floating_style.dart';
+import 'package:candlesticks/widgets/candlesticks_style.dart';
 import 'dart:ui' as ui;
 
 class TopFloatingPainter extends CustomPainter {
@@ -12,7 +12,7 @@ class TopFloatingPainter extends CustomPainter {
   final ExtCandleData extCandleData;
   final UICamera uiCamera;
   final Offset touchPoint;
-  final FloatingStyle style;
+  final CandlesticksStyle style;
 
   TopFloatingPainter({
     this.uiCamera,
@@ -30,8 +30,8 @@ class TopFloatingPainter extends CustomPainter {
         text: TextSpan(
           text: text,
           style: TextStyle(
-            color: style.frontColor,
-            fontSize: style.frontSize,
+            color: style.floatingStyle.frontColor,
+            fontSize: style.floatingStyle.frontSize,
           ),
         )
     );
@@ -61,8 +61,8 @@ class TopFloatingPainter extends CustomPainter {
         UIOPoint(extCandleData.timeMs.toDouble(), 0)))
         .dx;
     double width = size.width / 2.8;
-    if (width < style.minWidth) {
-      width = style.minWidth;
+    if (width < style.floatingStyle.minWidth) {
+      width = style.floatingStyle.minWidth;
     }
     var leftTop = Offset(0, 20);
     if (sceneX < size.width / 2) {
@@ -75,19 +75,19 @@ class TopFloatingPainter extends CustomPainter {
     var timeStamp = time.toLocal().toString();
     var p = paintLabel(canvas, size, "时间", timeStamp, leftTop, width);
     p = paintLabel(
-        canvas, size, "开", extCandleData.open.toStringAsFixed(4), p, width,
+        canvas, size, "开", extCandleData.open.toStringAsFixed(style.fractionDigits), p, width,
         real: false);
     p = paintLabel(
-        canvas, size, "高", extCandleData.high.toStringAsFixed(4), p, width,
+        canvas, size, "高", extCandleData.high.toStringAsFixed(style.fractionDigits), p, width,
         real: false);
     p = paintLabel(
-        canvas, size, "收", extCandleData.close.toStringAsFixed(4), p, width,
+        canvas, size, "收", extCandleData.close.toStringAsFixed(style.fractionDigits), p, width,
         real: false);
     p = paintLabel(
-        canvas, size, "低", extCandleData.low.toStringAsFixed(4), p, width,
+        canvas, size, "低", extCandleData.low.toStringAsFixed(style.fractionDigits), p, width,
         real: false);
     p = paintLabel(
-        canvas, size, "量", extCandleData.volume.toStringAsFixed(4), p, width,
+        canvas, size, "量", extCandleData.volume.toStringAsFixed(style.fractionDigits), p, width,
         real: false);
     var rightBottom = Offset(p.dx + width, p.dy);
     var linePainter = Paint();
@@ -97,26 +97,34 @@ class TopFloatingPainter extends CustomPainter {
 
     p = paintLabel(canvas, size, "时间", timeStamp, leftTop, width);
     p = paintLabel(
-        canvas, size, "开", extCandleData.open.toStringAsFixed(4), p, width);
+        canvas, size, "开", extCandleData.open.toStringAsFixed(style.fractionDigits), p, width);
     p = paintLabel(
-        canvas, size, "高", extCandleData.high.toStringAsFixed(4), p, width);
+        canvas, size, "高", extCandleData.high.toStringAsFixed(style.fractionDigits), p, width);
     p = paintLabel(
-        canvas, size, "收", extCandleData.close.toStringAsFixed(4), p, width);
+        canvas, size, "收", extCandleData.close.toStringAsFixed(style.fractionDigits), p, width);
     p = paintLabel(
-        canvas, size, "低", extCandleData.low.toStringAsFixed(4), p, width);
+        canvas, size, "低", extCandleData.low.toStringAsFixed(style.fractionDigits), p, width);
     p = paintLabel(
-        canvas, size, "量", extCandleData.volume.toStringAsFixed(4), p, width);
+        canvas, size, "量", extCandleData.volume.toStringAsFixed(style.fractionDigits), p, width);
+
+    var backgroundPainter = Paint();
+    backgroundPainter.color = style.floatingStyle.backGroundColor;
+    backgroundPainter.style = PaintingStyle.stroke;
+    canvas.drawRect(Rect.fromPoints(leftTop, rightBottom), backgroundPainter);
 
     var borderPainter = Paint();
-    borderPainter.color = style.borderColor;
+    borderPainter.color = style.floatingStyle.borderColor;
     borderPainter.style = PaintingStyle.stroke;
     canvas.drawRect(Rect.fromPoints(leftTop, rightBottom), borderPainter);
 
+    var crossPainter = Paint();
+    crossPainter.color = style.floatingStyle.crossColor;
+    crossPainter.style = PaintingStyle.stroke;
     canvas.drawLine(
         Offset(touchPoint.dx, 0), Offset(touchPoint.dx, size.height),
-        borderPainter);
+        crossPainter);
     canvas.drawLine(Offset(0, touchPoint.dy), Offset(size.width, touchPoint.dy),
-        borderPainter);
+        crossPainter);
     Paint maxCircle = new Paint();
     maxCircle
       ..shader = ui.Gradient.radial(touchPoint, 3, [
@@ -124,7 +132,6 @@ class TopFloatingPainter extends CustomPainter {
         Colors.white.withOpacity(0.1),
       ], [0.0, 1.0], TileMode.clamp);
     canvas.drawCircle(touchPoint, 3, maxCircle);
-    print(size.height);
   }
 
   @override
@@ -143,7 +150,7 @@ class FloatingWidget extends StatelessWidget {
     this.style,
   }) :super(key: key);
 
-  final FloatingStyle style;
+  final CandlesticksStyle style;
   final ExtCandleData extCandleData;
   final Offset touchPoint;
 

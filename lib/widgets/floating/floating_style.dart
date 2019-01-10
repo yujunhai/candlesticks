@@ -5,8 +5,10 @@ const double DefaultMinWidth = 60;
 class FloatingStyle {
   final double frontSize;
   final Color frontColor;
+  final Color crossColor;
   final Color borderColor;
+  final Color backGroundColor;
   final double minWidth;
 
-  FloatingStyle({this.frontSize, this.frontColor, this.borderColor, this.minWidth = DefaultMinWidth});
+  FloatingStyle({this.frontSize, this.frontColor, this.crossColor, this.backGroundColor, this.borderColor, this.minWidth = DefaultMinWidth});
 }
