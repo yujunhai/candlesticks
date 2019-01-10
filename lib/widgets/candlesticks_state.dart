@@ -81,7 +81,7 @@ abstract class CandlesticksState extends State<CandlesticksWidget>
     } else if ((!touching) && (!this.uiCameraAnimationController.isAnimating)) {
       var currentRangeX = this.uiCameraAnimation.value;
       if ((currentRangeX.minX <= candlesX.last) &&
-          (candlesX.last <= currentRangeX.maxX + durationMs * 6)) {
+          (candlesX.last <= currentRangeX.maxX + durationMs * 2)) {
         var maxX = candlesX.last + durationMs;
         var minX = maxX - currentRangeX.width;
         var rangeX = AABBRangeX(minX, maxX);
