@@ -154,12 +154,12 @@ abstract class CandlesticksState extends State<CandlesticksWidget>
     if (endIndex >= this.candlesX.length) {
       endIndex = this.candlesX.length - 1;
     }
-    if(minX < this.candlesX.first) {
+    if (minX < this.candlesX.first) {
       minX = this.candlesX.first;
       maxX = minX + width;
     }
 
-    if(maxX > this.candlesX.last + this.durationMs) {
+    if (maxX > this.candlesX.last + this.durationMs) {
       maxX = this.candlesX.last + this.durationMs;
       minX = maxX - width;
     }
@@ -171,14 +171,18 @@ abstract class CandlesticksState extends State<CandlesticksWidget>
             uiCameraAnimationController);
     uiCameraAnimationController.reset();
     extCandleData = null;
+    touchPoint = null;
     setState(() {
 
     });
   }
 
   ExtCandleData extCandleData;
-  onTouchCandle(ExtCandleData candleData) {
+  Offset touchPoint;
+
+  onTouchCandle(Offset touchPoint, ExtCandleData candleData) {
     extCandleData = candleData;
+    this.touchPoint = touchPoint;
     setState(() {
 
     });
@@ -196,6 +200,7 @@ abstract class CandlesticksState extends State<CandlesticksWidget>
     uiCameraAnimationController = AnimationController(
         duration: widget.candlesticksStyle.cameraDuration, vsync: this);
     extCandleData = null;
+    touchPoint = null;
   }
 
   @override

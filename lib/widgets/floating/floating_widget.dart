@@ -9,10 +9,12 @@ class TopFloatingPainter extends CustomPainter {
 
   final ExtCandleData extCandleData;
   final UICamera uiCamera;
+  final Offset touchPoint;
 
   TopFloatingPainter({
     this.uiCamera,
-    this.extCandleData
+    this.extCandleData,
+    this.touchPoint,
   });
 
 
@@ -84,6 +86,11 @@ class TopFloatingPainter extends CustomPainter {
     borderPainter.color=Colors.white;
     borderPainter.style = PaintingStyle.stroke;
     canvas.drawRect(Rect.fromPoints(leftTop, rightBottom), borderPainter);
+
+    canvas.drawLine(Offset(sceneX, 0), Offset(sceneX, size.height), borderPainter);
+    canvas.drawLine(Offset(sceneX, 0), Offset(sceneX, size.height), borderPainter);
+
+    canvas.drawLine(Offset(0, touchPoint.dy), Offset(size.width, touchPoint.dy), borderPainter);
   }
 
   @override
@@ -98,11 +105,11 @@ class FloatingWidget extends StatelessWidget {
   FloatingWidget({
     Key key,
     this.extCandleData,
-    this.left,
+    this.touchPoint,
   }) :super(key: key);
 
   final ExtCandleData extCandleData;
-  final bool left;
+  final Offset touchPoint;
 
   Widget getText(String text, String data, TextStyle textStyle,
       [TextStyle textStyleColor,]) {
@@ -129,40 +136,15 @@ class FloatingWidget extends StatelessWidget {
     if (extCandleData == null) {
       return Container();
     }
-    double tapTextHeight = 1.4;
-    double tapTextSize = 8.0;
-    Color tapTextFontColor = Colors.white.withOpacity(0.5);
-    TextStyle textStyle = new TextStyle(
-        color: tapTextFontColor, fontSize: tapTextSize, height: tapTextHeight);
-
     var uiCamera = AABBContext
         .of(context)
         .uiCamera;
     return CustomPaint(
       painter: TopFloatingPainter(
         uiCamera: uiCamera,
+        touchPoint: touchPoint,
         extCandleData: extCandleData,
       ),
     );
-
-    return SizedBox(
-        height: 10,
-        width: 10,
-        child: Container(
-
-            width: 10,
-            decoration: new BoxDecoration(
-              border: new Border.all(
-                width: 0.5,
-                color: Colors.white.withOpacity(0.4),
-              ),
-              color: Color(0xff21232e).withOpacity(0.9),
-            ),
-            child: new Column(
-              children: [
-                getText("asdf", "123.123", textStyle)
-              ],
-            )
-        ));
   }
 }

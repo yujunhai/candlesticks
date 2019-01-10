@@ -17,17 +17,13 @@ class TouchCandleState extends State<TouchCandleWidget> {
   onTapUp(TapUpDetails details) {
     var aabbContext = AABBContext.of(context);
     var uiCamera = aabbContext.uiCamera;
-    var touchOnLeft = false;
-    if (details.globalPosition.dx <= context.size.width / 2) {
-      touchOnLeft = true;
-    }
 
     var worldPoint = uiCamera.viewPortToWorldPoint(
         uiCamera.screenToViewPortPoint(context.size, details.globalPosition));
     extCandleData = aabbContext.getExtCandleDataIndexByX(worldPoint.x);
 
     var candlesticksContext = CandlesticksContext.of(context);
-    candlesticksContext.onTouchCandle(extCandleData);
+    candlesticksContext.onTouchCandle(details.globalPosition, extCandleData);
   }
 
   @override

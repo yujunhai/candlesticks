@@ -38,6 +38,7 @@ class CandlesticksView extends CandlesticksState {
               onCandleDataFinish: onCandleDataFinish,
               candlesX: candlesX,
               extCandleData: extCandleData,
+              touchPoint: touchPoint,
               child: Column(
                   children: <Widget>[
                     Expanded(
