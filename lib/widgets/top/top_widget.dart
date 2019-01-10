@@ -68,10 +68,7 @@ class TopWidget extends StatelessWidget {
                   ),
                 ),
                 Positioned.fill(
-                    child: TouchCandleWidget(
-                      candle: null,
-                      left: null,
-                    )
+                    child: TouchCandleWidget()
                 ),
               ],
             )

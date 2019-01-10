@@ -4,6 +4,7 @@ import 'package:candlesticks/2d/candle_data.dart';
 import 'package:candlesticks/2d/uiobjects/uio_point.dart';
 import 'package:candlesticks/2d/uicamera.dart';
 import 'package:candlesticks/widgets/aabb/aabb_context.dart';
+import 'dart:ui' as ui;
 
 class TopFloatingPainter extends CustomPainter {
 
@@ -87,10 +88,15 @@ class TopFloatingPainter extends CustomPainter {
     borderPainter.style = PaintingStyle.stroke;
     canvas.drawRect(Rect.fromPoints(leftTop, rightBottom), borderPainter);
 
-    canvas.drawLine(Offset(sceneX, 0), Offset(sceneX, size.height), borderPainter);
-    canvas.drawLine(Offset(sceneX, 0), Offset(sceneX, size.height), borderPainter);
-
+    canvas.drawLine(Offset(touchPoint.dx, 0), Offset(touchPoint.dx, size.height), borderPainter);
     canvas.drawLine(Offset(0, touchPoint.dy), Offset(size.width, touchPoint.dy), borderPainter);
+    Paint maxCircle = new Paint();
+    maxCircle..shader = ui.Gradient.radial(touchPoint, 3, [
+      Colors.white.withOpacity(0.8),
+      Colors.white.withOpacity(0.1),
+    ], [0.0, 1.0], TileMode.clamp);
+    canvas.drawCircle(touchPoint, 3, maxCircle);
+    print(size.height);
   }
 
   @override

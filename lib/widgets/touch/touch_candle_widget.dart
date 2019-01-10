@@ -23,7 +23,9 @@ class TouchCandleState extends State<TouchCandleWidget> {
     extCandleData = aabbContext.getExtCandleDataIndexByX(worldPoint.x);
 
     var candlesticksContext = CandlesticksContext.of(context);
-    candlesticksContext.onTouchCandle(details.globalPosition, extCandleData);
+    RenderBox getBox = context.findRenderObject();
+    var local = getBox.globalToLocal(details.globalPosition);
+    candlesticksContext.onTouchCandle(local, extCandleData);
   }
 
   @override
@@ -38,12 +40,8 @@ class TouchCandleState extends State<TouchCandleWidget> {
 class TouchCandleWidget extends StatefulWidget {
   TouchCandleWidget({
     Key key,
-    this.left,
-    this.candle
   }) : super(key: key);
 
-  final bool left;
-  final UIOCandle candle;
 
   @override
   TouchCandleState createState() => TouchCandleState();
