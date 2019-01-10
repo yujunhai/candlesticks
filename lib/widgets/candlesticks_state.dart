@@ -178,7 +178,7 @@ abstract class CandlesticksState extends State<CandlesticksWidget>
 
 
   onScaleUpdate(ScaleUpdateDetails details) {
-    double scale = details.scale;
+    double scale = 1 / details.scale;
     /*
     var width = originWidth * scale;
     if (width > this.durationMs * widget.candlesticksStyle.maxViewPortX) {
