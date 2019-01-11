@@ -19,9 +19,11 @@ class CandlesticksView extends CandlesticksState {
   Widget build(BuildContext context) {
     if (isWaitingForInitData()) {
       return Container(
+        /*
         child: Center(
           child: CircularProgressIndicator(),
         ),
+        */
       );
     }
 
