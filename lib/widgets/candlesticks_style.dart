@@ -41,7 +41,7 @@ CandlesticksStyle DefaultDarkCandleStyle = CandlesticksStyle(
 );
 
 CandlesticksStyle DefaultLightCandleStyle = CandlesticksStyle(
-  backgroundColor: Color(0xff21232e),
+  backgroundColor: Color(0xffffffff),
   cameraDuration: Duration(milliseconds: 500),
   initAfterNData: 50,
   defaultViewPortX: 50,
